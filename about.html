@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — WELK 人が歩く研究所</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--ink-mid); }
+    .page-hero {
+      min-height: 40vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 80px 40px 60px;
+      background: var(--ink);
+      border-bottom: 0.5px solid rgba(184,150,12,0.15);
+      position: relative;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 40px; right: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dim), transparent);
+    }
+    .page-hero-inner { max-width: 760px; }
+    .page-en {
+      font-size: 10px; letter-spacing: 0.3em;
+      color: var(--gold-dim); margin-bottom: 16px;
+    }
+    .page-title {
+      font-family: var(--serif); font-weight: 200;
+      font-size: clamp(24px, 3.5vw, 40px);
+      color: var(--paper); line-height: 1.5;
+    }
+    .content-block {
+      padding: 64px 40px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .block-label {
+      font-size: 9px; letter-spacing: 0.28em;
+      color: var(--gold-dim); text-transform: uppercase;
+      margin-bottom: 32px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .block-label::after {
+      content: ''; flex: 1; height: 0.5px;
+      background: var(--gold-dim); opacity: 0.3; max-width: 60px;
+    }
+    .reason-list { list-style: none; }
+    .reason-item {
+      display: flex; gap: 20px;
+      padding: 24px 0;
+      border-bottom: 0.5px solid rgba(247,243,236,0.06);
+    }
+    .reason-num {
+      font-family: var(--fell); font-style: italic;
+      font-size: 13px; color: var(--gold-dim);
+      min-width: 24px; padding-top: 2px;
+    }
+    .reason-text {
+      font-size: 14px; color: rgba(247,243,236,0.7);
+      line-height: 2.0;
+    }
+    .kintsugi-section {
+      background: var(--ink);
+      border-top: 0.5px solid rgba(184,150,12,0.12);
+      border-bottom: 0.5px solid rgba(184,150,12,0.12);
+      padding: 64px 40px;
+    }
+    .kintsugi-inner {
+      max-width: 760px; margin: 0 auto;
+    }
+    .kintsugi-quote {
+      font-family: var(--serif); font-weight: 200;
+      font-size: clamp(15px, 2vw, 20px);
+      line-height: 2.2; color: var(--paper);
+      border-left: 1.5px solid var(--gold-dim);
+      padding-left: 28px; margin-bottom: 32px;
+    }
+    .kintsugi-body {
+      font-size: 13px; color: rgba(247,243,236,0.5);
+      line-height: 2.2; font-weight: 300;
+    }
+    .corp-section {
+      padding: 64px 40px;
+      max-width: 760px; margin: 0 auto;
+    }
+    .corp-table { width: 100%; border-collapse: collapse; }
+    .corp-table tr {
+      border-bottom: 0.5px solid rgba(247,243,236,0.07);
+    }
+    .corp-table td {
+      padding: 14px 0; font-size: 13px; vertical-align: top;
+    }
+    .corp-table .td-label {
+      color: var(--text-mute); min-width: 140px; font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .corp-table .td-val { color: rgba(247,243,236,0.75); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">WELK</a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="participate.html">Participate</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-en">ABOUT</div>
+      <h1 class="page-title">人が歩く研究所について</h1>
+    </div>
+  </div>
+
+  <!-- Why -->
+  <div class="content-block">
+    <div class="block-label reveal">なぜ、この研究所を作ったのか</div>
+    <ul class="reason-list">
+      <li class="reason-item reveal">
+        <span class="reason-num">I.</span>
+        <span class="reason-text">膝の痛みを恐れ、歩くことを怖がる人がいる。それがとても悲しいと思った。</span>
+      </li>
+      <li class="reason-item reveal">
+        <span class="reason-num">II.</span>
+        <span class="reason-text">自分自身の関節の弱さを知っている。他人事ではないと気づいた。</span>
+      </li>
+      <li class="reason-item reveal">
+        <span class="reason-num">III.</span>
+        <span class="reason-text">「改善できない」「仕方ない」と諦められている現状がある。本当にそうなのか、疑いたかった。</span>
+      </li>
+      <li class="reason-item reveal">
+        <span class="reason-num">IV.</span>
+        <span class="reason-text">困っている人は今後も増える。高寿命化と定年延長の時代に、歩く身体を守ることの意味は大きくなっていく。</span>
+      </li>
+      <li class="reason-item reveal">
+        <span class="reason-num">V.</span>
+        <span class="reason-text">既存のシステムへの問い。歩数を数えることと、一歩の質を知ることは、まったく別のことだ。</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Kintsugi -->
+  <div class="kintsugi-section">
+    <div class="kintsugi-inner">
+      <div class="block-label reveal">金継ぎの思想</div>
+      <blockquote class="kintsugi-quote reveal">
+        一度崩壊したシステムや関係性を、<br>
+        傷跡を消すことなく抱えたまま、<br>
+        より高次の構造へ再統合する性質。<br><br>
+        それを私たちは「金継ぎ性」と呼ぶ。
+      </blockquote>
+      <p class="kintsugi-body reveal">
+        摩耗した身体は、弱さではない。それは歳月の証明だ。<br>
+        歩き続けてきた足には、その人固有のリズムと知恵が刻まれている。<br>
+        私たちはその傷跡に金を流し込み、より美しく、より強く在ることを支える。<br>
+        「持たない杖」——目には見えないが、確かに支えるものとして。
+      </p>
+    </div>
+  </div>
+
+  <!-- Corp Info -->
+  <div class="corp-section">
+    <div class="block-label reveal">法人概要</div>
+    <table class="corp-table">
+      <tr class="reveal"><td class="td-label">法人名</td><td class="td-val">一般社団法人WELK 人が歩く研究所</td></tr>
+      <tr class="reveal"><td class="td-label">英語名</td><td class="td-val">WELK Institute for Human Gait</td></tr>
+      <tr class="reveal"><td class="td-label">所在地</td><td class="td-val">大阪府</td></tr>
+      <tr class="reveal"><td class="td-label">設立</td><td class="td-val">2026年（設立準備中）</td></tr>
+      <tr class="reveal"><td class="td-label">活動内容</td><td class="td-val">歩行動態解析・ウェアラブルデバイス開発・実証研究</td></tr>
+      <tr class="reveal"><td class="td-label">代表理事</td><td class="td-val">桜間 哲史</td></tr>
+    </table>
+  </div>
+
+  <footer>
+    <div class="footer-logo">WELK</div>
+    <p class="footer-copy">&copy; 2026 一般社団法人WELK 人が歩く研究所 &nbsp;|&nbsp; Osaka, Japan</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

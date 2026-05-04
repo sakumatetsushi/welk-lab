@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research — WELK 人が歩く研究所</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--ink-mid); }
+    .page-hero {
+      min-height: 36vh; display: flex; align-items: flex-end;
+      padding: 80px 40px 60px; background: var(--ink);
+      border-bottom: 0.5px solid rgba(184,150,12,0.15);
+    }
+    .page-hero-inner { max-width: 760px; }
+    .page-en { font-size: 10px; letter-spacing: 0.3em; color: var(--gold-dim); margin-bottom: 16px; }
+    .page-title {
+      font-family: var(--serif); font-weight: 200;
+      font-size: clamp(24px, 3.5vw, 40px); color: var(--paper); line-height: 1.5;
+    }
+    .content-wrap { max-width: 960px; margin: 0 auto; padding: 64px 40px; }
+    .block-label {
+      font-size: 9px; letter-spacing: 0.28em; color: var(--gold-dim);
+      text-transform: uppercase; margin-bottom: 40px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .block-label::after {
+      content: ''; flex: 1; height: 0.5px;
+      background: var(--gold-dim); opacity: 0.3; max-width: 60px;
+    }
+    .device-intro {
+      font-family: var(--serif); font-weight: 300;
+      font-size: 16px; color: rgba(247,243,236,0.75);
+      line-height: 2.2; margin-bottom: 20px;
+      border-left: 1.5px solid var(--gold-dim); padding-left: 24px;
+    }
+    .device-sub {
+      font-size: 13px; color: rgba(247,243,236,0.4);
+      line-height: 2.0; margin-bottom: 60px;
+    }
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1px; background: rgba(184,150,12,0.1); margin-bottom: 80px;
+    }
+    .metric-card {
+      background: var(--ink); padding: 36px 28px;
+      transition: background 0.3s;
+    }
+    .metric-card:hover { background: rgba(14,14,12,0.6); }
+    .metric-ph-en {
+      font-size: 11px; letter-spacing: 0.2em;
+      color: var(--gold-dim); margin-bottom: 12px;
+    }
+    .metric-ph-ja {
+      font-family: var(--serif); font-weight: 300;
+      font-size: 18px; color: var(--paper);
+      margin-bottom: 16px; line-height: 1.5;
+    }
+    .metric-ph-body {
+      font-size: 12px; color: rgba(247,243,236,0.45); line-height: 2.0;
+    }
+    .phase-section {
+      background: var(--ink);
+      border-top: 0.5px solid rgba(184,150,12,0.12);
+      border-bottom: 0.5px solid rgba(184,150,12,0.12);
+      padding: 64px 40px;
+    }
+    .phase-inner { max-width: 760px; margin: 0 auto; }
+    .phase-item {
+      display: flex; gap: 24px; padding: 20px 0;
+      border-bottom: 0.5px solid rgba(247,243,236,0.06);
+      align-items: flex-start;
+    }
+    .phase-badge {
+      font-size: 10px; letter-spacing: 0.1em;
+      color: var(--gold-dim); min-width: 72px; padding-top: 3px;
+    }
+    .phase-text { font-size: 13px; color: rgba(247,243,236,0.6); line-height: 1.9; flex: 1; }
+    .status {
+      font-size: 9px; letter-spacing: 0.1em; padding: 3px 10px;
+      border-radius: 1px; white-space: nowrap;
+    }
+    .s-done { background: rgba(247,243,236,0.05); color: var(--text-mute); border: 0.5px solid rgba(247,243,236,0.1); }
+    .s-active { background: rgba(184,150,12,0.1); color: var(--gold-light); border: 0.5px solid rgba(184,150,12,0.35); }
+    .s-future { background: transparent; color: var(--text-mute); border: 0.5px solid rgba(247,243,236,0.08); }
+    @media (max-width: 600px) { .metrics-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html">WELK</a>
+    <ul class="nav-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="participate.html">Participate</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-en">RESEARCH</div>
+      <h1 class="page-title">私たちが捉えようとしているもの</h1>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <div class="block-label reveal">現象の記述</div>
+    <p class="device-intro reveal">
+      歩数を数えることと、一歩の質を知ることは、<br>
+      まったく別のことだ。
+    </p>
+    <p class="device-sub reveal">
+      膝下に装着する小型センサーが、50Hzで歩行の動きを計測する。<br>
+      そこから私たちは、身体と大地の対話を4つの「現象」として描き出す。<br>
+      指標の名ではなく、身体が語る言葉として。
+    </p>
+
+    <div class="metrics-grid">
+      <div class="metric-card reveal">
+        <div class="metric-ph-en">I. — 大地との対話</div>
+        <div class="metric-ph-ja">着地の衝撃</div>
+        <div class="metric-ph-body">
+          足が地面に触れる瞬間、身体はどれほどの響きを受け取るか。<br>
+          その強度と鋭さの中に、関節への語りかけが宿る。
+        </div>
+      </div>
+      <div class="metric-card reveal">
+        <div class="metric-ph-en">II. — 未来への意志</div>
+        <div class="metric-ph-ja">蹴り出しの力</div>
+        <div class="metric-ph-body">
+          次の一歩へ向かうエネルギー。<br>
+          その量と方向の中に、身体の意志と疲労が刻まれている。
+        </div>
+      </div>
+      <div class="metric-card reveal">
+        <div class="metric-ph-en">III. — 着地の詩学</div>
+        <div class="metric-ph-ja">着地の滑らかさ</div>
+        <div class="metric-ph-body">
+          衝撃の「鋭さ」。急激な負荷は、長年の研究が示す通り、<br>
+          関節の物語を早送りにする。
+        </div>
+      </div>
+      <div class="metric-card reveal">
+        <div class="metric-ph-en">IV. — 回旋の記憶</div>
+        <div class="metric-ph-ja">着地前後の回旋</div>
+        <div class="metric-ph-body">
+          着地の直前と直後で、足がどれだけ回転するか。<br>
+          この差分に、捻れの蓄積が現れる。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phase-section">
+    <div class="phase-inner">
+      <div class="block-label reveal">研究の進捗</div>
+      <div class="phase-item reveal">
+        <span class="phase-badge">Phase 0</span>
+        <span class="phase-text">データ収集・アルゴリズム設計・精度検証</span>
+        <span class="status s-done">完了</span>
+      </div>
+      <div class="phase-item reveal">
+        <span class="phase-badge">Phase 1</span>
+        <span class="phase-text">外部参加者との実証実験（屋外・大阪近郊）</span>
+        <span class="status s-active">進行中</span>
+      </div>
+      <div class="phase-item reveal">
+        <span class="phase-badge">Phase 2</span>
+        <span class="phase-text">コミュニティ・専門家との共同検証</span>
+        <span class="status s-future">予定</span>
+      </div>
+      <div class="phase-item reveal">
+        <span class="phase-badge">Phase 3</span>
+        <span class="phase-text">組織・企業との連携展開</span>
+        <span class="status s-future">将来</span>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-logo">WELK</div>
+    <p class="footer-copy">&copy; 2026 一般社団法人WELK 人が歩く研究所 &nbsp;|&nbsp; Osaka, Japan</p>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

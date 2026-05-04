@@ -1,0 +1,383 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Noto+Sans+JP:wght@300;400&family=IM+Fell+English:ital@0;1&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold:        #B8960C;
+  --gold-light:  #D4AE3A;
+  --gold-dim:    #8B6914;
+  --ink:         #0E0E0C;
+  --ink-mid:     #1C1C18;
+  --paper:       #F7F3EC;
+  --paper-dim:   #EDE8DF;
+  --text-main:   #1A1A16;
+  --text-mid:    #4A4840;
+  --text-mute:   #8A8880;
+  --serif:       'Noto Serif JP', 'IM Fell English', serif;
+  --sans:        'Noto Sans JP', sans-serif;
+  --fell:        'IM Fell English', serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--ink);
+  color: var(--paper);
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ── Navigation ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  background: transparent;
+  transition: background 0.6s, backdrop-filter 0.6s;
+}
+nav.scrolled {
+  background: rgba(14,14,12,0.85);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: var(--fell);
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: var(--gold-light);
+  text-decoration: none;
+  font-style: italic;
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: rgba(247,243,236,0.55);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--gold-light); }
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--ink);
+}
+
+canvas#splash {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 40px;
+}
+
+.hero-en {
+  font-family: var(--fell);
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: 0.35em;
+  color: var(--gold-light);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.3s forwards;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.7;
+  color: var(--paper);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.7s forwards;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--gold-light);
+}
+
+.hero-rule {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  margin: 0 auto 28px;
+  opacity: 0;
+  animation: fadeIn 1.2s ease 1.3s forwards;
+}
+
+.hero-sub {
+  font-family: var(--fell);
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(247,243,236,0.5);
+  letter-spacing: 0.08em;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 1.5s forwards;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeIn 1.2s ease 2.2s forwards;
+}
+.scroll-hint span {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--text-mute);
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+/* ── Philosophy Section ── */
+.philosophy {
+  background: var(--ink-mid);
+  padding: 120px 40px;
+  position: relative;
+}
+.philosophy::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.section-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 0.5px;
+  background: var(--gold-dim);
+  opacity: 0.4;
+  max-width: 80px;
+}
+
+.philosophy-quote {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-size: clamp(18px, 2.5vw, 26px);
+  line-height: 2.2;
+  color: var(--paper);
+  margin-bottom: 60px;
+  border-left: 1.5px solid var(--gold-dim);
+  padding-left: 28px;
+}
+
+.philosophy-body {
+  font-size: 14px;
+  color: rgba(247,243,236,0.6);
+  line-height: 2.4;
+  font-weight: 300;
+}
+
+/* ── Three Phenomena ── */
+.phenomena {
+  background: var(--ink);
+  padding: 100px 40px;
+  position: relative;
+}
+.phenomena::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.phenomena-grid {
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(184,150,12,0.12);
+}
+
+.phenomenon {
+  background: var(--ink);
+  padding: 48px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s;
+}
+.phenomenon:hover { background: var(--ink-mid); }
+
+.ph-num {
+  font-family: var(--fell);
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  margin-bottom: 24px;
+}
+.ph-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 24px;
+}
+.ph-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--paper);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+.ph-body {
+  font-size: 12px;
+  color: rgba(247,243,236,0.45);
+  line-height: 2.0;
+}
+
+/* ── Note Link ── */
+.note-bar {
+  background: var(--ink-mid);
+  border-top: 0.5px solid rgba(184,150,12,0.2);
+  border-bottom: 0.5px solid rgba(184,150,12,0.2);
+  padding: 32px 40px;
+}
+.note-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.note-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--gold-dim);
+  margin-bottom: 8px;
+}
+.note-title-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--paper);
+}
+.note-arrow-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--gold-light);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  border: 0.5px solid rgba(184,150,12,0.4);
+  padding: 10px 20px;
+  transition: background 0.3s, border-color 0.3s;
+}
+.note-arrow-link:hover {
+  background: rgba(184,150,12,0.08);
+  border-color: var(--gold-light);
+}
+
+/* ── Footer ── */
+footer {
+  background: var(--ink);
+  border-top: 0.5px solid rgba(184,150,12,0.15);
+  padding: 40px;
+  text-align: center;
+}
+.footer-logo {
+  font-family: var(--fell);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: var(--gold-dim);
+  margin-bottom: 16px;
+}
+.footer-copy {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--text-mute);
+}
+
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scrollPulse {
+  0%, 100% { transform: scaleY(1); opacity: 0.5; }
+  50%       { transform: scaleY(1.3); opacity: 1; }
+}
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .philosophy, .phenomena { padding: 80px 24px; }
+  .phenomena-grid { grid-template-columns: 1fr; }
+  .note-inner { flex-direction: column; align-items: flex-start; }
+  .note-bar { padding: 28px 24px; }
+  footer { padding: 32px 24px; }
+}
