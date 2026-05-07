@@ -5,151 +5,237 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — WELK 人が歩く研究所</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    body { background: var(--ink-mid); }
-    .page-hero {
-      min-height: 36vh; display: flex; align-items: flex-end;
-      padding: 80px 40px 60px; background: var(--ink);
-      border-bottom: 0.5px solid rgba(184,150,12,0.15);
-    }
-    .page-hero-inner { max-width: 760px; }
-    .page-en { font-size: 10px; letter-spacing: 0.3em; color: var(--gold-dim); margin-bottom: 16px; }
-    .page-title {
-      font-family: var(--serif); font-weight: 200;
-      font-size: clamp(24px, 3.5vw, 40px); color: var(--paper); line-height: 1.5;
-    }
-    .block-label {
-      font-size: 9px; letter-spacing: 0.28em; color: var(--gold-dim);
-      text-transform: uppercase; margin-bottom: 36px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .block-label::after {
-      content: ''; flex: 1; height: 0.5px;
-      background: var(--gold-dim); opacity: 0.3; max-width: 60px;
-    }
-    .contact-intro {
-      padding: 56px 40px; max-width: 760px; margin: 0 auto;
-    }
-    .contact-body {
-      font-size: 14px; color: rgba(247,243,236,0.55); line-height: 2.3;
-      margin-bottom: 16px;
-    }
-    .links-section {
-      background: var(--ink);
-      border-top: 0.5px solid rgba(184,150,12,0.12);
-      border-bottom: 0.5px solid rgba(184,150,12,0.12);
-      padding: 48px 40px;
-    }
-    .links-inner { max-width: 760px; margin: 0 auto; }
-    .link-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 1px; background: rgba(184,150,12,0.08);
-    }
-    .link-card {
-      background: var(--ink-mid); padding: 28px 24px;
-      text-decoration: none; display: block;
-      transition: background 0.3s;
-    }
-    .link-card:hover { background: rgba(14,14,12,0.8); }
-    .link-service {
-      font-size: 9px; letter-spacing: 0.25em;
-      color: var(--gold-dim); margin-bottom: 8px;
-    }
-    .link-desc {
-      font-size: 14px; color: rgba(247,243,236,0.7); line-height: 1.6;
-    }
-    .link-sub {
-      font-size: 11px; color: var(--text-mute); margin-top: 6px;
-    }
-    .collab-section {
-      padding: 56px 40px; max-width: 760px; margin: 0 auto;
-    }
-    .collab-list { list-style: none; }
-    .collab-item {
-      display: flex; gap: 16px; padding: 14px 0;
-      border-bottom: 0.5px solid rgba(247,243,236,0.06);
-      font-size: 13px; color: rgba(247,243,236,0.55);
-    }
-    .collab-dot {
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--gold-dim); margin-top: 8px; flex-shrink: 0;
-    }
-    @media (max-width: 600px) { .link-grid { grid-template-columns: 1fr; } }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
+    html{scroll-behavior:smooth}
+    body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+    #c{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none;transition:color .6s}
+    .logo:hover{color:rgba(234,229,220,.72)}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
+
+    .page-hero{position:relative;z-index:1;min-height:52vh;display:flex;align-items:flex-end;padding:120px 52px 64px}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-title{font-weight:200;font-size:clamp(22px,3.5vw,44px);line-height:1.7;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
+
+    .sec{position:relative;z-index:1;padding:80px 52px}
+    .sec-inner{max-width:680px;margin:0 auto}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
+    .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
+
+    /* invite quote */
+    .invite-quote{font-weight:200;font-size:clamp(15px,2vw,21px);line-height:2.3;color:rgba(234,229,220,.78);border-left:1.5px solid var(--goldD);padding-left:28px;margin-bottom:32px}
+    .invite-body{font-weight:200;font-size:13px;color:rgba(234,229,220,.42);line-height:2.3;margin-bottom:52px}
+
+    /* conditions */
+    .cond-list{list-style:none;margin-bottom:60px}
+    .cond-item{display:flex;gap:16px;padding:16px 0;border-bottom:.5px solid rgba(234,229,220,.06);font-weight:200;font-size:13px;color:rgba(234,229,220,.58);line-height:1.9}
+    .cond-dot{width:4px;height:4px;border-radius:50%;background:var(--goldD);margin-top:9px;flex-shrink:0}
+
+    /* flow */
+    .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(184,150,12,.08);margin-bottom:64px}
+    .flow-step{background:var(--ink);padding:24px 18px;text-align:center}
+    .flow-num{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.14em;color:var(--goldD);margin-bottom:10px}
+    .flow-label{font-weight:200;font-size:12px;color:rgba(234,229,220,.55);line-height:1.7}
+
+    /* form */
+    .form-row{margin-bottom:20px}
+    .form-label{display:block;font-size:10px;letter-spacing:.1em;color:rgba(234,229,220,.32);margin-bottom:8px}
+    .form-input,.form-textarea{width:100%;padding:12px 16px;background:rgba(234,229,220,.03);border:.5px solid rgba(234,229,220,.1);color:var(--paper);font-size:13px;font-family:'Noto Serif JP',serif;font-weight:200;transition:border-color .3s}
+    .form-input:focus,.form-textarea:focus{outline:none;border-color:rgba(184,150,12,.4)}
+    .form-textarea{height:100px;resize:vertical}
+    .form-submit{width:100%;padding:14px;background:rgba(184,150,12,.12);color:rgba(184,150,12,.75);border:.5px solid rgba(184,150,12,.3);font-size:13px;font-family:'Noto Serif JP',serif;font-weight:200;letter-spacing:.1em;cursor:pointer;transition:all .4s;margin-top:8px}
+    .form-submit:hover{background:rgba(184,150,12,.2);color:var(--goldL);border-color:rgba(184,150,12,.5)}
+    .form-note{margin-top:12px;font-size:10px;color:rgba(234,229,220,.25);line-height:1.8}
+
+    /* links grid */
+    .link-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(184,150,12,.08)}
+    .link-card{background:var(--ink);padding:26px 24px;text-decoration:none;display:block;transition:background .4s}
+    .link-card:hover{background:rgba(184,150,12,.03)}
+    .lc-service{font-family:'IM Fell English',serif;font-style:italic;font-size:9px;letter-spacing:.25em;color:var(--goldD);margin-bottom:8px;display:block}
+    .lc-desc{font-weight:200;font-size:13px;color:rgba(234,229,220,.62)}
+    .lc-sub{font-size:10px;color:rgba(234,229,220,.28);margin-top:5px}
+
+    /* collab */
+    .collab-list{list-style:none}
+    .collab-item{display:flex;gap:14px;padding:13px 0;border-bottom:.5px solid rgba(234,229,220,.06);font-weight:200;font-size:13px;color:rgba(234,229,220,.5)}
+    .collab-dot{width:3px;height:3px;border-radius:50%;background:var(--goldD);margin-top:9px;flex-shrink:0}
+
+    .reveal{opacity:0;filter:blur(8px);transform:translateY(16px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
+    .reveal.up{opacity:1;filter:blur(0);transform:none}
+
+    footer{position:relative;z-index:1;padding:44px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
+    .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
+    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(max-width:640px){nav{padding:18px 22px}.nav-links{gap:22px}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.flow{grid-template-columns:repeat(2,1fr)}.link-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
+<canvas id="c"></canvas>
 
-  <nav>
-    <a class="nav-logo" href="index.html">WELK</a>
-    <ul class="nav-links">
-      <li><a href="about.html">About</a></li>
-      <li><a href="research.html">Research</a></li>
-      <li><a href="participate.html">Participate</a></li>
-      <li><a href="contact.html">Contact</a></li>
+<nav>
+  <a class="logo" href="index.html">WELK</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="journal.html">Journal</a></li>
+    <li><a href="contact.html" class="cur">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <span class="ph-en">Contact</span>
+    <h1 class="ph-title">
+      あなたの歩みの調べを、<br>
+      私たちに聴かせてほしい。
+    </h1>
+  </div>
+</div>
+
+<!-- Participate -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label reveal">研究への参加</div>
+    <blockquote class="invite-quote reveal">
+      特別な準備は必要ありません。<br>
+      いつも通りの服装で、いつも通りの歩き方で。<br>
+      ただ、一緒に歩いてほしいのです。
+    </blockquote>
+    <p class="invite-body reveal">
+      あなたの歩き方のデータが、研究を前に進めます。計測はすべて非侵襲で、<br>
+      装置は膝下に小型センサーを巻くだけです。得られたデータは研究目的にのみ使用し、<br>
+      個人を特定できる形では公開しません。ご希望の方には歩行データのフィードバックをお伝えします。
+    </p>
+
+    <div class="sec-label reveal">こんな方に来てほしい</div>
+    <ul class="cond-list reveal">
+      <li class="cond-item"><div class="cond-dot"></div>長年、身体を使って働いてきた方（職種は問いません）</li>
+      <li class="cond-item"><div class="cond-dot"></div>おおむね40〜70歳の方</li>
+      <li class="cond-item"><div class="cond-dot"></div>大阪近郊で屋外の歩行に参加できる方</li>
+      <li class="cond-item"><div class="cond-dot"></div>膝や足腰に多少の不安を感じている方（症状がなくても歓迎です）</li>
+      <li class="cond-item"><div class="cond-dot"></div>この研究の趣旨に共感し、継続して関わっていただける方</li>
     </ul>
-  </nav>
 
-  <div class="page-hero">
-    <div class="page-hero-inner">
-      <div class="page-en">CONTACT</div>
-      <h1 class="page-title">つながる</h1>
+    <div class="sec-label reveal">参加の流れ</div>
+    <div class="flow reveal">
+      <div class="flow-step"><div class="flow-num">Step 01</div><div class="flow-label">フォームでご連絡</div></div>
+      <div class="flow-step"><div class="flow-num">Step 02</div><div class="flow-label">趣旨説明・日程調整</div></div>
+      <div class="flow-step"><div class="flow-num">Step 03</div><div class="flow-label">屋外での歩行計測<br>（約60分）</div></div>
+      <div class="flow-step"><div class="flow-num">Step 04</div><div class="flow-label">希望者へ<br>フィードバック</div></div>
+    </div>
+
+    <div class="sec-label reveal">ご連絡フォーム</div>
+    <div class="reveal">
+      <div class="form-row">
+        <label class="form-label">お名前</label>
+        <input class="form-input" type="text" placeholder="山田 太郎">
+      </div>
+      <div class="form-row">
+        <label class="form-label">メールアドレス</label>
+        <input class="form-input" type="email" placeholder="example@email.com">
+      </div>
+      <div class="form-row">
+        <label class="form-label">ご職業・これまでのお仕事（任意）</label>
+        <input class="form-input" type="text" placeholder="例：建設業、介護職、製造業など">
+      </div>
+      <div class="form-row">
+        <label class="form-label">一言メッセージ（任意）</label>
+        <textarea class="form-textarea" placeholder="参加のきっかけや、気になっていることなど、自由にどうぞ。"></textarea>
+      </div>
+      <button class="form-submit" type="button">参加を申し込む</button>
+      <p class="form-note">いただいた情報は研究活動のご連絡にのみ使用します。</p>
     </div>
   </div>
+</section>
 
-  <div class="contact-intro">
-    <div class="block-label reveal">お問い合わせ</div>
-    <p class="contact-body reveal">
-      研究への参加・共同研究・メディア取材・その他のお問い合わせはこちらから。<br>
-      理学療法士、トレーナー、介護・医療・産業分野の専門家の方、<br>
-      また企業の人事・安全衛生担当の方からのご連絡もお待ちしています。
-    </p>
-  </div>
-
-  <div class="links-section">
-    <div class="links-inner">
-      <div class="block-label reveal">SNS / 研究日誌</div>
-      <div class="link-grid">
-        <a class="link-card reveal" href="https://note.com/welk_lab" target="_blank" rel="noopener">
-          <div class="link-service">NOTE</div>
-          <div class="link-desc">研究日誌・活動報告</div>
-          <div class="link-sub">note.com/welk_lab</div>
-        </a>
-        <a class="link-card reveal" href="https://twitter.com/welk_lab" target="_blank" rel="noopener">
-          <div class="link-service">X（TWITTER）</div>
-          <div class="link-desc">活動の断片・気づきの記録</div>
-          <div class="link-sub">@welk_lab</div>
-        </a>
-        <a class="link-card reveal" href="#" target="_blank" rel="noopener">
-          <div class="link-service">LINKEDIN</div>
-          <div class="link-desc">専門家・企業との連携</div>
-          <div class="link-sub">WELK Institute for Human Gait</div>
-        </a>
-        <a class="link-card reveal" href="mailto:info@welk-lab.jp">
-          <div class="link-service">EMAIL</div>
-          <div class="link-desc">直接のご連絡はこちら</div>
-          <div class="link-sub">info@welk-lab.jp</div>
-        </a>
+<!-- SNS / Other contact -->
+<section class="sec" style="background:rgba(184,150,12,.018);border-top:.5px solid rgba(184,150,12,.07)">
+  <div class="sec-inner">
+    <div class="sec-label reveal">SNS / 研究日誌</div>
+    <div class="link-grid reveal">
+      <a class="link-card" href="https://note.com/welk_lab" target="_blank" rel="noopener">
+        <span class="lc-service">Note</span>
+        <div class="lc-desc">研究日誌・活動報告</div>
+        <div class="lc-sub">note.com/welk_lab</div>
+      </a>
+      <a class="link-card" href="https://twitter.com/welk_lab" target="_blank" rel="noopener">
+        <span class="lc-service">X ( Twitter )</span>
+        <div class="lc-desc">活動の断片・気づきの記録</div>
+        <div class="lc-sub">@welk_lab</div>
+      </a>
+      <a class="link-card" href="mailto:info@welk-lab.jp">
+        <span class="lc-service">Email</span>
+        <div class="lc-desc">直接のご連絡はこちら</div>
+        <div class="lc-sub">info@welk-lab.jp</div>
+      </a>
+      <div class="link-card" style="opacity:.4;cursor:default">
+        <span class="lc-service">LinkedIn</span>
+        <div class="lc-desc">専門家・企業との連携</div>
+        <div class="lc-sub">準備中</div>
       </div>
     </div>
-  </div>
 
-  <div class="collab-section">
-    <div class="block-label reveal">このような方の参加・連携を歓迎します</div>
-    <ul class="collab-list">
-      <li class="collab-item reveal"><div class="collab-dot"></div>理学療法士・作業療法士・トレーナーの方</li>
-      <li class="collab-item reveal"><div class="collab-dot"></div>歩行・動作科学・バイオメカニクスの研究者の方</li>
-      <li class="collab-item reveal"><div class="collab-dot"></div>企業の人事・安全衛生・人的資本経営担当の方</li>
-      <li class="collab-item reveal"><div class="collab-dot"></div>靴・インソール・ウェアラブル分野の事業者の方</li>
-      <li class="collab-item reveal"><div class="collab-dot"></div>この研究に関心を持ち、何らかの形で関わりたいと思っている方、どなたでも</li>
+    <div class="sec-label reveal" style="margin-top:56px">このような方の参加・連携を歓迎します</div>
+    <ul class="collab-list reveal">
+      <li class="collab-item"><div class="collab-dot"></div>理学療法士・作業療法士・トレーナーの方</li>
+      <li class="collab-item"><div class="collab-dot"></div>歩行・動作科学・バイオメカニクスの研究者の方</li>
+      <li class="collab-item"><div class="collab-dot"></div>企業の人事・安全衛生・人的資本経営担当の方</li>
+      <li class="collab-item"><div class="collab-dot"></div>靴・インソール・ウェアラブル分野の事業者の方</li>
+      <li class="collab-item"><div class="collab-dot"></div>この研究に関心を持ち、何らかの形で関わりたいと思っている方、どなたでも</li>
     </ul>
   </div>
+</section>
 
-  <footer>
-    <div class="footer-logo">WELK</div>
-    <p class="footer-copy">&copy; 2026 一般社団法人WELK 人が歩く研究所 &nbsp;|&nbsp; Osaka, Japan</p>
-  </footer>
+<footer>
+  <div class="f-logo">WELK</div>
+  <p class="f-copy">© 2026 一般社団法人WELK 人が歩く研究所 · Osaka, Japan</p>
+</footer>
 
-  <script src="main.js"></script>
+<script>
+(() => {
+  const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  let W,H;function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}resize();addEventListener('resize',resize);
+  let mx=-1,my=-1;addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  const particles=Array.from({length:80},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00008,vy:-(Math.random()*.00004),r:.3+Math.random()*1.1,phase:Math.random()*Math.PI*2,alpha:.06+Math.random()*.22}));
+  const ripples=[];
+  function spawnR(x,y,str=1){ripples.push({x,y,r:0,maxR:(80+Math.random()*140)*str,speed:(.5+Math.random()*.5)*str,life:1})}
+  let lastAuto=0;
+  function loop(t){
+    requestAnimationFrame(loop);
+    ctx.fillStyle='#050503';ctx.fillRect(0,0,W,H);
+    const bv=Math.sin(t*.00036)*.01;
+    const vg=ctx.createRadialGradient(W/2,H/2,H*.04,W/2,H/2,H*.9);
+    vg.addColorStop(0,'rgba(5,5,3,0)');vg.addColorStop(1,`rgba(5,5,3,${.64+bv})`);
+    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    for(const p of particles){
+      p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;
+      if(mx>0){const dx=mx-p.x*W,dy=my-p.y*H,d2=dx*dx+dy*dy;if(d2<30000&&d2>100){p.vx+=dx*.00000005;p.vy+=dy*.00000005}}
+      p.vx*=.996;p.vy*=.998;
+      const a=p.alpha*(.3+Math.sin(t*.00055+p.phase)*.7);
+      ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,150,12,${a})`;ctx.fill();
+    }
+    if(t-lastAuto>3200+Math.random()*1000){lastAuto=t;spawnR(W*(.25+Math.random()*.5),H*(.3+Math.random()*.4),.55)}
+    for(let i=ripples.length-1;i>=0;i--){
+      const rp=ripples[i];rp.r+=rp.speed;rp.life=1-rp.r/rp.maxR;
+      if(rp.life<=0){ripples.splice(i,1);continue}
+      ctx.beginPath();ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(184,150,12,${rp.life*.22})`;ctx.lineWidth=.8*rp.life;ctx.stroke();
+    }
+  }
+  requestAnimationFrame(loop);
+  addEventListener('click',e=>spawnR(e.clientX,e.clientY,1.0));
+  const io=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('up');io.unobserve(en.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+</script>
 </body>
 </html>

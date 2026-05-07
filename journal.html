@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal — WELK 人が歩く研究所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
+    html{scroll-behavior:smooth}
+    body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+    #c{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none;transition:color .6s}
+    .logo:hover{color:rgba(234,229,220,.72)}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
+
+    .page-hero{position:relative;z-index:1;min-height:52vh;display:flex;align-items:flex-end;padding:120px 52px 64px}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.6;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
+    .ph-sub{margin-top:20px;font-weight:200;font-size:clamp(12px,1.4vw,15px);color:rgba(234,229,220,.35);line-height:2.0;opacity:0;animation:fadeUp 2s ease 1s forwards}
+
+    .sec{position:relative;z-index:1;padding:80px 52px}
+    .sec-inner{max-width:720px;margin:0 auto}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px;opacity:0;filter:blur(6px);transform:translateY(12px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease}
+    .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
+    .sec-label.up{opacity:1;filter:blur(0);transform:none}
+
+    /* article cards */
+    .articles{display:flex;flex-direction:column;gap:1px;background:rgba(184,150,12,.08)}
+    .article-card{background:var(--ink);padding:36px 40px;text-decoration:none;display:block;transition:background .4s;opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease,background .4s}
+    .article-card.up{opacity:1;filter:blur(0);transform:none}
+    .article-card:hover{background:rgba(184,150,12,.03)}
+    .ac-num{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.22em;color:var(--goldD);margin-bottom:14px;display:block}
+    .ac-title{font-weight:200;font-size:clamp(15px,2vw,20px);color:rgba(234,229,220,.78);line-height:1.7;margin-bottom:12px}
+    .ac-body{font-weight:200;font-size:12px;color:rgba(234,229,220,.38);line-height:2.0}
+    .ac-link{display:inline-block;margin-top:18px;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.14em;color:rgba(184,150,12,.55);border-bottom:.5px solid rgba(184,150,12,.25);padding-bottom:2px}
+
+    /* note cta */
+    .note-cta{margin-top:64px;text-align:center;opacity:0;filter:blur(6px);transition:opacity 1.6s ease,filter 1.6s ease}
+    .note-cta.up{opacity:1;filter:blur(0)}
+    .note-cta-text{font-weight:200;font-size:13px;color:rgba(234,229,220,.35);margin-bottom:24px;line-height:2}
+    .note-btn{display:inline-block;padding:12px 36px;border:.5px solid rgba(184,150,12,.25);color:rgba(184,150,12,.6);text-decoration:none;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.16em;transition:all .5s}
+    .note-btn:hover{border-color:var(--goldL);color:var(--goldL);background:rgba(184,150,12,.04)}
+
+    footer{position:relative;z-index:1;padding:44px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
+    .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
+    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(max-width:640px){nav{padding:18px 22px}.nav-links{gap:22px}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.article-card{padding:28px 24px}}
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">WELK</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="journal.html" class="cur">Journal</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <span class="ph-en">Journal</span>
+    <h1 class="ph-title">研究日誌</h1>
+    <p class="ph-sub">歩くことについて考えたこと、<br>研究の断片、問いの記録。</p>
+  </div>
+</div>
+
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label">最新の記録</div>
+
+    <div class="articles">
+      <a class="article-card" href="https://note.com/welk_lab/n/n9741b4f4527b" target="_blank" rel="noopener">
+        <span class="ac-num">No. 01 &nbsp;·&nbsp; 2026</span>
+        <div class="ac-title">はじまりの一歩手前</div>
+        <p class="ac-body">公園のベンチで杖をつく人を見た。その人の目に、諦めと、少しの寂しさがありました。そこからすべてが始まった。</p>
+        <span class="ac-link">noteで読む →</span>
+      </a>
+
+      <div class="article-card" style="opacity:.35;pointer-events:none;cursor:default">
+        <span class="ac-num">No. 02 &nbsp;·&nbsp; 準備中</span>
+        <div class="ac-title">歩くということは、思っていたよりずっと難しい。</div>
+        <p class="ac-body">センサーを自分の足首に巻いて初めて気づいた。歩数計では見えないものが、確かにそこにあった。</p>
+      </div>
+
+      <div class="article-card" style="opacity:.2;pointer-events:none;cursor:default">
+        <span class="ac-num">No. 03 &nbsp;·&nbsp; 準備中</span>
+        <div class="ac-title">熟練者の足は、なぜ美しいのか。</div>
+        <p class="ac-body">長年の仕事で培われた歩き方には、その人固有のリズムがある。データの中にその痕跡を見つけたとき——。</p>
+      </div>
+    </div>
+
+    <div class="note-cta">
+      <p class="note-cta-text">すべての記録はnoteで公開しています。</p>
+      <a class="note-btn" href="https://note.com/welk_lab" target="_blank" rel="noopener">note を読む</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">WELK</div>
+  <p class="f-copy">© 2026 一般社団法人WELK 人が歩く研究所 · Osaka, Japan</p>
+</footer>
+
+<script>
+(() => {
+  const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  let W,H;function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}resize();addEventListener('resize',resize);
+  let mx=-1,my=-1;addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  const particles=Array.from({length:80},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00008,vy:-(Math.random()*.00004),r:.3+Math.random()*1.1,phase:Math.random()*Math.PI*2,alpha:.06+Math.random()*.22}));
+  const ripples=[];
+  function spawnR(x,y,str=1){ripples.push({x,y,r:0,maxR:(80+Math.random()*140)*str,speed:(.5+Math.random()*.5)*str,life:1})}
+  let lastAuto=0;
+  function loop(t){
+    requestAnimationFrame(loop);
+    ctx.fillStyle='#050503';ctx.fillRect(0,0,W,H);
+    const bv=Math.sin(t*.00036)*.01;
+    const vg=ctx.createRadialGradient(W/2,H/2,H*.04,W/2,H/2,H*.9);
+    vg.addColorStop(0,'rgba(5,5,3,0)');vg.addColorStop(1,`rgba(5,5,3,${.64+bv})`);
+    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    for(const p of particles){
+      p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;
+      if(mx>0){const dx=mx-p.x*W,dy=my-p.y*H,d2=dx*dx+dy*dy;if(d2<30000&&d2>100){p.vx+=dx*.00000005;p.vy+=dy*.00000005}}
+      p.vx*=.996;p.vy*=.998;
+      const a=p.alpha*(.3+Math.sin(t*.00055+p.phase)*.7);
+      ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,150,12,${a})`;ctx.fill();
+    }
+    if(t-lastAuto>3200+Math.random()*1000){lastAuto=t;spawnR(W*(.25+Math.random()*.5),H*(.3+Math.random()*.4),.55)}
+    for(let i=ripples.length-1;i>=0;i--){
+      const rp=ripples[i];rp.r+=rp.speed;rp.life=1-rp.r/rp.maxR;
+      if(rp.life<=0){ripples.splice(i,1);continue}
+      ctx.beginPath();ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(184,150,12,${rp.life*.22})`;ctx.lineWidth=.8*rp.life;ctx.stroke();
+    }
+  }
+  requestAnimationFrame(loop);
+  addEventListener('click',e=>spawnR(e.clientX,e.clientY,1.0));
+  const io=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('up');io.unobserve(en.target)}})},{threshold:.12});
+  document.querySelectorAll('.sec-label,.article-card,.note-cta').forEach(el=>io.observe(el));
+})();
+</script>
+</body>
+</html>

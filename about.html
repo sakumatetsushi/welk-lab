@@ -5,186 +5,182 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — WELK 人が歩く研究所</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <style>
-    body { background: var(--ink-mid); }
-    .page-hero {
-      min-height: 40vh;
-      display: flex;
-      align-items: flex-end;
-      padding: 80px 40px 60px;
-      background: var(--ink);
-      border-bottom: 0.5px solid rgba(184,150,12,0.15);
-      position: relative;
-    }
-    .page-hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 40px; right: 40px;
-      height: 1px;
-      background: linear-gradient(90deg, var(--gold-dim), transparent);
-    }
-    .page-hero-inner { max-width: 760px; }
-    .page-en {
-      font-size: 10px; letter-spacing: 0.3em;
-      color: var(--gold-dim); margin-bottom: 16px;
-    }
-    .page-title {
-      font-family: var(--serif); font-weight: 200;
-      font-size: clamp(24px, 3.5vw, 40px);
-      color: var(--paper); line-height: 1.5;
-    }
-    .content-block {
-      padding: 64px 40px;
-      max-width: 760px;
-      margin: 0 auto;
-    }
-    .block-label {
-      font-size: 9px; letter-spacing: 0.28em;
-      color: var(--gold-dim); text-transform: uppercase;
-      margin-bottom: 32px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .block-label::after {
-      content: ''; flex: 1; height: 0.5px;
-      background: var(--gold-dim); opacity: 0.3; max-width: 60px;
-    }
-    .reason-list { list-style: none; }
-    .reason-item {
-      display: flex; gap: 20px;
-      padding: 24px 0;
-      border-bottom: 0.5px solid rgba(247,243,236,0.06);
-    }
-    .reason-num {
-      font-family: var(--fell); font-style: italic;
-      font-size: 13px; color: var(--gold-dim);
-      min-width: 24px; padding-top: 2px;
-    }
-    .reason-text {
-      font-size: 14px; color: rgba(247,243,236,0.7);
-      line-height: 2.0;
-    }
-    .kintsugi-section {
-      background: var(--ink);
-      border-top: 0.5px solid rgba(184,150,12,0.12);
-      border-bottom: 0.5px solid rgba(184,150,12,0.12);
-      padding: 64px 40px;
-    }
-    .kintsugi-inner {
-      max-width: 760px; margin: 0 auto;
-    }
-    .kintsugi-quote {
-      font-family: var(--serif); font-weight: 200;
-      font-size: clamp(15px, 2vw, 20px);
-      line-height: 2.2; color: var(--paper);
-      border-left: 1.5px solid var(--gold-dim);
-      padding-left: 28px; margin-bottom: 32px;
-    }
-    .kintsugi-body {
-      font-size: 13px; color: rgba(247,243,236,0.5);
-      line-height: 2.2; font-weight: 300;
-    }
-    .corp-section {
-      padding: 64px 40px;
-      max-width: 760px; margin: 0 auto;
-    }
-    .corp-table { width: 100%; border-collapse: collapse; }
-    .corp-table tr {
-      border-bottom: 0.5px solid rgba(247,243,236,0.07);
-    }
-    .corp-table td {
-      padding: 14px 0; font-size: 13px; vertical-align: top;
-    }
-    .corp-table .td-label {
-      color: var(--text-mute); min-width: 140px; font-size: 11px;
-      letter-spacing: 0.05em;
-    }
-    .corp-table .td-val { color: rgba(247,243,236,0.75); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
+    html{scroll-behavior:smooth}
+    body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+    #c{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
+    /* nav */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none;transition:color .6s}
+    .logo:hover{color:rgba(234,229,220,.72)}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
+
+    /* page hero */
+    .page-hero{position:relative;z-index:1;min-height:52vh;display:flex;align-items:flex-end;padding:120px 52px 64px}
+    .ph-inner{max-width:680px}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.6;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
+    .ph-rule{width:1px;height:52px;background:linear-gradient(to bottom,var(--goldD),transparent);margin:40px 0;opacity:0;animation:fadeOnly 1.5s ease 1.2s forwards}
+
+    /* sections */
+    .sec{position:relative;z-index:1;padding:80px 52px}
+    .sec-inner{max-width:680px;margin:0 auto}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px}
+    .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
+
+    /* reason list */
+    .reason-list{list-style:none}
+    .reason-item{display:flex;gap:22px;padding:22px 0;border-bottom:.5px solid rgba(234,229,220,.06);opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
+    .reason-item.up{opacity:1;filter:blur(0);transform:none}
+    .ri-num{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--goldD);min-width:22px;padding-top:2px}
+    .ri-text{font-weight:200;font-size:clamp(13px,1.6vw,17px);color:rgba(234,229,220,.65);line-height:2.1}
+
+    /* kintsugi quote */
+    .kintsugi-quote{font-weight:200;font-size:clamp(15px,2vw,21px);line-height:2.3;color:rgba(234,229,220,.82);border-left:1.5px solid var(--goldD);padding-left:28px;margin-bottom:36px}
+    .kintsugi-body{font-weight:200;font-size:clamp(12px,1.5vw,15px);color:rgba(234,229,220,.42);line-height:2.4}
+
+    /* corp table */
+    .corp-table{width:100%;border-collapse:collapse}
+    .corp-table tr{border-bottom:.5px solid rgba(234,229,220,.07)}
+    .corp-table td{padding:14px 0;font-size:13px;vertical-align:top}
+    .corp-table .tl{color:rgba(234,229,220,.35);min-width:140px;font-size:11px;letter-spacing:.05em}
+    .corp-table .tv{color:rgba(234,229,220,.68);font-weight:200}
+
+    /* divider */
+    .divider{width:.5px;height:60px;background:linear-gradient(to bottom,transparent,var(--goldD),transparent);margin:60px auto;opacity:0;transition:opacity 1.6s ease}
+    .divider.up{opacity:.55}
+    .reveal{opacity:0;filter:blur(8px);transform:translateY(16px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
+    .reveal.up{opacity:1;filter:blur(0);transform:none}
+
+    footer{position:relative;z-index:1;padding:44px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
+    .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
+    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes fadeOnly{from{opacity:0}to{opacity:1}}
+    @media(max-width:640px){nav{padding:18px 22px}.nav-links{gap:22px}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}}
   </style>
 </head>
 <body>
+<canvas id="c"></canvas>
 
-  <nav>
-    <a class="nav-logo" href="index.html">WELK</a>
-    <ul class="nav-links">
-      <li><a href="about.html">About</a></li>
-      <li><a href="research.html">Research</a></li>
-      <li><a href="participate.html">Participate</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+<nav>
+  <a class="logo" href="index.html">WELK</a>
+  <ul class="nav-links">
+    <li><a href="about.html" class="cur">About</a></li>
+    <li><a href="journal.html">Journal</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
 
-  <div class="page-hero">
-    <div class="page-hero-inner">
-      <div class="page-en">ABOUT</div>
-      <h1 class="page-title">人が歩く研究所について</h1>
-    </div>
+<div class="page-hero">
+  <div class="ph-inner">
+    <span class="ph-en">About</span>
+    <h1 class="ph-title">人が歩く研究所について</h1>
+    <div class="ph-rule"></div>
   </div>
+</div>
 
-  <!-- Why -->
-  <div class="content-block">
-    <div class="block-label reveal">なぜ、この研究所を作ったのか</div>
+<!-- Why -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label reveal">なぜ、この研究所を作ったのか</div>
     <ul class="reason-list">
-      <li class="reason-item reveal">
-        <span class="reason-num">I.</span>
-        <span class="reason-text">膝の痛みを恐れ、歩くことを怖がる人がいる。それがとても悲しいと思った。</span>
-      </li>
-      <li class="reason-item reveal">
-        <span class="reason-num">II.</span>
-        <span class="reason-text">自分自身の関節の弱さを知っている。他人事ではないと気づいた。</span>
-      </li>
-      <li class="reason-item reveal">
-        <span class="reason-num">III.</span>
-        <span class="reason-text">「改善できない」「仕方ない」と諦められている現状がある。本当にそうなのか、疑いたかった。</span>
-      </li>
-      <li class="reason-item reveal">
-        <span class="reason-num">IV.</span>
-        <span class="reason-text">困っている人は今後も増える。高寿命化と定年延長の時代に、歩く身体を守ることの意味は大きくなっていく。</span>
-      </li>
-      <li class="reason-item reveal">
-        <span class="reason-num">V.</span>
-        <span class="reason-text">既存のシステムへの問い。歩数を数えることと、一歩の質を知ることは、まったく別のことだ。</span>
-      </li>
+      <li class="reason-item"><span class="ri-num">I.</span><span class="ri-text">膝の痛みを恐れ、歩くことを怖がる人がいる。それがとても悲しいと思った。</span></li>
+      <li class="reason-item"><span class="ri-num">II.</span><span class="ri-text">自分自身の関節の弱さを知っている。他人事ではないと気づいた。</span></li>
+      <li class="reason-item"><span class="ri-num">III.</span><span class="ri-text">「改善できない」「仕方ない」と諦められている現状がある。本当にそうなのか、疑いたかった。</span></li>
+      <li class="reason-item"><span class="ri-num">IV.</span><span class="ri-text">困っている人は今後も増える。高寿命化と定年延長の時代に、歩く身体を守ることの意味は大きくなっていく。</span></li>
+      <li class="reason-item"><span class="ri-num">V.</span><span class="ri-text">既存のシステムへの問い。歩数を数えることと、一歩の質を知ることは、まったく別のことだ。</span></li>
     </ul>
   </div>
+</section>
 
-  <!-- Kintsugi -->
-  <div class="kintsugi-section">
-    <div class="kintsugi-inner">
-      <div class="block-label reveal">金継ぎの思想</div>
-      <blockquote class="kintsugi-quote reveal">
-        一度崩壊したシステムや関係性を、<br>
-        傷跡を消すことなく抱えたまま、<br>
-        より高次の構造へ再統合する性質。<br><br>
-        それを私たちは「金継ぎ性」と呼ぶ。
-      </blockquote>
-      <p class="kintsugi-body reveal">
-        摩耗した身体は、弱さではない。それは歳月の証明だ。<br>
-        歩き続けてきた足には、その人固有のリズムと知恵が刻まれている。<br>
-        私たちはその傷跡に金を流し込み、より美しく、より強く在ることを支える。<br>
-        「持たない杖」——目には見えないが、確かに支えるものとして。
-      </p>
-    </div>
+<!-- Kintsugi -->
+<section class="sec" style="background:rgba(184,150,12,.022);border-top:.5px solid rgba(184,150,12,.08);border-bottom:.5px solid rgba(184,150,12,.08)">
+  <div class="sec-inner">
+    <div class="sec-label reveal">金継ぎの思想</div>
+    <blockquote class="kintsugi-quote reveal">
+      一度崩壊したシステムや関係性を、<br>
+      傷跡を消すことなく抱えたまま、<br>
+      より高次の構造へ再統合する性質。<br><br>
+      それを私たちは「金継ぎ性」と呼ぶ。
+    </blockquote>
+    <p class="kintsugi-body reveal">
+      摩耗した身体は、弱さではない。それは歳月の証明だ。<br>
+      歩き続けてきた足には、その人固有のリズムと知恵が刻まれている。<br>
+      私たちはその傷跡に金を流し込み、より美しく、より強く在ることを支える。<br>
+      「持たない杖」——目には見えないが、確かに支えるものとして。
+    </p>
   </div>
+</section>
 
-  <!-- Corp Info -->
-  <div class="corp-section">
-    <div class="block-label reveal">法人概要</div>
+<!-- Corp -->
+<section class="sec">
+  <div class="sec-inner">
+    <div class="sec-label reveal">法人概要</div>
     <table class="corp-table">
-      <tr class="reveal"><td class="td-label">法人名</td><td class="td-val">一般社団法人WELK 人が歩く研究所</td></tr>
-      <tr class="reveal"><td class="td-label">英語名</td><td class="td-val">WELK Institute for Human Gait</td></tr>
-      <tr class="reveal"><td class="td-label">所在地</td><td class="td-val">大阪府</td></tr>
-      <tr class="reveal"><td class="td-label">設立</td><td class="td-val">2026年（設立準備中）</td></tr>
-      <tr class="reveal"><td class="td-label">活動内容</td><td class="td-val">歩行動態解析・ウェアラブルデバイス開発・実証研究</td></tr>
-      <tr class="reveal"><td class="td-label">代表理事</td><td class="td-val">桜間 哲史</td></tr>
+      <tr class="reveal"><td class="tl">法人名</td><td class="tv">一般社団法人WELK 人が歩く研究所</td></tr>
+      <tr class="reveal"><td class="tl">英語名</td><td class="tv">WELK Institute for Human Gait</td></tr>
+      <tr class="reveal"><td class="tl">所在地</td><td class="tv">大阪府</td></tr>
+      <tr class="reveal"><td class="tl">設立</td><td class="tv">2026年（設立準備中）</td></tr>
+      <tr class="reveal"><td class="tl">活動内容</td><td class="tv">歩行動態解析・ウェアラブルデバイス開発・実証研究</td></tr>
+      <tr class="reveal"><td class="tl">代表理事</td><td class="tv">桜間 哲史</td></tr>
     </table>
   </div>
+</section>
 
-  <footer>
-    <div class="footer-logo">WELK</div>
-    <p class="footer-copy">&copy; 2026 一般社団法人WELK 人が歩く研究所 &nbsp;|&nbsp; Osaka, Japan</p>
-  </footer>
+<footer>
+  <div class="f-logo">WELK</div>
+  <p class="f-copy">© 2026 一般社団法人WELK 人が歩く研究所 · Osaka, Japan</p>
+</footer>
 
-  <script src="main.js"></script>
+<script>
+(() => {
+  const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  let W,H;
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  let mx=-1,my=-1;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+  const particles=Array.from({length:80},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00008,vy:-(Math.random()*.00004),r:.3+Math.random()*1.1,phase:Math.random()*Math.PI*2,alpha:.06+Math.random()*.22}));
+  const ripples=[];
+  function spawnR(x,y,str=1){ripples.push({x,y,r:0,maxR:(80+Math.random()*140)*str,speed:(.5+Math.random()*.5)*str,life:1})}
+  let lastAuto=0;
+  function loop(t){
+    requestAnimationFrame(loop);
+    ctx.fillStyle='#050503';ctx.fillRect(0,0,W,H);
+    const bv=Math.sin(t*.00036)*.01;
+    const vg=ctx.createRadialGradient(W/2,H/2,H*.04,W/2,H/2,H*.9);
+    vg.addColorStop(0,'rgba(5,5,3,0)');vg.addColorStop(1,`rgba(5,5,3,${.64+bv})`);
+    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+    for(const p of particles){
+      p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;
+      if(mx>0){const dx=mx-p.x*W,dy=my-p.y*H,d2=dx*dx+dy*dy;if(d2<30000&&d2>100){p.vx+=dx*.00000005;p.vy+=dy*.00000005}}
+      p.vx*=.996;p.vy*=.998;
+      const a=p.alpha*(.3+Math.sin(t*.00055+p.phase)*.7);
+      ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,150,12,${a})`;ctx.fill();
+    }
+    if(t-lastAuto>3000+Math.random()*1200){lastAuto=t;spawnR(W*(.25+Math.random()*.5),H*(.3+Math.random()*.4),.6)}
+    for(let i=ripples.length-1;i>=0;i--){
+      const rp=ripples[i];rp.r+=rp.speed;rp.life=1-rp.r/rp.maxR;
+      if(rp.life<=0){ripples.splice(i,1);continue}
+      ctx.beginPath();ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(184,150,12,${rp.life*.25})`;ctx.lineWidth=.8*rp.life;ctx.stroke();
+    }
+  }
+  requestAnimationFrame(loop);
+  addEventListener('click',e=>spawnR(e.clientX,e.clientY,1.0));
+  const io=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('up');io.unobserve(en.target)}})},{threshold:.14});
+  document.querySelectorAll('.reveal,.reason-item,.divider').forEach(el=>io.observe(el));
+})();
+</script>
 </body>
 </html>
