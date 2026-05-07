@@ -100,7 +100,7 @@
     }
     .hero-copy {
       font-weight: 200;
-      font-size: clamp(20px,3.2vw,40px);
+      font-size: clamp(28px,3.2vw,40px);
       line-height: 2.15; letter-spacing: .06em;
       color: rgba(234,229,220,.84);
     }
@@ -148,7 +148,7 @@
     .word-line {
       display: block;
       font-weight: 200;
-      font-size: clamp(13px, 1.7vw, 20px);
+      font-size: clamp(18px, 1.7vw, 20px);
       line-height: 1;           /* 行間はmargin-bottomで制御 */
       letter-spacing: .07em;
       color: rgba(234,229,220,0);  /* 初期：完全透明 */
@@ -197,7 +197,7 @@
       color: var(--goldD); display: block; margin-bottom: 18px;
     }
     .j-title {
-      font-weight: 200; font-size: clamp(14px,1.9vw,22px);
+      font-weight: 200; font-size: clamp(18px,1.9vw,22px);
       color: rgba(234,229,220,.5); margin-bottom: 34px; line-height: 1.8;
     }
     .j-cta {
@@ -241,7 +241,12 @@
     @media (max-width: 640px) {
       nav { padding: 18px 22px; }
       .nav-links { gap: 22px; }
-      #about, #journal { padding: 80px 26px; }
+      #about, #journal { padding: 80px 28px; }
+      .word-line { margin-bottom: 1.8em; }
+      .hero-brand { font-size: 11px; letter-spacing: .45em; margin-bottom: 40px; }
+      .hero-en { font-size: 11px; }
+      .j-cta { font-size: 13px; padding: 12px 28px; }
+      .scroll-ind span { font-size: 10px; }
     }
   </style>
 </head>
