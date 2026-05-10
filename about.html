@@ -13,9 +13,9 @@
     :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
     html{scroll-behavior:smooth}
     body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
-    #c{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
-    /* nav */
+    #bg-canvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+
     nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
     .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none;transition:color .6s}
     .logo:hover{color:rgba(234,229,220,.72)}
@@ -23,40 +23,68 @@
     .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
     .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
 
-    /* page hero */
-    .page-hero{position:relative;z-index:1;min-height:52vh;display:flex;align-items:flex-end;padding:120px 52px 64px}
-    .ph-inner{max-width:680px}
+    .page-hero{position:relative;z-index:1;min-height:48vh;display:flex;align-items:flex-end;padding:120px 52px 60px}
     .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
     .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.6;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
-    .ph-rule{width:1px;height:52px;background:linear-gradient(to bottom,var(--goldD),transparent);margin:40px 0;opacity:0;animation:fadeOnly 1.5s ease 1.2s forwards}
 
-    /* sections */
-    .sec{position:relative;z-index:1;padding:80px 52px}
+    .why-sec{position:relative;z-index:1;padding:80px 52px}
     .sec-inner{max-width:680px;margin:0 auto}
-    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
     .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
-
-    /* reason list */
     .reason-list{list-style:none}
     .reason-item{display:flex;gap:22px;padding:22px 0;border-bottom:.5px solid rgba(234,229,220,.06);opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
     .reason-item.up{opacity:1;filter:blur(0);transform:none}
     .ri-num{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--goldD);min-width:22px;padding-top:2px}
-    .ri-text{font-weight:200;font-size:clamp(13px,1.6vw,17px);color:rgba(234,229,220,.65);line-height:2.1}
+    .ri-text{font-weight:200;font-size:clamp(15px,1.6vw,17px);color:rgba(234,229,220,.65);line-height:2.1}
 
-    /* kintsugi quote */
-    .kintsugi-quote{font-weight:200;font-size:clamp(15px,2vw,21px);line-height:2.3;color:rgba(234,229,220,.82);border-left:1.5px solid var(--goldD);padding-left:28px;margin-bottom:36px}
-    .kintsugi-body{font-weight:200;font-size:clamp(12px,1.5vw,15px);color:rgba(234,229,220,.42);line-height:2.4}
+    /* phenomenon section */
+    .phenomenon{
+      position:relative;z-index:1;
+      min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .phenomenon-canvas{
+      position:absolute;inset:0;
+      width:100%;height:100%;
+      pointer-events:none;z-index:0;
+    }
+    .phenomenon-inner{
+      position:relative;z-index:2;
+      max-width:520px;text-align:center;
+      padding:80px 40px;
+    }
+    .ph-word{
+      display:block;font-weight:200;
+      line-height:1;letter-spacing:.06em;
+      color:rgba(234,229,220,0);
+      filter:blur(12px) brightness(.3);
+      transform:translateY(8px);
+      will-change:color,filter,transform;
+    }
+    .ph-word.large{font-size:clamp(22px,2.8vw,34px);margin-bottom:1.4em}
+    .ph-word.small{font-size:clamp(15px,1.5vw,17px);margin-bottom:1.1em;line-height:1.9}
+    .ph-word.settled{animation:wordDrift var(--dd,9s) ease-in-out infinite;animation-delay:var(--do,0s)}
+    @keyframes wordDrift{
+      0%,100%{transform:translateY(var(--dy0,0px))}
+      50%{transform:translateY(var(--dy1,.3px))}
+    }
 
-    /* corp table */
+    .section-rule{
+      position:relative;z-index:1;
+      width:.5px;height:80px;
+      background:linear-gradient(to bottom,transparent,var(--goldD),transparent);
+      margin:0 auto;
+      opacity:0;transition:opacity 1.8s ease;
+    }
+    .section-rule.up{opacity:.4}
+
+    .corp-sec{position:relative;z-index:1;padding:80px 52px}
     .corp-table{width:100%;border-collapse:collapse}
     .corp-table tr{border-bottom:.5px solid rgba(234,229,220,.07)}
     .corp-table td{padding:14px 0;font-size:13px;vertical-align:top}
-    .corp-table .tl{color:rgba(234,229,220,.35);min-width:140px;font-size:11px;letter-spacing:.05em}
-    .corp-table .tv{color:rgba(234,229,220,.68);font-weight:200}
-
-    /* divider */
-    .divider{width:.5px;height:60px;background:linear-gradient(to bottom,transparent,var(--goldD),transparent);margin:60px auto;opacity:0;transition:opacity 1.6s ease}
-    .divider.up{opacity:.55}
+    .corp-table .tl{color:rgba(234,229,220,.32);min-width:140px;font-size:11px;letter-spacing:.05em}
+    .corp-table .tv{color:rgba(234,229,220,.65);font-weight:200}
     .reveal{opacity:0;filter:blur(8px);transform:translateY(16px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
     .reveal.up{opacity:1;filter:blur(0);transform:none}
 
@@ -65,12 +93,17 @@
     .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-    @keyframes fadeOnly{from{opacity:0}to{opacity:1}}
-    @media(max-width:640px){nav{padding:18px 22px}.nav-links{gap:22px}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}}
+    @media(max-width:640px){
+      nav{padding:18px 22px}.nav-links{gap:22px}
+      .page-hero{padding:100px 26px 48px}
+      .why-sec,.corp-sec{padding:60px 26px}
+      .phenomenon-inner{padding:60px 24px}
+    }
   </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+
+<canvas id="bg-canvas"></canvas>
 
 <nav>
   <a class="logo" href="index.html">WELK</a>
@@ -82,15 +115,14 @@
 </nav>
 
 <div class="page-hero">
-  <div class="ph-inner">
+  <div>
     <span class="ph-en">About</span>
     <h1 class="ph-title">人が歩く研究所について</h1>
-    <div class="ph-rule"></div>
   </div>
 </div>
 
-<!-- Why -->
-<section class="sec">
+<!-- ① なぜやるのか -->
+<section class="why-sec">
   <div class="sec-inner">
     <div class="sec-label reveal">なぜ、この研究所を作ったのか</div>
     <ul class="reason-list">
@@ -98,32 +130,39 @@
       <li class="reason-item"><span class="ri-num">II.</span><span class="ri-text">自分自身の関節の弱さを知っている。他人事ではないと気づいた。</span></li>
       <li class="reason-item"><span class="ri-num">III.</span><span class="ri-text">「改善できない」「仕方ない」と諦められている現状がある。本当にそうなのか、疑いたかった。</span></li>
       <li class="reason-item"><span class="ri-num">IV.</span><span class="ri-text">困っている人は今後も増える。高寿命化と定年延長の時代に、歩く身体を守ることの意味は大きくなっていく。</span></li>
-      <li class="reason-item"><span class="ri-num">V.</span><span class="ri-text">既存のシステムへの問い。歩数を数えることと、一歩の質を知ることは、まったく別のことだ。</span></li>
+      <li class="reason-item"><span class="ri-num">V.</span><span class="ri-text">歩数を数えることと、一歩の質を知ることは、まったく別のことだ。</span></li>
     </ul>
   </div>
 </section>
 
-<!-- Kintsugi -->
-<section class="sec" style="background:rgba(184,150,12,.022);border-top:.5px solid rgba(184,150,12,.08);border-bottom:.5px solid rgba(184,150,12,.08)">
-  <div class="sec-inner">
-    <div class="sec-label reveal">金継ぎの思想</div>
-    <blockquote class="kintsugi-quote reveal">
-      一度崩壊したシステムや関係性を、<br>
-      傷跡を消すことなく抱えたまま、<br>
-      より高次の構造へ再統合する性質。<br><br>
-      それを私たちは「金継ぎ性」と呼ぶ。
-    </blockquote>
-    <p class="kintsugi-body reveal">
-      摩耗した身体は、弱さではない。それは歳月の証明だ。<br>
-      歩き続けてきた足には、その人固有のリズムと知恵が刻まれている。<br>
-      私たちはその傷跡に金を流し込み、より美しく、より強く在ることを支える。<br>
-      「持たない杖」——目には見えないが、確かに支えるものとして。
-    </p>
-  </div>
-</section>
+<div class="section-rule"></div>
 
-<!-- Corp -->
-<section class="sec">
+<!-- ② 着地衝撃 -->
+<div class="phenomenon" id="ph-shock">
+  <canvas class="phenomenon-canvas" id="shock-canvas"></canvas>
+  <div class="phenomenon-inner">
+    <span class="ph-word large" data-delay="0"    data-dur="3400" data-dd="9s"  data-dy0="0px"   data-dy1=".25px">足が、地面に触れる。</span>
+    <span class="ph-word small" data-delay="1800" data-dur="3800" data-dd="11s" data-dy0="-.1px" data-dy1=".2px" >その瞬間だけ、身体は正直になる。</span>
+    <span class="ph-word small" data-delay="3400" data-dur="4200" data-dd="13s" data-dy0="0px"   data-dy1="-.18px">蓄積された庇いが、衝撃の形に現れる。</span>
+  </div>
+</div>
+
+<div class="section-rule"></div>
+
+<!-- ③ 左右差 -->
+<div class="phenomenon" id="ph-asym">
+  <canvas class="phenomenon-canvas" id="asym-canvas"></canvas>
+  <div class="phenomenon-inner">
+    <span class="ph-word large" data-delay="0"    data-dur="3400" data-dd="10s" data-dy0="0px"    data-dy1=".22px">同じ一歩は、一度もない。</span>
+    <span class="ph-word small" data-delay="2000" data-dur="3800" data-dd="12s" data-dy0="-.08px" data-dy1=".18px">左と右は、必ず違う物語を持っている。</span>
+    <span class="ph-word small" data-delay="3800" data-dur="4400" data-dd="14s" data-dy0=".1px"   data-dy1="-.2px">その非対称こそが、その人の歩きだ。</span>
+  </div>
+</div>
+
+<div class="section-rule"></div>
+
+<!-- ④ 法人概要 -->
+<section class="corp-sec">
   <div class="sec-inner">
     <div class="sec-label reveal">法人概要</div>
     <table class="corp-table">
@@ -144,42 +183,245 @@
 
 <script>
 (() => {
-  const cv=document.getElementById('c'),ctx=cv.getContext('2d');
+  /* ══════════════════════════════════════
+     BG CANVAS — 背景粒子
+  ══════════════════════════════════════ */
+  const bgCv=document.getElementById('bg-canvas'),bgCtx=bgCv.getContext('2d');
   let W,H;
-  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+  function resize(){W=bgCv.width=innerWidth;H=bgCv.height=innerHeight}
   resize();addEventListener('resize',resize);
   let mx=-1,my=-1;
   addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-  const particles=Array.from({length:80},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00008,vy:-(Math.random()*.00004),r:.3+Math.random()*1.1,phase:Math.random()*Math.PI*2,alpha:.06+Math.random()*.22}));
-  const ripples=[];
-  function spawnR(x,y,str=1){ripples.push({x,y,r:0,maxR:(80+Math.random()*140)*str,speed:(.5+Math.random()*.5)*str,life:1})}
-  let lastAuto=0;
-  function loop(t){
-    requestAnimationFrame(loop);
-    ctx.fillStyle='#050503';ctx.fillRect(0,0,W,H);
+  const pts=Array.from({length:80},()=>({
+    x:Math.random(),y:Math.random(),
+    vx:(Math.random()-.5)*.00007,vy:-(Math.random()*.000035),
+    r:.3+Math.random()*1.0,phase:Math.random()*Math.PI*2,alpha:.05+Math.random()*.18
+  }));
+  function bgLoop(t){
+    requestAnimationFrame(bgLoop);
+    bgCtx.fillStyle='#050503';bgCtx.fillRect(0,0,W,H);
     const bv=Math.sin(t*.00036)*.01;
-    const vg=ctx.createRadialGradient(W/2,H/2,H*.04,W/2,H/2,H*.9);
-    vg.addColorStop(0,'rgba(5,5,3,0)');vg.addColorStop(1,`rgba(5,5,3,${.64+bv})`);
-    ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
-    for(const p of particles){
+    const vg=bgCtx.createRadialGradient(W/2,H/2,H*.04,W/2,H/2,H*.9);
+    vg.addColorStop(0,'rgba(5,5,3,0)');vg.addColorStop(1,`rgba(5,5,3,${.65+bv})`);
+    bgCtx.fillStyle=vg;bgCtx.fillRect(0,0,W,H);
+    for(const p of pts){
       p.x=(p.x+p.vx+1)%1;p.y=(p.y+p.vy+1)%1;
-      if(mx>0){const dx=mx-p.x*W,dy=my-p.y*H,d2=dx*dx+dy*dy;if(d2<30000&&d2>100){p.vx+=dx*.00000005;p.vy+=dy*.00000005}}
+      if(mx>0){const dx=mx-p.x*W,dy=my-p.y*H,d2=dx*dx+dy*dy;
+        if(d2<25000&&d2>100){p.vx+=dx*.000000045;p.vy+=dy*.000000045}}
       p.vx*=.996;p.vy*=.998;
       const a=p.alpha*(.3+Math.sin(t*.00055+p.phase)*.7);
-      ctx.beginPath();ctx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(184,150,12,${a})`;ctx.fill();
-    }
-    if(t-lastAuto>3000+Math.random()*1200){lastAuto=t;spawnR(W*(.25+Math.random()*.5),H*(.3+Math.random()*.4),.6)}
-    for(let i=ripples.length-1;i>=0;i--){
-      const rp=ripples[i];rp.r+=rp.speed;rp.life=1-rp.r/rp.maxR;
-      if(rp.life<=0){ripples.splice(i,1);continue}
-      ctx.beginPath();ctx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
-      ctx.strokeStyle=`rgba(184,150,12,${rp.life*.25})`;ctx.lineWidth=.8*rp.life;ctx.stroke();
+      bgCtx.beginPath();bgCtx.arc(p.x*W,p.y*H,p.r,0,Math.PI*2);
+      bgCtx.fillStyle=`rgba(184,150,12,${a})`;bgCtx.fill();
     }
   }
+  requestAnimationFrame(bgLoop);
+
+  /* ══════════════════════════════════════
+     SHOCK CANVAS — 着地衝撃
+  ══════════════════════════════════════ */
+  const shockCv=document.getElementById('shock-canvas');
+  const shockCtx=shockCv.getContext('2d');
+  const shockSec=document.getElementById('ph-shock');
+  let SW,SH;
+  function rsShock(){SW=shockCv.width=shockSec.offsetWidth;SH=shockCv.height=shockSec.offsetHeight}
+  rsShock();addEventListener('resize',rsShock);
+
+  const sRipples=[];
+  let lastSAuto=0,shockOn=false,sStep=0;
+
+  function spawnShock(){
+    if(sRipples.length>=8)sRipples.shift();
+    sStep++;
+    const cx=SW*.5,cy=SH*.48;
+    // 左右交互で中心位置が微妙にズレる（片側の衝撃）
+    const side=sStep%2===0?-1:1;
+    const bx=cx+side*20+(Math.random()-.5)*8;
+    const by=cy+(Math.random()-.5)*8;
+    // 主波紋：鋭い高周波
+    sRipples.push({x:bx,y:by,type:'impact',r:0,maxR:75+Math.random()*55,speed:2.0+Math.random()*.8,life:1,biasLeft:sStep%2===0});
+    // 残響：遅い
+    setTimeout(()=>{
+      if(sRipples.length>=8)sRipples.shift();
+      sRipples.push({x:bx+(Math.random()-.5)*16,y:by+(Math.random()-.5)*12,type:'echo',r:0,maxR:45+Math.random()*35,speed:.55+Math.random()*.25,life:1,biasLeft:sStep%2===0});
+    },200);
+  }
+
+  function drawShock(t){
+    if(!shockOn)return;
+    shockCtx.clearRect(0,0,SW,SH);
+    if(t-lastSAuto>2000+Math.random()*500){lastSAuto=t;spawnShock()}
+    for(let i=sRipples.length-1;i>=0;i--){
+      const rp=sRipples[i];
+      rp.r+=rp.speed;rp.life=1-rp.r/rp.maxR;
+      if(rp.life<=0){sRipples.splice(i,1);continue}
+      const SEG=32;
+      shockCtx.save();
+      if(rp.type==='impact'){
+        for(let s=0;s<SEG;s++){
+          const a0=(s/SEG)*Math.PI*2,a1=a0+Math.PI*2/SEG+.01;
+          // 片側（biasLeft側）だけ張り出す
+          const onBias=rp.biasLeft?(Math.cos(a0)<0):(Math.cos(a0)>0);
+          const bias=onBias?1.1:1.0;
+          const noise=1+Math.sin(a0*8+t*.004)*.06*rp.life;
+          const sr=rp.r*bias*noise;
+          shockCtx.beginPath();shockCtx.arc(rp.x,rp.y,sr,a0,a1);
+          shockCtx.strokeStyle=`rgba(184,150,12,${rp.life*(onBias?.44:.24)})`;
+          shockCtx.lineWidth=(1.1+Math.sin(a0*8)*.3)*rp.life;
+          shockCtx.stroke();
+        }
+        if(rp.r<18){
+          const g=shockCtx.createRadialGradient(rp.x,rp.y,0,rp.x,rp.y,18);
+          g.addColorStop(0,`rgba(184,150,12,${rp.life*.14})`);g.addColorStop(1,'rgba(184,150,12,0)');
+          shockCtx.beginPath();shockCtx.arc(rp.x,rp.y,18,0,Math.PI*2);
+          shockCtx.fillStyle=g;shockCtx.fill();
+        }
+      } else {
+        shockCtx.beginPath();
+        shockCtx.ellipse(rp.x,rp.y,rp.r,rp.r*.65,0,0,Math.PI*2);
+        shockCtx.strokeStyle=`rgba(184,150,12,${rp.life*.16})`;
+        shockCtx.lineWidth=.55*rp.life;shockCtx.stroke();
+      }
+      shockCtx.restore();
+    }
+  }
+
+  /* ══════════════════════════════════════
+     ASYM CANVAS — 左右差
+  ══════════════════════════════════════ */
+  const asymCv=document.getElementById('asym-canvas');
+  const asymCtx=asymCv.getContext('2d');
+  const asymSec=document.getElementById('ph-asym');
+  let AW,AH;
+  function rsAsym(){AW=asymCv.width=asymSec.offsetWidth;AH=asymCv.height=asymSec.offsetHeight}
+  rsAsym();addEventListener('resize',rsAsym);
+
+  const aRipples=[];
+  let lastAAuto=0,asymOn=false,aStep=0;
+
+  function spawnAsym(t){
+    if(aRipples.length>=8)aRipples.shift();
+    aStep++;
+    const isLeft=aStep%2===0;
+    const cx=AW*.5,cy=AH*.48;
+    // 左右で中心位置・扁平率・強度が違う
+    const ox=isLeft?-(14+Math.sin(t*.0003)*7):(9+Math.cos(t*.0004)*5);
+    const sx=isLeft?1.0:.80+Math.random()*.1;
+    const sy=isLeft?.72:.88+Math.random()*.08;
+    aRipples.push({
+      x:cx+ox+(Math.random()-.5)*7,y:cy+(Math.random()-.5)*7,
+      scaleX:sx,scaleY:sy,isLeft,
+      r:0,maxR:88+Math.random()*48,speed:.62+Math.random()*.32,life:1,
+      phase:Math.random()*Math.PI*2
+    });
+  }
+
+  function drawAsym(t){
+    if(!asymOn)return;
+    asymCtx.clearRect(0,0,AW,AH);
+    if(t-lastAAuto>1700+Math.random()*400){lastAAuto=t;spawnAsym(t)}
+    for(let i=aRipples.length-1;i>=0;i--){
+      const rp=aRipples[i];
+      rp.r+=rp.speed;rp.life=1-rp.r/rp.maxR;
+      if(rp.life<=0){aRipples.splice(i,1);continue}
+      asymCtx.save();
+      asymCtx.translate(rp.x,rp.y);
+      asymCtx.scale(rp.scaleX,rp.scaleY);
+      const SEG=36;
+      asymCtx.beginPath();
+      for(let s=0;s<=SEG;s++){
+        const a=(s/SEG)*Math.PI*2;
+        const noise=1+Math.sin(a*3+rp.phase+t*.0002)*.045*rp.life;
+        const r=rp.r*noise;
+        s===0?asymCtx.moveTo(Math.cos(a)*r,Math.sin(a)*r):asymCtx.lineTo(Math.cos(a)*r,Math.sin(a)*r);
+      }
+      asymCtx.closePath();
+      // 左足はやや明るく（強い踏み込み）、右足はやや暗く（弱い側）
+      asymCtx.strokeStyle=`rgba(184,150,12,${(rp.isLeft?.33:.20)*rp.life})`;
+      asymCtx.lineWidth=.9*rp.life;asymCtx.stroke();
+      if(rp.r<rp.maxR*.3){
+        const c=rp.isLeft?'184,150,12':'155,132,35';
+        const g=asymCtx.createRadialGradient(0,0,0,0,0,rp.r*.8);
+        g.addColorStop(0,`rgba(${c},${rp.life*.028})`);g.addColorStop(1,`rgba(${c},0)`);
+        asymCtx.beginPath();asymCtx.arc(0,0,rp.r*.8,0,Math.PI*2);
+        asymCtx.fillStyle=g;asymCtx.fill();
+      }
+      asymCtx.restore();
+    }
+  }
+
+  /* ── メインループ ── */
+  function loop(t){requestAnimationFrame(loop);drawShock(t);drawAsym(t)}
   requestAnimationFrame(loop);
-  addEventListener('click',e=>spawnR(e.clientX,e.clientY,1.0));
-  const io=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('up');io.unobserve(en.target)}})},{threshold:.14});
-  document.querySelectorAll('.reveal,.reason-item,.divider').forEach(el=>io.observe(el));
+
+  /* ── セクション可視判定 ── */
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.target.id==='ph-shock')shockOn=en.isIntersecting;
+      if(en.target.id==='ph-asym') asymOn =en.isIntersecting;
+    });
+  },{threshold:.15}).observe(shockSec),
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.target.id==='ph-shock')shockOn=en.isIntersecting;
+      if(en.target.id==='ph-asym') asymOn =en.isIntersecting;
+    });
+  },{threshold:.15}).observe(asymSec);
+
+  /* ══════════════════════════════════════
+     SEDIMENT ENGINE
+  ══════════════════════════════════════ */
+  function settleWord(el){
+    const delay=parseInt(el.dataset.delay??0);
+    const dur  =parseInt(el.dataset.dur??3400);
+    const dd=el.dataset.dd??'10s',dy0=el.dataset.dy0??'0px',dy1=el.dataset.dy1??'.2px';
+    setTimeout(()=>{
+      el.style.transition=[
+        `color ${dur}ms cubic-bezier(.1,.9,.2,1)`,
+        `filter ${dur*1.1}ms cubic-bezier(.1,.9,.2,1)`,
+        `transform ${dur*.9}ms cubic-bezier(.1,.9,.2,1)`
+      ].join(',');
+      el.style.color=el.classList.contains('small')?'rgba(234,229,220,.5)':'rgba(234,229,220,.82)';
+      el.style.filter='blur(0) brightness(1)';
+      el.style.transform='translateY(0)';
+      setTimeout(()=>{
+        el.style.transition='none';
+        el.style.setProperty('--dd',dd);
+        el.style.setProperty('--do',`${Math.random()*-4}s`);
+        el.style.setProperty('--dy0',dy0);
+        el.style.setProperty('--dy1',dy1);
+        el.classList.add('settled');
+      },dur*1.2);
+    },delay);
+  }
+
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting)return;
+      en.target.querySelectorAll('.ph-word').forEach(el=>settleWord(el));
+    });
+  },{threshold:.2}).observe(shockSec),
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting)return;
+      en.target.querySelectorAll('.ph-word').forEach(el=>settleWord(el));
+    });
+  },{threshold:.2}).observe(asymSec);
+
+  /* ── reveal ── */
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('up')}});
+  },{threshold:.12}).observe(document.querySelector('.sec-label')||document.body);
+  new IntersectionObserver(entries=>{
+    entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('up')}});
+  },{threshold:.12});
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting)return;
+      en.target.classList.add('up');io.unobserve(en.target);
+    });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal,.reason-item,.section-rule').forEach(el=>io.observe(el));
+
 })();
 </script>
 </body>
