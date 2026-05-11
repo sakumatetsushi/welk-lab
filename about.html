@@ -291,6 +291,9 @@ class FlowField {
     // パターン別の火花定義を生成
     const sparks  = this._buildSparks(x, y, sc, imprintType, isLeft, gravX, gravY);
 
+    // 上限10個：超えたら最も古いものから削除
+    if (this.disturbances.length >= 10) this.disturbances.shift();
+
     this.disturbances.push({
       x, y, strength, duration,
       elapsed: 0,
