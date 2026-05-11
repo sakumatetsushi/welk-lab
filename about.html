@@ -280,117 +280,169 @@ class FlowField {
     }
   }
 
-  // 歪みを注入（着地イベント）
-  // pattern: 'heel' | 'out' | 'in' | 'suriashi' | 'rotation'
-  disturb(x, y, strength, duration, isLeft, pattern = 'heel') {
-    // パターンに応じたフラッシュ制御点を事前に生成
-    const flashPts = this._buildFlashPoints(x, y, pattern, isLeft);
+  // 接地イベントを登録 → 線香花火粒子群を生成
+  disturb(x, y, strength, duration, isLeft, imprintType = 'heavy') {
+    const sc      = Math.min(this.W, this.H);
+    const gAngle  = this.cfg.gaitAngle ?? (Math.PI * 0.5 + 0.32); // 歩行進行角
+    // 「進行方向の逆」が重力方向（B案）
+    const gravX   = -Math.cos(gAngle);
+    const gravY   = -Math.sin(gAngle);
+
+    // パターン別の火花定義を生成
+    const sparks  = this._buildSparks(x, y, sc, imprintType, isLeft, gravX, gravY);
+
     this.disturbances.push({
       x, y, strength, duration,
       elapsed: 0,
-      isLeft, pattern, flashPts,
-      type: 'impact',
+      isLeft, imprintType,
+      type:    'impact',
+      sparks,           // 線香花火粒子群
+      gravX, gravY,     // 重力方向（進行逆向き）
     });
   }
 
-  // パターン別のフラッシュ制御点を生成
-  // W・Hを参照して画面全体スケールで描く
-  _buildFlashPoints(cx, cy, pattern, isLeft) {
-    const W    = this.W, H = this.H;
-    const side = isLeft ? -1 : 1;
-    const pts  = [];
+  // パターン別の線香花火粒子群を生成
+  _buildSparks(cx, cy, sc, type, isLeft, gravX, gravY) {
+    const sparks = [];
+    const side   = isLeft ? -1 : 1;
 
-    // 画面の短辺を基準にしたスケール係数
-    const sc = Math.min(W, H);
+    // 共通パラメータ
+    const baseSpd  = sc * 0.0018; // 基本初速（sc比）
+    const baseLife = 0.55 + Math.random() * 0.25; // 粒子寿命（duration比）
 
-    if (pattern === 'heel') {
-      // 踵着地：画面縦方向に長いライン（踵→爪先の軌跡）
-      const len   = sc * 0.38 + Math.random() * sc * 0.12;
-      const angle = -Math.PI * 0.5 + side * 0.12 + (Math.random()-0.5) * 0.1;
-      const count = 7;
-      for (let i = 0; i < count; i++) {
-        const t = i / (count-1);
-        pts.push({
-          x:     cx + Math.cos(angle) * len * (t - 0.2),
-          y:     cy + Math.sin(angle) * len * (t - 0.2),
-          r:     sc * 0.04 * (1 - t * 0.6),
-          peak:  0.7 - t * 0.32,
-          delay: t * 0.45,
+    if (type === 'suriashi') {
+      // すり足：横に広く・低く・地面を這う
+      // 粒子が前後に長楕円状に広がり、地面を擦るように動く
+      for (let i = 0; i < 55; i++) {
+        const along  = (Math.random() - 0.5) * 2.8; // 進行方向に長く
+        const perp   = (Math.random() - 0.5) * 0.4; // 垂直方向は狭く
+        const perpX  = -gravY, perpY = gravX; // 進行方向に垂直
+        sparks.push({
+          x: cx, y: cy,
+          vx: (-gravX * along + perpX * perp) * baseSpd * (0.6 + Math.random() * 0.4),
+          vy: (-gravY * along + perpY * perp) * baseSpd * (0.6 + Math.random() * 0.4),
+          life: 1, maxLife: baseLife * (0.7 + Math.random() * 0.5),
+          r: 0.8 + Math.random() * 1.2,
+          alpha: 0.35 + Math.random() * 0.3,
+          gravity: 0.28, // 重力弱め＝這う
         });
       }
 
-    } else if (pattern === 'out') {
-      // アウト着地：外側から内側へ大きな弧
-      const radius = sc * 0.22 + Math.random() * sc * 0.08;
-      const startA = side > 0 ?  0.15 : Math.PI - 0.15;
-      const endA   = side > 0 ?  Math.PI * 0.72 : Math.PI * 0.28;
-      const count  = 7;
-      for (let i = 0; i < count; i++) {
-        const t = i / (count-1);
-        const a = startA + (endA - startA) * t;
-        pts.push({
-          x:     cx + Math.cos(a) * radius * side,
-          y:     cy + Math.sin(a) * radius * 0.55,
-          r:     sc * 0.032 * (1 - t * 0.5),
-          peak:  0.65 - t * 0.28,
-          delay: t * 0.5,
+    } else if (type === 'heavy') {
+      // 衝撃大：密度高・中心が強烈・放射状に飛ぶ
+      for (let i = 0; i < 80; i++) {
+        const angle  = Math.random() * Math.PI * 2;
+        const speed  = baseSpd * (0.8 + Math.random() * 1.8);
+        sparks.push({
+          x: cx + (Math.random() - 0.5) * sc * 0.018,
+          y: cy + (Math.random() - 0.5) * sc * 0.018,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1, maxLife: baseLife * (0.6 + Math.random() * 0.6),
+          r: 1.0 + Math.random() * 2.2,  // 大きめ
+          alpha: 0.55 + Math.random() * 0.35, // 明るい
+          gravity: 0.55,
+        });
+      }
+      // 中心核：特に明るい数粒子
+      for (let i = 0; i < 8; i++) {
+        sparks.push({
+          x: cx, y: cy,
+          vx: (Math.random() - 0.5) * baseSpd * 0.3,
+          vy: (Math.random() - 0.5) * baseSpd * 0.3,
+          life: 1, maxLife: 0.85,
+          r: 3.0 + Math.random() * 2.0,
+          alpha: 0.9,
+          gravity: 0.1,
         });
       }
 
-    } else if (pattern === 'in') {
-      // イン着地：内側から外側へ逆弧
-      const radius = sc * 0.20 + Math.random() * sc * 0.08;
-      const startA = side > 0 ? Math.PI * 0.72 : Math.PI * 0.28;
-      const endA   = side > 0 ?  0.08 : Math.PI - 0.08;
-      const count  = 7;
-      for (let i = 0; i < count; i++) {
-        const t = i / (count-1);
-        const a = startA + (endA - startA) * t;
-        pts.push({
-          x:     cx + Math.cos(a) * radius * side,
-          y:     cy + Math.sin(a) * radius * 0.55,
-          r:     sc * 0.028 * (1 - t * 0.45),
-          peak:  0.55 - t * 0.2,
-          delay: t * 0.5,
+    } else if (type === 'out') {
+      // アウトサイド着地：外側（side方向）だけに粒子が飛ぶ
+      const perpX = -gravY * side, perpY = gravX * side;
+      for (let i = 0; i < 60; i++) {
+        // 外側90度の扇形に集中
+        const spread = (Math.random() - 0.3) * Math.PI * 0.8;
+        const baseA  = Math.atan2(perpY, perpX);
+        const angle  = baseA + spread;
+        const speed  = baseSpd * (0.5 + Math.random() * 1.4);
+        sparks.push({
+          x: cx, y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1, maxLife: baseLife * (0.6 + Math.random() * 0.5),
+          r: 0.7 + Math.random() * 1.5,
+          alpha: 0.4 + Math.random() * 0.35,
+          gravity: 0.5,
         });
       }
 
-    } else if (pattern === 'suriashi') {
-      // すり足：画面縦方向に非常に長い線、前端で吸い込まれる
-      const len   = sc * 0.52 + Math.random() * sc * 0.15;
-      const angle = -Math.PI * 0.5 + (Math.random()-0.5) * 0.06;
-      const count = 9;
-      for (let i = 0; i < count; i++) {
-        const t = i / (count-1);
-        pts.push({
-          x:     cx + Math.cos(angle) * len * (t - 0.45),
-          y:     cy + Math.sin(angle) * len * (t - 0.45),
-          r:     sc * 0.015 * (1 + (1-t) * 0.8),  // 前端ほど細い
-          peak:  0.25 + (1-t) * 0.35,              // 前端ほど暗い
-          delay: t * 0.35,
+    } else if (type === 'in') {
+      // インサイド着地：内側（-side方向）だけに粒子が飛ぶ
+      const perpX = gravY * side, perpY = -gravX * side;
+      for (let i = 0; i < 60; i++) {
+        const spread = (Math.random() - 0.3) * Math.PI * 0.8;
+        const baseA  = Math.atan2(perpY, perpX);
+        const angle  = baseA + spread;
+        const speed  = baseSpd * (0.5 + Math.random() * 1.2);
+        sparks.push({
+          x: cx, y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1, maxLife: baseLife * (0.6 + Math.random() * 0.5),
+          r: 0.7 + Math.random() * 1.5,
+          alpha: 0.38 + Math.random() * 0.3,
+          gravity: 0.48,
         });
       }
 
-    } else if (pattern === 'rotation') {
-      // 回転着地：画面スケールの渦状ライン
-      const turns  = 0.7 + Math.random() * 0.35;
-      const maxR   = sc * 0.20 + Math.random() * sc * 0.06;
-      const count  = 9;
-      for (let i = 0; i < count; i++) {
-        const t = i / (count-1);
-        const a = t * Math.PI * 2 * turns * side;
-        const r = maxR * t;
-        pts.push({
-          x:     cx + Math.cos(a) * r,
-          y:     cy + Math.sin(a) * r * 0.55,
-          r:     sc * 0.03 * (1 - t * 0.55),
-          peak:  0.6 - t * 0.25,
-          delay: t * 0.58,
+    } else if (type === 'heel') {
+      // 踵のみ：鋭利・少数・速く・短命
+      for (let i = 0; i < 30; i++) {
+        // 踵から後方へ鋭く飛ぶ（進行方向逆）
+        const spread = (Math.random() - 0.5) * 0.55;
+        const baseA  = Math.atan2(gravY, gravX); // 真後ろ
+        const angle  = baseA + spread;
+        const speed  = baseSpd * (1.5 + Math.random() * 2.5); // 速い
+        sparks.push({
+          x: cx, y: cy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1, maxLife: baseLife * (0.3 + Math.random() * 0.3), // 短命
+          r: 0.5 + Math.random() * 0.9, // 細い
+          alpha: 0.5 + Math.random() * 0.4,
+          gravity: 0.7, // 重力強め＝鋭くカーブ
+        });
+      }
+
+    } else if (type === 'mid') {
+      // ミッド着地：足裏形状（前広がりの楕円）に粒子が分布
+      // 足裏の輪郭に沿って粒子が生まれ、そこから飛び散る
+      const fwdX = -gravX, fwdY = -gravY; // 進行方向
+      const perpX = -gravY, perpY = gravX;
+      for (let i = 0; i < 70; i++) {
+        // 足裏形状：前半分が広く、後ろは細い
+        const t     = Math.random(); // 0=踵, 1=爪先
+        const footW = (0.15 + t * 0.35) * sc * 0.04; // 爪先ほど広い
+        const footL = (t - 0.5) * sc * 0.06;          // 前後の位置
+        const ox    = fwdX * footL + perpX * (Math.random() - 0.5) * footW * 2;
+        const oy    = fwdY * footL + perpY * (Math.random() - 0.5) * footW * 2;
+        // 各点から外向きに飛ぶ
+        const angle = Math.atan2(oy, ox) + (Math.random() - 0.5) * 0.9;
+        const speed = baseSpd * (0.4 + Math.random() * 0.9);
+        sparks.push({
+          x: cx + ox, y: cy + oy,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 1, maxLife: baseLife * (0.5 + Math.random() * 0.6),
+          r: 0.8 + Math.random() * 1.4,
+          alpha: 0.3 + Math.random() * 0.35,
+          gravity: 0.42,
         });
       }
     }
 
-    return pts;
+    return sparks;
   }
 
   // 歪みをフィールドに適用
@@ -479,63 +531,54 @@ class FlowField {
     ctx.fillStyle = `rgba(5,5,3,${trailAlpha})`;
     ctx.fillRect(0, 0, W, H);
 
-    // 着地フラッシュ — パターン別ライン描画
+    // ── 線香花火粒子の更新・描画 ──────────────────
     for (const d of this.disturbances) {
-      if (!d.flashPts || !d.flashPts.length) continue;
       const progress = d.elapsed / d.duration;
-      if (progress > 0.22) continue; // 最初の22%だけ
+      if (!d.sparks) continue;
 
-      const flashLife = 1 - progress / 0.22;
-      const elapsed01 = progress / 0.22; // 0→1（フラッシュ内での経過）
+      for (const sp of d.sparks) {
+        if (sp.life <= 0) continue;
 
-      ctx.save();
+        // 重力（進行逆方向）を加速度として加える
+        const gravStrength = 0.028 * sp.gravity;
+        sp.vx += d.gravX * gravStrength;
+        sp.vy += d.gravY * gravStrength;
 
-      for (const fp of d.flashPts) {
-        // delay：制御点ごとに少しずつ遅れて光る（走査線のように）
-        const localLife = Math.max(0, Math.min(1,
-          (elapsed01 - fp.delay) / (1 - fp.delay + 0.001)
-        ));
-        if (localLife <= 0) continue;
+        // 摩擦（空気抵抗）
+        sp.vx *= 0.968;
+        sp.vy *= 0.968;
 
-        // 出現→ピーク→消滅のカーブ
-        const envelope = localLife < 0.35
-          ? localLife / 0.35
-          : 1 - (localLife - 0.35) / 0.65;
+        // 位置更新
+        sp.x += sp.vx;
+        sp.y += sp.vy;
 
-        const alpha = fp.peak * envelope * flashLife;
-        if (alpha < 0.01) continue;
+        // 寿命減衰
+        sp.life -= 1 / (sp.maxLife * d.duration / 16);
 
-        const g = ctx.createRadialGradient(fp.x, fp.y, 0, fp.x, fp.y, fp.r);
-        g.addColorStop(0,   `rgba(${goldR},${goldG},${goldB},${alpha})`);
-        g.addColorStop(0.45,`rgba(${goldR},${goldG},${goldB},${alpha*0.32})`);
-        g.addColorStop(1,   `rgba(${goldR},${goldG},${goldB},0)`);
-        ctx.beginPath();
-        ctx.arc(fp.x, fp.y, fp.r, 0, Math.PI*2);
-        ctx.fillStyle = g;
-        ctx.fill();
-      }
+        if (sp.life <= 0) continue;
 
-      // 制御点をベジェ曲線で繋ぐ細いライン（走査感）
-      if (d.flashPts.length >= 2 && elapsed01 < 0.65) {
-        ctx.beginPath();
-        ctx.moveTo(d.flashPts[0].x, d.flashPts[0].y);
-        for (let i = 1; i < d.flashPts.length; i++) {
-          const prev = d.flashPts[i-1];
-          const curr = d.flashPts[i];
-          const mx   = (prev.x + curr.x) * 0.5;
-          const my   = (prev.y + curr.y) * 0.5;
-          ctx.quadraticCurveTo(prev.x, prev.y, mx, my);
+        // 描画：速度に応じて軌跡の長さが変わる（高速=長い尾）
+        const spd = Math.sqrt(sp.vx*sp.vx + sp.vy*sp.vy);
+        const tailLen = Math.min(spd * 2.8, 8);
+        const a = sp.alpha * Math.pow(sp.life, 0.7);
+        if (a < 0.008) continue;
+
+        if (tailLen > 0.5) {
+          ctx.beginPath();
+          ctx.moveTo(sp.x - sp.vx * tailLen / spd * sp.r,
+                     sp.y - sp.vy * tailLen / spd * sp.r);
+          ctx.lineTo(sp.x, sp.y);
+          ctx.strokeStyle = `rgba(${goldR},${goldG},${goldB},${a})`;
+          ctx.lineWidth   = sp.r * sp.life;
+          ctx.lineCap     = 'round';
+          ctx.stroke();
+        } else {
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.r * sp.life, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${goldR},${goldG},${goldB},${a})`;
+          ctx.fill();
         }
-        const lp = d.flashPts[d.flashPts.length-1];
-        ctx.lineTo(lp.x, lp.y);
-        ctx.strokeStyle = `rgba(${goldR},${goldG},${goldB},${flashLife * 0.18 * (1 - elapsed01/0.65)})`;
-        ctx.lineWidth   = 0.6;
-        ctx.lineCap     = 'round';
-        ctx.lineJoin    = 'round';
-        ctx.stroke();
       }
-
-      ctx.restore();
     }
 
     // 粒子を線として描く
@@ -601,6 +644,101 @@ class FlowField {
 /* ════════════════════════════════════════════════════════
    SHOCK SECTION — 着地衝撃
 ════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════
+   GAIT LANE — 歩行軌道の管理
+   斜め方向に前進する歩行レーンを設定し、
+   左右交互に一定歩幅で接地位置を計算する
+════════════════════════════════════════════════════════ */
+class GaitLane {
+  constructor(ff, options = {}) {
+    this.ff = ff;
+
+    // 歩行方向：斜め（右上から左下へ、または左上から右下へ）
+    // angle：進行方向の角度（ラジアン）
+    this.angle    = options.angle    ?? (Math.PI * 0.5 + 0.35); // 斜め前進
+    this.stride   = options.stride   ?? 0.14;  // 歩幅（画面高さ比）
+    this.laneW    = options.laneW    ?? 0.12;  // 左右の幅（画面幅比）
+    this.wobble   = options.wobble   ?? 0.022; // 歩行の揺らぎ量
+    this.isAsym   = options.isAsym   ?? false; // 左右差モード
+
+    this.step     = 0;
+    // 初期位置：画面上部付近からスタート
+    this.pos      = { x: 0.5, y: 0.15 };
+    this._resetLane();
+  }
+
+  _resetLane() {
+    // 斜め軌道のスタート位置をランダムに決める
+    // 画面の上側1/3からスタートし、斜め下に流れる
+    this.pos = {
+      x: 0.28 + Math.random() * 0.44,
+      y: 0.08 + Math.random() * 0.15,
+    };
+    this.step = 0;
+  }
+
+  next() {
+    const W = this.ff.W, H = this.ff.H;
+    const sc = Math.min(W, H);
+    this.step++;
+    const isLeft = this.step % 2 === 0;
+
+    // 歩行方向ベクトル（斜め前進）
+    const dx = Math.cos(this.angle);
+    const dy = Math.sin(this.angle);
+
+    // 歩幅分だけ前進
+    const stride = sc * (this.stride + (Math.random() - 0.5) * 0.04);
+    this.pos.x += dx * stride / W;
+    this.pos.y += dy * stride / H;
+
+    // 左右の横ずれ（左足は左、右足は右）
+    const perpX = -dy; // 進行方向に垂直
+    const perpY =  dx;
+    const lateralBase = W * this.laneW * 0.5;
+    // 左右差モードでは左右のずれ量に差をつける
+    const lateralL = lateralBase * (this.isAsym ? 1.0 : 1.0);
+    const lateralR = lateralBase * (this.isAsym ? 0.72 : 1.0);
+    const lateral  = isLeft ? -lateralL : lateralR;
+    const wobbleX  = (Math.random() - 0.5) * W * this.wobble;
+    const wobbleY  = (Math.random() - 0.5) * H * this.wobble;
+
+    const cx = this.pos.x * W + perpX * lateral + wobbleX;
+    const cy = this.pos.y * H + perpY * lateral + wobbleY;
+
+    // 画面外に出たらリセット
+    const margin = sc * 0.1;
+    if (cx < -margin || cx > W + margin || cy < -margin || cy > H + margin) {
+      this._resetLane();
+      return this.next(); // リセット後に再取得
+    }
+
+    return { cx, cy, isLeft };
+  }
+}
+
+// Shock用歩行レーン（shockFF定義後に実行）
+let shockLane, asymLane;
+function initLanes() {
+  shockLane = new GaitLane(shockFF, {
+    angle:  Math.PI * 0.5 + 0.32,
+    stride: 0.13,
+    laneW:  0.11,
+    wobble: 0.018,
+  });
+  asymLane = new GaitLane(asymFF, {
+    angle:  Math.PI * 0.5 + 0.28,
+    stride: 0.12,
+    laneW:  0.14,
+    wobble: 0.025,
+    isAsym: true,
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   SHOCK SECTION — 着地衝撃
+════════════════════════════════════════════════════════ */
 const shockEl = document.getElementById('ph-shock');
 const shockFF = new FlowField(document.getElementById('c-shock'), {
   particleCount:  540,
@@ -609,35 +747,26 @@ const shockFF = new FlowField(document.getElementById('c-shock'), {
   noiseSpeed:     0.00014,
   maxSpeed:       2.6,
   friction:       0.89,
-  trailAlpha:     0.022,   // 薄く→軌跡が長く蓄積される
-  lineAlpha:      0.38,    // 粒子を明るく
-  lineWidth:      0.85,
-  disturbRadius:  160,     // 影響範囲を広く
-  disturbStrength:14.0,    // 歪みを強く
+  trailAlpha:     0.022,
+  lineAlpha:      0.14,
+  lineWidth:      0.75,
+  disturbRadius:  160,
+  disturbStrength:14.0,
   asymmetry:      0,
+  gaitAngle:      Math.PI * 0.5 + 0.32,  // 線香花火の重力方向に使用
 });
 
-let lastShock = 0, shockStep = 0, shockOn = false;
+let shockStep = 0, shockOn = false;
 
-// 着地パターン一覧
-const PATTERNS = ['heel', 'out', 'in', 'suriashi', 'rotation'];
+const IMPRINT_TYPES = ['heavy', 'heavy', 'heel', 'out', 'in', 'suriashi', 'mid'];
 
-function triggerShock(t) {
+function triggerShock() {
   shockStep++;
-  const isLeft  = shockStep % 2 === 0;
-  const pattern = PATTERNS[Math.floor(Math.random() * PATTERNS.length)];
-
-  const W = shockFF.W, H = shockFF.H;
-  const cx = isLeft
-    ? W * (0.15 + Math.random() * 0.38)
-    : W * (0.47 + Math.random() * 0.38);
-  const cy = H * (0.18 + Math.random() * 0.64);
-
+  const { cx, cy, isLeft } = shockLane.next();
+  const imprintType = IMPRINT_TYPES[Math.floor(Math.random() * IMPRINT_TYPES.length)];
   const str = isLeft ? 14.0 + Math.random()*3 : 8.0 + Math.random()*2;
-  const dur = isLeft ? 1800 : 900;
-
-  // フラッシュは1回・1箇所のみ。残響は歪みのみ（フラッシュなし）
-  shockFF.disturb(cx, cy, str, dur, isLeft, pattern);
+  const dur = isLeft ? 2400 : 1400;
+  shockFF.disturb(cx, cy, str, dur, isLeft, imprintType);
 }
 
 /* ════════════════════════════════════════════════════════
@@ -651,12 +780,13 @@ const asymFF = new FlowField(document.getElementById('c-asym'), {
   noiseSpeed:     0.00016,
   maxSpeed:       1.6,
   friction:       0.91,
-  trailAlpha:     0.020,   // 薄く→軌跡が蓄積
-  lineAlpha:      0.32,
-  lineWidth:      0.72,
+  trailAlpha:     0.020,
+  lineAlpha:      0.11,
+  lineWidth:      0.65,
   disturbRadius:  110,
   disturbStrength:9.0,
-  asymmetry:      0.85,    // 右はより乱れる
+  asymmetry:      0.85,
+  gaitAngle:      Math.PI * 0.5 + 0.28,
 });
 
 // 粒子に左右のalpha差・速度差を付与
@@ -666,13 +796,13 @@ asymFF._initParticles = function() {
   for (const p of this.particles) {
     const isLeftSide = Math.random() < 0.62;
     if (isLeftSide) {
-      p.x = Math.random() * this.W * 0.5;   // 左寄り・密度高
-      p.sideAlpha  = 1.0;
+      p.x = Math.random() * this.W * 0.5;
+      p.sideAlpha    = 1.0;
       p.maxSpeedMult = 1.0;
     } else {
-      p.x = this.W * 0.5 + Math.random() * this.W * 0.5; // 右寄り
-      p.sideAlpha  = 0.45;   // 右は明らかに暗い
-      p.maxSpeedMult = 0.62; // 右は遅い（弱い側）
+      p.x = this.W * 0.5 + Math.random() * this.W * 0.5;
+      p.sideAlpha    = 0.45;
+      p.maxSpeedMult = 0.62;
     }
   }
 };
@@ -690,16 +820,11 @@ asymFF._updateParticles = function() {
       p.vy += this.field[idx+1] * 0.22;
     }
     p.vx *= friction; p.vy *= friction;
-
-    // 左右で速度上限が違う
     const maxSpd = this.cfg.maxSpeed * (p.maxSpeedMult ?? 1.0);
     const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
     if (spd > maxSpd) { p.vx = p.vx/spd*maxSpd; p.vy = p.vy/spd*maxSpd; }
-
     p.x += p.vx; p.y += p.vy; p.age++;
-
     if (p.age > p.maxAge || p.x < 0 || p.x > this.W || p.y < 0 || p.y > this.H) {
-      // 再配置時も左右の偏りを維持
       const goLeft = (p.sideAlpha ?? 1) > 0.6;
       p.x = goLeft ? Math.random() * this.W * 0.5
                    : this.W * 0.5 + Math.random() * this.W * 0.5;
@@ -710,47 +835,40 @@ asymFF._updateParticles = function() {
   }
 };
 
-let lastAsym = 0, asymStep = 0, asymOn = false;
+let asymStep = 0, asymOn = false;
 
-function triggerAsym(t) {
+function triggerAsym() {
   asymStep++;
-  const isLeft = asymStep % 2 === 0;
-
-  const W = asymFF.W, H = asymFF.H;
-  const cx = isLeft
-    ? W * (0.12 + Math.random() * 0.38)
-    : W * (0.50 + Math.random() * 0.38);
-  const cy = H * (0.18 + Math.random() * 0.64);
-
+  const { cx, cy, isLeft } = asymLane.next();
+  // 左：heavy（強い接地）、右：out/in/mid（弱く不安定）
+  const rightTypes = ['out', 'in', 'mid', 'suriashi'];
+  const imprintType = isLeft
+    ? 'heavy'
+    : rightTypes[Math.floor(Math.random() * rightTypes.length)];
   const str = isLeft ? 9.0 + Math.random()*2 : 4.5 + Math.random()*1.5;
-  const dur = isLeft ? 1300 : 580;
-
-  // 1回・1箇所のみ
-  asymFF.disturb(cx, cy, str, dur, isLeft, 'heel');
+  const dur = isLeft ? 2000 : 900;
+  asymFF.disturb(cx, cy, str, dur, isLeft, imprintType);
 }
 
 /* ════════════════════════════════════════════════════════
    AUTO-TRIGGER LOOP
-   Flow Fieldのアニメに同期して定期的に着地を発生
 ════════════════════════════════════════════════════════ */
 let lastShockT = 0, lastAsymT = 0;
 
 function triggerLoop(t) {
   requestAnimationFrame(triggerLoop);
-
   if (shockOn) {
-    // フラッシュフェーズ（duration×22%）が終わっていたら次を発生
-    const shockActive = shockFF.disturbances.some(d => d.elapsed / d.duration < 0.22);
-    if (!shockActive && t - lastShockT > 2200 + Math.random()*600) {
+    const shockLive = shockFF.disturbances.some(d => d.elapsed / d.duration < 0.55);
+    if (!shockLive && t - lastShockT > 1800 + Math.random()*600) {
       lastShockT = t;
-      triggerShock(t);
+      triggerShock();
     }
   }
   if (asymOn) {
-    const asymActive = asymFF.disturbances.some(d => d.elapsed / d.duration < 0.22);
-    if (!asymActive && t - lastAsymT > 2000 + Math.random()*500) {
+    const asymLive = asymFF.disturbances.some(d => d.elapsed / d.duration < 0.55);
+    if (!asymLive && t - lastAsymT > 1600 + Math.random()*500) {
       lastAsymT = t;
-      triggerAsym(t);
+      triggerAsym();
     }
   }
 }
@@ -763,11 +881,21 @@ const visIO = new IntersectionObserver(entries => {
   entries.forEach(en => {
     if (en.target.id === 'ph-shock') {
       shockOn = en.isIntersecting;
-      en.isIntersecting ? shockFF.start() : shockFF.stop();
+      if (en.isIntersecting) {
+        if (!shockLane) initLanes();
+        shockFF.start();
+      } else {
+        shockFF.stop();
+      }
     }
     if (en.target.id === 'ph-asym') {
       asymOn = en.isIntersecting;
-      en.isIntersecting ? asymFF.start() : asymFF.stop();
+      if (en.isIntersecting) {
+        if (!asymLane) initLanes();
+        asymFF.start();
+      } else {
+        asymFF.stop();
+      }
     }
   });
 }, {threshold: 0.1});
