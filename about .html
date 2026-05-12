@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WELK — Flow Field Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#B8960C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
+    html{scroll-behavior:smooth}
+    body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+
+    /* ── Nav ── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
+
+    /* ── page hero ── */
+    .page-hero{position:relative;z-index:1;min-height:48vh;display:flex;align-items:flex-end;padding:120px 52px 60px}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.6;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
+
+    /* ── why ── */
+    .why-sec{position:relative;z-index:1;padding:80px 52px}
+    .sec-inner{max-width:680px;margin:0 auto}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
+    .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
+    .reason-list{list-style:none}
+    .reason-item{display:flex;gap:22px;padding:22px 0;border-bottom:.5px solid rgba(234,229,220,.06);opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
+    .reason-item.up{opacity:1;filter:blur(0);transform:none}
+    .ri-num{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;color:var(--goldD);min-width:22px;padding-top:2px}
+    .ri-text{font-weight:200;font-size:clamp(15px,1.6vw,17px);color:rgba(234,229,220,.65);line-height:2.1}
+
+    /* ── phenomenon ── */
+    .phenomenon{
+      position:relative;z-index:1;
+      min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
+      overflow:hidden;
+    }
+    .ph-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .ph-inner{position:relative;z-index:2;max-width:480px;text-align:center;padding:80px 36px}
+
+    /* sediment text */
+    .pw{display:block;font-weight:200;line-height:1;letter-spacing:.06em;color:rgba(234,229,220,0);filter:blur(12px) brightness(.3);transform:translateY(8px);will-change:color,filter,transform}
+    .pw.lg{font-size:clamp(22px,2.8vw,32px);margin-bottom:1.5em}
+    .pw.sm{font-size:clamp(15px,1.5vw,17px);margin-bottom:1.15em;line-height:1.9}
+    .pw.settled{animation:wDrift var(--dd,9s) ease-in-out infinite;animation-delay:var(--do,0s)}
+    @keyframes wDrift{0%,100%{transform:translateY(var(--dy0,0px))}50%{transform:translateY(var(--dy1,.3px))}}
+
+    .s-rule{position:relative;z-index:1;width:.5px;height:80px;background:linear-gradient(to bottom,transparent,var(--goldD),transparent);margin:0 auto;opacity:0;transition:opacity 1.8s ease}
+    .s-rule.up{opacity:.4}
+
+    /* ── corp ── */
+    .corp-sec{position:relative;z-index:1;padding:80px 52px}
+    .corp-table{width:100%;border-collapse:collapse}
+    .corp-table tr{border-bottom:.5px solid rgba(234,229,220,.07)}
+    .corp-table td{padding:14px 0;font-size:13px;vertical-align:top}
+    .corp-table .tl{color:rgba(234,229,220,.32);min-width:140px;font-size:11px;letter-spacing:.05em}
+    .corp-table .tv{color:rgba(234,229,220,.65);font-weight:200}
+    .reveal{opacity:0;filter:blur(8px);transform:translateY(16px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
+    .reveal.up{opacity:1;filter:blur(0);transform:none}
+
+    footer{position:relative;z-index:1;padding:44px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
+    .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
+    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(max-width:640px){
+      nav{padding:18px 22px}.nav-links{gap:22px}
+      .page-hero,.why-sec,.corp-sec{padding-left:26px;padding-right:26px}
+      .ph-inner{padding:60px 24px}
+      /* スマホのみCanvasを明るく補正 */
+      .ph-canvas{filter:brightness(1.55)}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">WELK</a>
+  <ul class="nav-links">
+    <li><a href="about.html" class="cur">About</a></li>
+    <li><a href="journal.html">Journal</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <div>
+    <span class="ph-en">About</span>
+    <h1 class="ph-title">人が歩く研究所について</h1>
+  </div>
+</div>
+
+<section class="why-sec">
+  <div class="sec-inner">
+    <div class="sec-label reveal">なぜ、この研究所を作ったのか</div>
+    <ul class="reason-list">
+      <li class="reason-item"><span class="ri-num">I.</span><span class="ri-text">膝の痛みを恐れ、歩くことを怖がる人がいる。それがとても悲しいと思った。</span></li>
+      <li class="reason-item"><span class="ri-num">II.</span><span class="ri-text">自分自身の関節の弱さを知っている。他人事ではないと気づいた。</span></li>
+      <li class="reason-item"><span class="ri-num">III.</span><span class="ri-text">「改善できない」「仕方ない」と諦められている現状がある。本当にそうなのか、疑いたかった。</span></li>
+      <li class="reason-item"><span class="ri-num">IV.</span><span class="ri-text">困っている人は今後も増える。高寿命化と定年延長の時代に、歩く身体を守ることの意味は大きくなっていく。</span></li>
+      <li class="reason-item"><span class="ri-num">V.</span><span class="ri-text">歩数を数えることと、一歩の質を知ることは、まったく別のことだ。</span></li>
+    </ul>
+  </div>
+</section>
+
+<div class="s-rule"></div>
+
+<!-- ② 着地衝撃 -->
+<div class="phenomenon" id="ph-shock">
+  <canvas class="ph-canvas" id="c-shock"></canvas>
+  <div class="ph-inner">
+    <span class="pw lg" data-delay="0"    data-dur="3400" data-dd="9s"  data-dy0="0px"   data-dy1=".25px">足が、地面に触れる。</span>
+    <span class="pw sm" data-delay="1800" data-dur="3800" data-dd="11s" data-dy0="-.1px" data-dy1=".2px">その瞬間だけ、身体は正直になる。</span>
+    <span class="pw sm" data-delay="3400" data-dur="4200" data-dd="13s" data-dy0="0px"   data-dy1="-.18px">蓄積された庇いが、衝撃の形に現れる。</span>
+  </div>
+</div>
+
+<div class="s-rule"></div>
+
+<!-- ③ 左右差 -->
+<div class="phenomenon" id="ph-asym">
+  <canvas class="ph-canvas" id="c-asym"></canvas>
+  <div class="ph-inner">
+    <span class="pw lg" data-delay="0"    data-dur="3400" data-dd="10s" data-dy0="0px"    data-dy1=".22px">同じ一歩は、一度もない。</span>
+    <span class="pw sm" data-delay="2000" data-dur="3800" data-dd="12s" data-dy0="-.08px" data-dy1=".18px">左と右は、必ず違う物語を持っている。</span>
+    <span class="pw sm" data-delay="3800" data-dur="4400" data-dd="14s" data-dy0=".1px"   data-dy1="-.2px">その非対称こそが、その人の歩きだ。</span>
+  </div>
+</div>
+
+<div class="s-rule"></div>
+
+<section class="corp-sec">
+  <div class="sec-inner">
+    <div class="sec-label reveal">法人概要</div>
+    <table class="corp-table">
+      <tr class="reveal"><td class="tl">法人名</td><td class="tv">一般社団法人WELK 人が歩く研究所</td></tr>
+      <tr class="reveal"><td class="tl">英語名</td><td class="tv">WELK Institute for Human Gait</td></tr>
+      <tr class="reveal"><td class="tl">所在地</td><td class="tv">大阪府</td></tr>
+      <tr class="reveal"><td class="tl">設立</td><td class="tv">2026年（設立準備中）</td></tr>
+      <tr class="reveal"><td class="tl">活動内容</td><td class="tv">歩行動態解析・ウェアラブルデバイス開発・実証研究</td></tr>
+      <tr class="reveal"><td class="tl">代表理事</td><td class="tv">桜間 哲史</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">WELK</div>
+  <p class="f-copy">© 2026 一般社団法人WELK 人が歩く研究所 · Osaka, Japan</p>
+</footer>
+
+<script>
+'use strict';
+(() => {
+
+/* ════════════════════════════════════════════════════════
+   PERLIN NOISE — 流れ場の基礎
+   シンプルな2Dノイズで有機的なベクトル場を生成
+════════════════════════════════════════════════════════ */
+const P = (() => {
+  const perm = new Uint8Array(512);
+  const p256 = new Uint8Array(256);
+  for (let i = 0; i < 256; i++) p256[i] = i;
+  for (let i = 255; i > 0; i--) {
+    const j = Math.random() * (i+1) | 0;
+    [p256[i], p256[j]] = [p256[j], p256[i]];
+  }
+  for (let i = 0; i < 512; i++) perm[i] = p256[i & 255];
+
+  const fade = t => t*t*t*(t*(t*6-15)+10);
+  const lerp = (a,b,t) => a + t*(b-a);
+  const grad = (h, x, y) => {
+    const v = h & 3;
+    const u = v < 2 ? x : y;
+    const w = v < 2 ? y : x;
+    return ((h&1)?-u:u) + ((h&2)?-w:w);
+  };
+  return (x, y) => {
+    const X = Math.floor(x) & 255, Y = Math.floor(y) & 255;
+    x -= Math.floor(x); y -= Math.floor(y);
+    const u = fade(x), v = fade(y);
+    const a = perm[X]+Y, b = perm[X+1]+Y;
+    return lerp(
+      lerp(grad(perm[a],x,y),   grad(perm[b],x-1,y),   u),
+      lerp(grad(perm[a+1],x,y-1),grad(perm[b+1],x-1,y-1),u), v
+    );
+  };
+})();
+
+/* ════════════════════════════════════════════════════════
+   FLOW FIELD ENGINE
+   グリッド状のベクトル場を持ち、粒子をそれに従わせる
+════════════════════════════════════════════════════════ */
+class FlowField {
+  constructor(canvas, config = {}) {
+    this.cv  = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.W   = 0;
+    this.H   = 0;
+
+    // 設定
+    this.cfg = {
+      particleCount : config.particleCount ?? 480,
+      cellSize      : config.cellSize      ?? 18,   // ベクトル場のグリッドサイズ
+      noiseScale    : config.noiseScale    ?? 0.003, // ノイズのスケール
+      noiseSpeed    : config.noiseSpeed    ?? 0.00018,
+      maxSpeed      : config.maxSpeed      ?? 1.6,
+      friction      : config.friction      ?? 0.92,
+      trailAlpha    : config.trailAlpha    ?? 0.045, // 軌跡の残像
+      lineAlpha     : config.lineAlpha     ?? 0.22,
+      lineWidth     : config.lineWidth     ?? 0.7,
+      disturbRadius : config.disturbRadius ?? 110,  // 歪み注入の半径
+      disturbStrength:config.disturbStrength?? 8.0,
+      asymmetry     : config.asymmetry     ?? 0,    // 左右差係数 0〜1
+      goldR:184, goldG:150, goldB:12,
+      ...config,
+    };
+
+    // 歪みイベントリスト
+    this.disturbances = [];
+
+    // 粒子
+    this.particles = [];
+    this.field     = null; // ベクトル場（Float32Array × 2）
+    this.cols      = 0;
+    this.rows      = 0;
+    this.t         = 0;
+    this.active    = false;
+    this.animId    = null;
+  }
+
+  resize() {
+    this.W = this.cv.width  = this.cv.parentElement.offsetWidth  || innerWidth;
+    this.H = this.cv.height = this.cv.parentElement.offsetHeight || innerHeight;
+    this.cols  = Math.ceil(this.W / this.cfg.cellSize) + 1;
+    this.rows  = Math.ceil(this.H / this.cfg.cellSize) + 1;
+    this.field = new Float32Array(this.cols * this.rows * 2);
+    this._initParticles();
+  }
+
+  _initParticles() {
+    const c = this.cfg;
+    this.particles = Array.from({length: c.particleCount}, () => ({
+      x: Math.random() * this.W,
+      y: Math.random() * this.H,
+      vx: 0, vy: 0,
+      age: Math.random() * 200,   // 寿命をバラけさせる
+      maxAge: 180 + Math.random() * 160,
+      alpha: c.lineAlpha * (0.4 + Math.random() * 0.6),
+    }));
+  }
+
+  // ベクトル場を更新（Perlin noise ベース）
+  _updateField(t) {
+    const {cellSize, noiseScale, noiseSpeed, asymmetry} = this.cfg;
+    const nt = t * noiseSpeed;
+
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.cols; col++) {
+        const idx = (row * this.cols + col) * 2;
+        const wx  = col * cellSize;
+        const wy  = row * cellSize;
+
+        // 基本ノイズ角
+        const n1  = P(wx * noiseScale, wy * noiseScale + nt);
+        let angle = n1 * Math.PI * 3.5;
+
+        // 非対称性：右半分（asymmetry > 0）はノイズが多い
+        if (asymmetry > 0 && wx > this.W * 0.5) {
+          const n2 = P(wx * noiseScale * 2.2, wy * noiseScale * 1.8 + nt * 1.4);
+          angle += n2 * Math.PI * asymmetry * 2.8;
+        }
+
+        this.field[idx]   = Math.cos(angle);
+        this.field[idx+1] = Math.sin(angle);
+      }
+    }
+  }
+
+  // 接地イベントを登録 → 線香花火粒子群を生成
+  disturb(x, y, strength, duration, isLeft, imprintType = 'heavy') {
+    const sc      = Math.min(this.W, this.H);
+    const gAngle  = this.cfg.gaitAngle ?? (Math.PI * 0.5 + 0.32); // 歩行進行角
+    // 「進行方向の逆」が重力方向（B案）
+    const gravX   = -Math.cos(gAngle);
+    const gravY   = -Math.sin(gAngle);
+
+    // パターン別の火花定義を生成
+    const sparks  = this._buildSparks(x, y, sc, imprintType, isLeft, gravX, gravY);
+
+    // 上限10個：超えたら最も古いものから削除
+    if (this.disturbances.length >= 10) this.disturbances.shift();
+
+    this.disturbances.push({
+      x, y, strength, duration,
+      elapsed: 0,
+      isLeft, imprintType,
+      type:    'impact',
+      sparks,           // 線香花火粒子群
+      gravX, gravY,     // 重力方向（進行逆向き）
+    });
+  }
+
+  // パターン別の線香花火粒子群を生成
+  _buildSparks(cx, cy, sc, type, isLeft, gravX, gravY) {
+    const sparks = [];
+    const side   = isLeft ? -1 : 1;
+    const perpX  = -gravY, perpY = gravX; // 進行方向に垂直
+    const fwdX   = -gravX, fwdY = -gravY; // 進行方向
+    const baseSpd  = sc * 0.0018;
+    const baseLife = 0.55 + Math.random() * 0.25;
+
+    // ── ヘルパー：粒子を追加（frictionを個別に持たせる）
+    const add = (x, y, vx, vy, r, alpha, maxLifeMult, gravity, friction, tag) => {
+      sparks.push({
+        x, y, vx, vy,
+        life: 1,
+        maxLife: baseLife * maxLifeMult,
+        r, alpha, gravity,
+        friction: friction ?? 0.968, // 個別減衰率
+        tag: tag ?? '',              // 粒子種別（描画制御用）
+      });
+    };
+
+    if (type === 'suriashi') {
+      // すり足：前後2グループに千切れ + 後方摩擦尾 + 滞留
+      // Group A：前方へ抜ける（速く・短命）
+      for (let i = 0; i < 28; i++) {
+        const along = 0.4 + Math.random() * 1.6; // 前方
+        const perp  = (Math.random() - 0.5) * 0.3;
+        const spd   = baseSpd * (0.8 + Math.random() * 0.8);
+        add(cx, cy,
+          (fwdX * along + perpX * perp) * spd,
+          (fwdY * along + perpY * perp) * spd,
+          0.7 + Math.random() * 0.9,
+          0.3 + Math.random() * 0.2,
+          0.35 + Math.random() * 0.2,  // 短命
+          0.18,
+          0.94 + Math.random() * 0.04, // 速め減衰
+          'fwd'
+        );
+      }
+      // Group B：後方に残る（摩擦で引きずられる）
+      for (let i = 0; i < 22; i++) {
+        const along = -(0.2 + Math.random() * 1.0); // 後方
+        const perp  = (Math.random() - 0.5) * 0.2;
+        const spd   = baseSpd * (0.3 + Math.random() * 0.4);
+        add(cx, cy,
+          (fwdX * along + perpX * perp) * spd,
+          (fwdY * along + perpY * perp) * spd,
+          0.6 + Math.random() * 0.8,
+          0.25 + Math.random() * 0.2,
+          0.9 + Math.random() * 0.5,   // 長く残る（滞留）
+          0.12,
+          0.988 + Math.random() * 0.008, // ゆっくり減衰
+          'trail'
+        );
+      }
+      // 摩擦尾：接地点から後方に短く擦れる粒子
+      for (let i = 0; i < 10; i++) {
+        const t   = Math.random();
+        const spd = baseSpd * (0.15 + Math.random() * 0.2);
+        add(
+          cx + gravX * sc * 0.012 * t,
+          cy + gravY * sc * 0.012 * t,
+          gravX * spd, gravY * spd,
+          0.4 + Math.random() * 0.5,
+          0.2 + Math.random() * 0.15,
+          0.6 + Math.random() * 0.4,
+          0.08,
+          0.980,
+          'friction'
+        );
+      }
+
+    } else if (type === 'heavy') {
+      // 衝撃大：中心は静か・外周が暴れる
+      // 中心核：静か・長く残る
+      for (let i = 0; i < 12; i++) {
+        add(
+          cx + (Math.random() - 0.5) * sc * 0.01,
+          cy + (Math.random() - 0.5) * sc * 0.01,
+          (Math.random() - 0.5) * baseSpd * 0.25,
+          (Math.random() - 0.5) * baseSpd * 0.25,
+          2.5 + Math.random() * 2.0,
+          0.75 + Math.random() * 0.2,
+          1.1 + Math.random() * 0.4,  // 長く残る
+          0.05,
+          0.992,
+          'core'
+        );
+      }
+      // 外周：不規則に暴れる（frictionがバラバラ）
+      for (let i = 0; i < 72; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const spd   = baseSpd * (1.0 + Math.random() * 2.2);
+        const isOuter = spd > baseSpd * 1.8; // 高速=外周
+        add(cx, cy,
+          Math.cos(angle) * spd,
+          Math.sin(angle) * spd,
+          isOuter ? 0.5 + Math.random() * 0.8 : 1.0 + Math.random() * 1.5,
+          isOuter ? 0.4 + Math.random() * 0.3 : 0.5 + Math.random() * 0.3,
+          isOuter
+            ? 0.2 + Math.random() * 0.5   // 外周：短命・不規則
+            : 0.5 + Math.random() * 0.5,
+          0.55,
+          isOuter
+            ? 0.88 + Math.random() * 0.08  // 外周：frictionがバラバラ＝暴れる
+            : 0.96 + Math.random() * 0.02,
+          isOuter ? 'outer' : 'mid'
+        );
+      }
+
+    } else if (type === 'out') {
+      // アウトサイド：外側グループが遠くまで、内側が詰まって残る
+      const outX = perpX * side, outY = perpY * side; // 外方向
+      for (let i = 0; i < 65; i++) {
+        const t      = Math.random();
+        const isOuter = t > 0.42; // 約58%が外側グループ
+        const spread = (Math.random() - 0.3) * Math.PI * (isOuter ? 0.7 : 0.4);
+        const baseA  = Math.atan2(outY, outX);
+        const angle  = baseA + spread;
+        const spd    = isOuter
+          ? baseSpd * (1.0 + Math.random() * 1.6)  // 外：速く遠くへ
+          : baseSpd * (0.2 + Math.random() * 0.4); // 内：詰まる
+        add(cx, cy,
+          Math.cos(angle) * spd,
+          Math.sin(angle) * spd,
+          isOuter ? 0.6 + Math.random() * 1.0 : 0.8 + Math.random() * 1.2,
+          isOuter ? 0.35 + Math.random() * 0.3 : 0.3 + Math.random() * 0.25,
+          isOuter ? 0.4 + Math.random() * 0.4 : 0.8 + Math.random() * 0.6, // 内は滞留
+          0.5,
+          isOuter ? 0.93 + Math.random() * 0.04 : 0.985 + Math.random() * 0.01,
+          isOuter ? 'out_fly' : 'out_stay'
+        );
+      }
+
+    } else if (type === 'in') {
+      // インサイド：outの逆方向、右側（弱い側）に詰まりが多い
+      const inX = -perpX * side, inY = -perpY * side;
+      for (let i = 0; i < 65; i++) {
+        const t      = Math.random();
+        const isInner = t > 0.45;
+        const spread = (Math.random() - 0.3) * Math.PI * (isInner ? 0.7 : 0.35);
+        const baseA  = Math.atan2(inY, inX);
+        const angle  = baseA + spread;
+        const spd    = isInner
+          ? baseSpd * (0.9 + Math.random() * 1.4)
+          : baseSpd * (0.15 + Math.random() * 0.35);
+        add(cx, cy,
+          Math.cos(angle) * spd,
+          Math.sin(angle) * spd,
+          isInner ? 0.6 + Math.random() * 1.0 : 0.8 + Math.random() * 1.2,
+          isInner ? 0.32 + Math.random() * 0.28 : 0.28 + Math.random() * 0.22,
+          isInner ? 0.35 + Math.random() * 0.4 : 0.85 + Math.random() * 0.55,
+          0.48,
+          isInner ? 0.92 + Math.random() * 0.05 : 0.983 + Math.random() * 0.012,
+          isInner ? 'in_fly' : 'in_stay'
+        );
+      }
+
+    } else if (type === 'heel') {
+      // 踵のみ：後方へ鋭く・急失速 + 摩擦尾
+      // メイン：鋭く飛んで急に失速
+      for (let i = 0; i < 32; i++) {
+        const spread = (Math.random() - 0.5) * 0.5;
+        const angle  = Math.atan2(gravY, gravX) + spread;
+        const spd    = baseSpd * (1.8 + Math.random() * 2.8);
+        add(cx, cy,
+          Math.cos(angle) * spd,
+          Math.sin(angle) * spd,
+          0.4 + Math.random() * 0.8,
+          0.5 + Math.random() * 0.38,
+          0.22 + Math.random() * 0.25, // 短命
+          0.65,
+          // friction差を極端に：一部は急激に失速
+          Math.random() < 0.4 ? 0.85 + Math.random() * 0.04 : 0.96 + Math.random() * 0.025,
+          'heel_main'
+        );
+      }
+      // 摩擦尾：踵から後方に短く引きずる
+      for (let i = 0; i < 14; i++) {
+        const t   = Math.random();
+        add(
+          cx + gravX * sc * 0.018 * t,
+          cy + gravY * sc * 0.018 * t,
+          gravX * baseSpd * (0.1 + Math.random() * 0.18),
+          gravY * baseSpd * (0.1 + Math.random() * 0.18),
+          0.35 + Math.random() * 0.45,
+          0.22 + Math.random() * 0.18,
+          0.55 + Math.random() * 0.35,
+          0.05,
+          0.975 + Math.random() * 0.015,
+          'heel_friction'
+        );
+      }
+
+    } else if (type === 'mid') {
+      // ミッド着地：前後に千切れる + 足裏形状 + 滞留
+      const count = 75;
+      for (let i = 0; i < count; i++) {
+        const t     = Math.random(); // 0=踵側, 1=爪先側
+        const footW = (0.15 + t * 0.35) * sc * 0.04;
+        const footL = (t - 0.5) * sc * 0.06;
+        const ox    = fwdX * footL + perpX * (Math.random() - 0.5) * footW * 2;
+        const oy    = fwdY * footL + perpY * (Math.random() - 0.5) * footW * 2;
+        // 千切れ：爪先側（t>0.6）は前方グループ、踵側（t<0.4）は残留グループ
+        const isFront = t > 0.6;
+        const isStay  = t < 0.4;
+        const angle   = Math.atan2(oy, ox) + (Math.random() - 0.5) * (isFront ? 0.6 : 1.1);
+        const spd     = isFront
+          ? baseSpd * (0.7 + Math.random() * 0.8)  // 前：速め
+          : isStay
+            ? baseSpd * (0.15 + Math.random() * 0.25) // 後：詰まって滞留
+            : baseSpd * (0.3 + Math.random() * 0.6);
+        add(
+          cx + ox, cy + oy,
+          Math.cos(angle) * spd,
+          Math.sin(angle) * spd,
+          0.7 + Math.random() * 1.3,
+          0.28 + Math.random() * 0.3,
+          isFront ? 0.3 + Math.random() * 0.3     // 前：短命
+          : isStay ? 1.0 + Math.random() * 0.6    // 後：長く沈殿
+          : 0.5 + Math.random() * 0.4,
+          0.4,
+          isFront ? 0.935 + Math.random() * 0.03
+          : isStay ? 0.986 + Math.random() * 0.01
+          : 0.955 + Math.random() * 0.025,
+          isFront ? 'mid_front' : isStay ? 'mid_stay' : 'mid_mid'
+        );
+      }
+    }
+
+    return sparks;
+  }
+
+  // 歪みをフィールドに適用
+  _applyDisturbances() {
+    const {cellSize, disturbRadius} = this.cfg;
+
+    for (const d of this.disturbances) {
+      const progress = d.elapsed / d.duration;
+      const strength = d.strength * Math.pow(1 - progress, 1.8); // 急速に減衰
+
+      for (let row = 0; row < this.rows; row++) {
+        for (let col = 0; col < this.cols; col++) {
+          const wx = col * cellSize, wy = row * cellSize;
+          const dx = wx - d.x, dy = wy - d.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist > disturbRadius || dist < 1) continue;
+
+          const falloff = Math.pow(1 - dist/disturbRadius, 2.0);
+          const idx = (row * this.cols + col) * 2;
+
+          if (d.type === 'impact') {
+            // 着地：放射状に外へ押し出す
+            const nx = dx/dist, ny = dy/dist;
+            this.field[idx]   += nx * strength * falloff;
+            this.field[idx+1] += ny * strength * falloff;
+
+            // 片側（強い側）だけ追加の渦成分
+            if (d.isLeft && dx < 0) {
+              this.field[idx]   += -ny * strength * falloff * 0.5;
+              this.field[idx+1] +=  nx * strength * falloff * 0.5;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 粒子を更新
+  _updateParticles() {
+    const {cellSize, maxSpeed, friction} = this.cfg;
+
+    for (const p of this.particles) {
+      // 所属セルを取得
+      const col = Math.floor(p.x / cellSize);
+      const row = Math.floor(p.y / cellSize);
+
+      if (col >= 0 && col < this.cols && row >= 0 && row < this.rows) {
+        const idx = (row * this.cols + col) * 2;
+        // バイリニア補間で滑らかにしたいが、まず直接取得
+        const fx = this.field[idx];
+        const fy = this.field[idx+1];
+
+        p.vx += fx * 0.22;
+        p.vy += fy * 0.22;
+      }
+
+      // 摩擦
+      p.vx *= friction;
+      p.vy *= friction;
+
+      // 速度制限
+      const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+      if (spd > maxSpeed) { p.vx = p.vx/spd*maxSpeed; p.vy = p.vy/spd*maxSpeed; }
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.age++;
+
+      // 画面外・寿命切れで再配置
+      if (p.age > p.maxAge || p.x < 0 || p.x > this.W || p.y < 0 || p.y > this.H) {
+        p.x = Math.random() * this.W;
+        p.y = Math.random() * this.H;
+        p.vx = 0; p.vy = 0;
+        p.age = 0;
+        p.maxAge = 180 + Math.random() * 160;
+      }
+    }
+  }
+
+  // 描画
+  _draw() {
+    const {ctx, W, H} = this;
+    const {trailAlpha, lineAlpha, lineWidth, goldR, goldG, goldB} = this.cfg;
+
+    // 残像（軌跡を残す）— 少し薄めにしてフラッシュが際立つように
+    ctx.fillStyle = `rgba(5,5,3,${trailAlpha})`;
+    ctx.fillRect(0, 0, W, H);
+
+    // ── 線香花火粒子の更新・描画 ──────────────────
+    for (const d of this.disturbances) {
+      if (!d.sparks) continue;
+
+      for (const sp of d.sparks) {
+        if (sp.life <= 0) continue;
+
+        // 重力（進行逆方向）を加速度として加える
+        const gravStrength = 0.028 * sp.gravity;
+        sp.vx += d.gravX * gravStrength;
+        sp.vy += d.gravY * gravStrength;
+
+        // 個別friction（粒子ごとに減衰率が違う）
+        sp.vx *= sp.friction;
+        sp.vy *= sp.friction;
+
+        // 位置更新
+        sp.x += sp.vx;
+        sp.y += sp.vy;
+
+        // 寿命減衰
+        sp.life -= 1 / (sp.maxLife * d.duration / 16);
+
+        if (sp.life <= 0) continue;
+
+        // 描画：速度に応じて軌跡の長さが変わる
+        const spd = Math.sqrt(sp.vx*sp.vx + sp.vy*sp.vy);
+        const tailLen = Math.min(spd * 2.8, 8);
+        const a = sp.alpha * Math.pow(sp.life, 0.7);
+        if (a < 0.008) continue;
+
+        if (tailLen > 0.5 && spd > 0.1) {
+          ctx.beginPath();
+          ctx.moveTo(sp.x - sp.vx * tailLen / spd * sp.r,
+                     sp.y - sp.vy * tailLen / spd * sp.r);
+          ctx.lineTo(sp.x, sp.y);
+          ctx.strokeStyle = `rgba(${goldR},${goldG},${goldB},${a})`;
+          ctx.lineWidth   = sp.r * sp.life;
+          ctx.lineCap     = 'round';
+          ctx.stroke();
+        } else {
+          // 失速した粒子は点として残る（滞留感）
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.r * sp.life, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${goldR},${goldG},${goldB},${a * 0.7})`;
+          ctx.fill();
+        }
+      }
+    }
+
+    // 粒子を線として描く
+    for (const p of this.particles) {
+      if (p.age < 2) continue;
+      const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+      const speedFactor = Math.min(spd / this.cfg.maxSpeed, 1);
+
+      // 左右alpha差：粒子にsideAlphaプロパティがあれば適用
+      const sideA = p.sideAlpha ?? 1.0;
+      const a = lineAlpha * p.alpha * sideA *
+                (0.28 + speedFactor * 0.72) *
+                Math.min(p.age / 18, 1) *
+                Math.max(0, 1 - (p.age - p.maxAge * 0.78) / (p.maxAge * 0.22));
+
+      if (a < 0.005) continue;
+
+      ctx.beginPath();
+      ctx.moveTo(p.x - p.vx * 2.2, p.y - p.vy * 2.2);
+      ctx.lineTo(p.x, p.y);
+      ctx.strokeStyle = `rgba(${goldR},${goldG},${goldB},${a})`;
+      ctx.lineWidth = lineWidth * (0.45 + speedFactor * 0.55);
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+  }
+
+  start() {
+    this.active = true;
+    this.resize();
+
+    const loop = (t) => {
+      if (!this.active) return;
+      this.animId = requestAnimationFrame(loop);
+      this.t = t;
+
+      // ベクトル場更新
+      this._updateField(t);
+
+      // 歪みを適用・更新
+      this._applyDisturbances();
+      for (let i = this.disturbances.length-1; i >= 0; i--) {
+        this.disturbances[i].elapsed += 16;
+        if (this.disturbances[i].elapsed >= this.disturbances[i].duration) {
+          this.disturbances.splice(i, 1);
+        }
+      }
+
+      this._updateParticles();
+      this._draw();
+    };
+    requestAnimationFrame(loop);
+  }
+
+  stop() {
+    this.active = false;
+    if (this.animId) cancelAnimationFrame(this.animId);
+    // キャンバスをクリア
+    this.ctx.clearRect(0, 0, this.W, this.H);
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   SHOCK SECTION — 着地衝撃
+════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════
+   GAIT LANE — 歩行軌道の管理
+   斜め方向に前進する歩行レーンを設定し、
+   左右交互に一定歩幅で接地位置を計算する
+════════════════════════════════════════════════════════ */
+class GaitLane {
+  constructor(ff, options = {}) {
+    this.ff = ff;
+
+    // 歩行方向：斜め（右上から左下へ、または左上から右下へ）
+    // angle：進行方向の角度（ラジアン）
+    this.angle    = options.angle    ?? (Math.PI * 0.5 + 0.35); // 斜め前進
+    this.stride   = options.stride   ?? 0.14;  // 歩幅（画面高さ比）
+    this.laneW    = options.laneW    ?? 0.12;  // 左右の幅（画面幅比）
+    this.wobble   = options.wobble   ?? 0.022; // 歩行の揺らぎ量
+    this.isAsym   = options.isAsym   ?? false; // 左右差モード
+
+    this.step     = 0;
+    // 初期位置：画面上部付近からスタート
+    this.pos      = { x: 0.5, y: 0.15 };
+    this._resetLane();
+  }
+
+  _resetLane() {
+    // 斜め軌道のスタート位置をランダムに決める
+    // 画面の上側1/3からスタートし、斜め下に流れる
+    this.pos = {
+      x: 0.28 + Math.random() * 0.44,
+      y: 0.08 + Math.random() * 0.15,
+    };
+    this.step = 0;
+  }
+
+  next() {
+    const W = this.ff.W, H = this.ff.H;
+    const sc = Math.min(W, H);
+    this.step++;
+    const isLeft = this.step % 2 === 0;
+
+    // 歩行方向ベクトル（斜め前進）
+    const dx = Math.cos(this.angle);
+    const dy = Math.sin(this.angle);
+
+    // 歩幅分だけ前進
+    const stride = sc * (this.stride + (Math.random() - 0.5) * 0.04);
+    this.pos.x += dx * stride / W;
+    this.pos.y += dy * stride / H;
+
+    // 左右の横ずれ（左足は左、右足は右）
+    const perpX = -dy; // 進行方向に垂直
+    const perpY =  dx;
+    const lateralBase = W * this.laneW * 0.5;
+    // 左右差モードでは左右のずれ量に差をつける
+    const lateralL = lateralBase * (this.isAsym ? 1.0 : 1.0);
+    const lateralR = lateralBase * (this.isAsym ? 0.72 : 1.0);
+    const lateral  = isLeft ? -lateralL : lateralR;
+    const wobbleX  = (Math.random() - 0.5) * W * this.wobble;
+    const wobbleY  = (Math.random() - 0.5) * H * this.wobble;
+
+    const cx = this.pos.x * W + perpX * lateral + wobbleX;
+    const cy = this.pos.y * H + perpY * lateral + wobbleY;
+
+    // 画面外に出たらリセット
+    const margin = sc * 0.1;
+    if (cx < -margin || cx > W + margin || cy < -margin || cy > H + margin) {
+      this._resetLane();
+      return this.next(); // リセット後に再取得
+    }
+
+    return { cx, cy, isLeft };
+  }
+}
+
+// Shock用歩行レーン（shockFF定義後に実行）
+let shockLane, asymLane;
+function initLanes() {
+  shockLane = new GaitLane(shockFF, {
+    angle:  Math.PI * 0.5 + 0.32,
+    stride: 0.13,
+    laneW:  0.11,
+    wobble: 0.018,
+  });
+  asymLane = new GaitLane(asymFF, {
+    angle:  Math.PI * 0.5 + 0.28,
+    stride: 0.12,
+    laneW:  0.14,
+    wobble: 0.025,
+    isAsym: true,
+  });
+}
+
+/* ════════════════════════════════════════════════════════
+   SHOCK SECTION — 着地衝撃
+════════════════════════════════════════════════════════ */
+const shockEl = document.getElementById('ph-shock');
+const shockFF = new FlowField(document.getElementById('c-shock'), {
+  particleCount:  540,
+  cellSize:       16,
+  noiseScale:     0.0028,
+  noiseSpeed:     0.00014,
+  maxSpeed:       2.6,
+  friction:       0.89,
+  trailAlpha:     0.022,
+  lineAlpha:      0.14,
+  lineWidth:      0.75,
+  disturbRadius:  160,
+  disturbStrength:14.0,
+  asymmetry:      0,
+  gaitAngle:      Math.PI * 0.5 + 0.32,  // 線香花火の重力方向に使用
+});
+
+let shockStep = 0, shockOn = false;
+
+const IMPRINT_TYPES = ['heavy', 'heavy', 'heel', 'out', 'in', 'suriashi', 'mid'];
+
+function triggerShock() {
+  shockStep++;
+  const { cx, cy, isLeft } = shockLane.next();
+  const imprintType = IMPRINT_TYPES[Math.floor(Math.random() * IMPRINT_TYPES.length)];
+  const str = isLeft ? 14.0 + Math.random()*3 : 8.0 + Math.random()*2;
+  const dur = isLeft ? 2400 : 1400;
+  shockFF.disturb(cx, cy, str, dur, isLeft, imprintType);
+}
+
+/* ════════════════════════════════════════════════════════
+   ASYM SECTION — 左右差
+════════════════════════════════════════════════════════ */
+const asymEl = document.getElementById('ph-asym');
+const asymFF = new FlowField(document.getElementById('c-asym'), {
+  particleCount:  500,
+  cellSize:       18,
+  noiseScale:     0.003,
+  noiseSpeed:     0.00016,
+  maxSpeed:       1.6,
+  friction:       0.91,
+  trailAlpha:     0.020,
+  lineAlpha:      0.11,
+  lineWidth:      0.65,
+  disturbRadius:  110,
+  disturbStrength:9.0,
+  asymmetry:      0.85,
+  gaitAngle:      Math.PI * 0.5 + 0.28,
+});
+
+// 粒子に左右のalpha差・速度差を付与
+const origInit = asymFF._initParticles.bind(asymFF);
+asymFF._initParticles = function() {
+  origInit();
+  for (const p of this.particles) {
+    const isLeftSide = Math.random() < 0.62;
+    if (isLeftSide) {
+      p.x = Math.random() * this.W * 0.5;
+      p.sideAlpha    = 1.0;
+      p.maxSpeedMult = 1.0;
+    } else {
+      p.x = this.W * 0.5 + Math.random() * this.W * 0.5;
+      p.sideAlpha    = 0.45;
+      p.maxSpeedMult = 0.62;
+    }
+  }
+};
+
+// 右側粒子の速度制限を個別に適用
+const origUpdateP = asymFF._updateParticles.bind(asymFF);
+asymFF._updateParticles = function() {
+  const {cellSize, friction} = this.cfg;
+  for (const p of this.particles) {
+    const col = Math.floor(p.x / cellSize);
+    const row = Math.floor(p.y / cellSize);
+    if (col >= 0 && col < this.cols && row >= 0 && row < this.rows) {
+      const idx = (row * this.cols + col) * 2;
+      p.vx += this.field[idx]   * 0.22;
+      p.vy += this.field[idx+1] * 0.22;
+    }
+    p.vx *= friction; p.vy *= friction;
+    const maxSpd = this.cfg.maxSpeed * (p.maxSpeedMult ?? 1.0);
+    const spd = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+    if (spd > maxSpd) { p.vx = p.vx/spd*maxSpd; p.vy = p.vy/spd*maxSpd; }
+    p.x += p.vx; p.y += p.vy; p.age++;
+    if (p.age > p.maxAge || p.x < 0 || p.x > this.W || p.y < 0 || p.y > this.H) {
+      const goLeft = (p.sideAlpha ?? 1) > 0.6;
+      p.x = goLeft ? Math.random() * this.W * 0.5
+                   : this.W * 0.5 + Math.random() * this.W * 0.5;
+      p.y = Math.random() * this.H;
+      p.vx = 0; p.vy = 0; p.age = 0;
+      p.maxAge = 180 + Math.random() * 160;
+    }
+  }
+};
+
+let asymStep = 0, asymOn = false;
+
+function triggerAsym() {
+  asymStep++;
+  const { cx, cy, isLeft } = asymLane.next();
+  // 左：heavy（強い接地）、右：out/in/mid（弱く不安定）
+  const rightTypes = ['out', 'in', 'mid', 'suriashi'];
+  const imprintType = isLeft
+    ? 'heavy'
+    : rightTypes[Math.floor(Math.random() * rightTypes.length)];
+  const str = isLeft ? 9.0 + Math.random()*2 : 4.5 + Math.random()*1.5;
+  const dur = isLeft ? 2000 : 900;
+  asymFF.disturb(cx, cy, str, dur, isLeft, imprintType);
+}
+
+/* ════════════════════════════════════════════════════════
+   AUTO-TRIGGER LOOP
+════════════════════════════════════════════════════════ */
+let lastShockT = 0, lastAsymT = 0;
+
+function triggerLoop(t) {
+  requestAnimationFrame(triggerLoop);
+  if (shockOn) {
+    const shockLive = shockFF.disturbances.some(d => d.elapsed / d.duration < 0.55);
+    if (!shockLive && t - lastShockT > 1800 + Math.random()*600) {
+      lastShockT = t;
+      triggerShock();
+    }
+  }
+  if (asymOn) {
+    const asymLive = asymFF.disturbances.some(d => d.elapsed / d.duration < 0.55);
+    if (!asymLive && t - lastAsymT > 1600 + Math.random()*500) {
+      lastAsymT = t;
+      triggerAsym();
+    }
+  }
+}
+requestAnimationFrame(triggerLoop);
+
+/* ════════════════════════════════════════════════════════
+   VISIBILITY — セクション可視でstart/stop
+════════════════════════════════════════════════════════ */
+const visIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.target.id === 'ph-shock') {
+      shockOn = en.isIntersecting;
+      if (en.isIntersecting) {
+        if (!shockLane) initLanes();
+        shockFF.start();
+      } else {
+        shockFF.stop();
+      }
+    }
+    if (en.target.id === 'ph-asym') {
+      asymOn = en.isIntersecting;
+      if (en.isIntersecting) {
+        if (!asymLane) initLanes();
+        asymFF.start();
+      } else {
+        asymFF.stop();
+      }
+    }
+  });
+}, {threshold: 0.1});
+visIO.observe(shockEl);
+visIO.observe(asymEl);
+
+addEventListener('resize', () => {
+  if (shockOn) shockFF.resize();
+  if (asymOn)  asymFF.resize();
+});
+
+/* ════════════════════════════════════════════════════════
+   SEDIMENT ENGINE — テキスト沈殿
+════════════════════════════════════════════════════════ */
+function settle(el) {
+  const delay = parseInt(el.dataset.delay || 0);
+  const dur   = parseInt(el.dataset.dur   || 3400);
+  const {dd='10s', dy0='0px', dy1='.2px'} = el.dataset;
+  setTimeout(() => {
+    el.style.transition = [
+      `color ${dur}ms cubic-bezier(.08,.92,.2,1)`,
+      `filter ${dur*1.1}ms cubic-bezier(.08,.92,.2,1)`,
+      `transform ${dur*.9}ms cubic-bezier(.08,.92,.2,1)`,
+    ].join(',');
+    el.style.color     = el.classList.contains('sm') ? 'rgba(234,229,220,.5)' : 'rgba(234,229,220,.82)';
+    el.style.filter    = 'blur(0) brightness(1)';
+    el.style.transform = 'translateY(0)';
+    setTimeout(() => {
+      el.style.transition = 'none';
+      el.style.setProperty('--dd', dd);
+      el.style.setProperty('--do', `${Math.random()*-4}s`);
+      el.style.setProperty('--dy0', dy0);
+      el.style.setProperty('--dy1', dy1);
+      el.classList.add('settled');
+    }, dur * 1.2);
+  }, delay);
+}
+
+const wordIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    en.target.querySelectorAll('.pw').forEach(settle);
+    wordIO.unobserve(en.target);
+  });
+}, {threshold: .18});
+document.querySelectorAll('.phenomenon').forEach(s => wordIO.observe(s));
+
+/* general reveal */
+const revIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('up'); revIO.unobserve(en.target); }
+  });
+}, {threshold: .12});
+document.querySelectorAll('.reveal,.reason-item,.s-rule').forEach(el => revIO.observe(el));
+
+})();
+</script>
+</body>
+</html>
