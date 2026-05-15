@@ -445,20 +445,8 @@ class ObsSection {
       this.lines = [lineA, lineB];
 
     } else if (this.type === 'shock') {
-      // Obs 02 着地衝撃：ほぼ直進、ときどき鋭く衝撃
-      const line = new LivingLine({
-        baseAngle:   Math.random() * Math.PI * 2,
-        noiseAmp:    0.15, noiseScale: 0.001,
-        baseSpeed:   1.0, speedJitter: 0.2,
-        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
-        shockMode: true,
-        color: [184,150,12],
-      });
-      line._phraseDurBase = 600; // 長い直進
-      line._shockFreq = 0.006;
-      line._shockAmp  = 1.4;
-      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
-      this.lines = [line];
+      // Obs 02 は横スクロール波形エンジンで描画するため LivingLine は使わない
+      this.lines = [];
 
     } else if (this.type === 'drive') {
       // Obs 03 推進力の変容：最初は長くまっすぐ、徐々に変化
@@ -521,6 +509,98 @@ class ObsSection {
     this.resize();
     this._buildLines();
 
+    // ── Obs 02 shock: 横スクロール波形エンジン ──────────────
+    if (this.type === 'shock') {
+      const { ctx } = this;
+      const state = {
+        points: [], headX: 0, baseY: 0,
+        phase: 0, phaseT: 0,
+        nextShock: 120, shockTimer: 0,
+        spd: 2.2,
+      };
+      const shockLoop = (t) => {
+        if (!this.active) return;
+        this.animId = requestAnimationFrame(shockLoop);
+        const W = this.canvas.width, H = this.canvas.height;
+
+        // 残響：clearRectの代わりに半透明で塗り重ねる
+        ctx.fillStyle = 'rgba(5,5,3,0.13)';
+        ctx.fillRect(0, 0, W, H);
+
+        if (state.headX === 0) { state.headX = W * 0.08; state.baseY = H * 0.5; }
+
+        state.shockTimer++;
+        state.phaseT++;
+        let dy = 0;
+
+        if (state.phase === 0) {
+          dy = Math.sin(state.shockTimer * 0.08) * 2.5 + (Math.random()-0.5) * 1.0;
+          if (state.shockTimer >= state.nextShock) { state.phase = 1; state.phaseT = 0; }
+        } else if (state.phase === 1) {
+          const p = state.phaseT / 3;
+          dy = -H * 0.26 * Math.sin(p * Math.PI * 0.5) * (1 - p * 0.3);
+          dy += (Math.random()-0.5) * 4;
+          if (state.phaseT >= 3) { state.phase = 2; state.phaseT = 0; }
+        } else if (state.phase === 2) {
+          const p = state.phaseT / 4;
+          dy = H * 0.36 * Math.sin(p * Math.PI);
+          dy += (Math.random()-0.5) * 5;
+          if (state.phaseT >= 4) { state.phase = 3; state.phaseT = 0; }
+        } else if (state.phase === 3) {
+          const dec = Math.exp(-state.phaseT * 0.18);
+          dy = -H * 0.13 * dec * Math.sin(state.phaseT * 0.9) + (Math.random()-0.5) * dec * 3;
+          if (state.phaseT >= 28) { state.phase = 4; state.phaseT = 0; }
+        } else if (state.phase === 4) {
+          const dec = Math.exp(-state.phaseT * 0.12);
+          dy = (Math.random()-0.5) * dec * 2;
+          if (state.phaseT >= 20) {
+            state.phase = 0; state.phaseT = 0; state.shockTimer = 0;
+            state.nextShock = 100 + Math.random() * 140;
+          }
+        }
+
+        const margin = H * 0.1;
+        const newY = Math.max(margin, Math.min(H - margin, state.baseY + dy));
+        state.points.push({ x: state.headX, y: newY, shock: state.phase >= 1 && state.phase <= 3 });
+        state.headX += state.spd;
+
+        if (state.headX > W * 0.92) {
+          state.points = []; state.headX = W * 0.08;
+          state.shockTimer = 0; state.phase = 0; state.phaseT = 0;
+          state.nextShock = 80 + Math.random() * 100;
+        }
+
+        if (state.points.length < 2) return;
+        const totalPts = state.points.length;
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+
+        for (let i = 1; i < totalPts; i++) {
+          const a = state.points[i-1], b = state.points[i];
+          const distFromTip = totalPts - i;
+          const fadeLen = Math.min(totalPts, W * 0.55 / state.spd);
+          const alpha = Math.max(0, 1 - distFromTip / fadeLen);
+          const isShocking = state.phase >= 1 && state.phase <= 3;
+          const lw = isShocking
+            ? 2.5 + (state.phase <= 2 ? 3.5 : 1.5) * (1 - state.phaseT / 10)
+            : 2.0;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(184,150,12,${alpha * 0.88})`;
+          ctx.lineWidth = Math.max(0.5, lw * alpha);
+          ctx.stroke();
+        }
+
+        const tip = state.points[totalPts-1];
+        const glowR = state.phase >= 1 && state.phase <= 2 ? 10 : 4;
+        const grd = ctx.createRadialGradient(tip.x, tip.y, 0, tip.x, tip.y, glowR);
+        grd.addColorStop(0, 'rgba(220,190,40,0.9)'); grd.addColorStop(1, 'rgba(184,150,12,0)');
+        ctx.beginPath(); ctx.arc(tip.x, tip.y, glowR, 0, Math.PI*2);
+        ctx.fillStyle = grd; ctx.fill();
+      };
+      requestAnimationFrame(shockLoop);
+      this.revealDelay = setTimeout(() => {}, 800);
+      return;
+    }
+
     // 中央到達後、少し遅れて線が立ち上がる
     this.revealDelay = setTimeout(() => {
       this._buildLines();
@@ -532,8 +612,9 @@ class ObsSection {
 
       const { ctx, W, H } = this;
 
-      // クリア→軌跡のみ再描画（ビネットはCSSで対応）
-      ctx.clearRect(0, 0, W, H);
+      // 残響：clearRectではなく半透明fillRectで軌跡をうっすら残す
+      ctx.fillStyle = 'rgba(5,5,3,0.12)';
+      ctx.fillRect(0, 0, W, H);
 
       for (const line of this.lines) {
         line.update(t);
