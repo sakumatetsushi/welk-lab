@@ -512,63 +512,156 @@ class ObsSection {
     // ── Obs 02 shock: 横スクロール波形エンジン ──────────────
     if (this.type === 'shock') {
       const { ctx } = this;
+
+      // パルスパターン4種
+      // 'single'  : 山1つ（sin半波）
+      // 'double'  : 山1つ → gap → 山1つ（小）
+      // 'variable': 高さ変動の山1つ
+      // 'classic' : 上昇→下降→減衰振動→収束（山と谷）
+      const PATTERNS = ['single', 'double', 'variable', 'classic'];
+
       const state = {
         points: [], headX: 0, baseY: 0,
+        // フェーズ
+        // 0=静寂, 1=パルス中(sin山), 2=gap(double用),
+        // 3=収束(sin後), 10=classic上昇, 11=classic下降, 12=classic減衰, 13=classic収束
         phase: 0, phaseT: 0,
-        nextShock: 120, shockTimer: 0,
-        spd: 2.2,
+        nextShock: 80 + Math.random() * 80,
+        shockTimer: 0,
+        spd: 1.47,
+        pattern: 'single',
+        ampScale: 1.0,
+        pulseDur: 14,
+        pulseCount: 0,
+        gapDur: 0,
       };
-      const shockLoop = (t) => {
+
+      // 右端到達時：点列クリア＋左端から再スタート（baseYもランダム更新）
+      const newLine = (W, H) => {
+        state.points     = [];
+        state.headX      = W * 0.08;
+        state.baseY      = H * (0.28 + Math.random() * 0.44);
+        state.shockTimer = 0;
+        state.phase      = 0;
+        state.phaseT     = 0;
+        state.nextShock  = 70 + Math.random() * 90;
+      };
+
+      // 次のパルスを選択してphase=1or10へ遷移（点列はそのまま）
+      const launchPulse = () => {
+        state.pattern    = PATTERNS[Math.floor(Math.random() * PATTERNS.length)];
+        state.ampScale   = state.pattern === 'variable'
+          ? 0.45 + Math.random() * 0.95 : 1.0;
+        state.pulseDur   = 12 + Math.floor(Math.random() * 6);
+        state.pulseCount = 0;
+        state.gapDur     = 10 + Math.floor(Math.random() * 10);
+        state.phaseT     = 0;
+        state.phase      = state.pattern === 'classic' ? 10 : 1;
+        state.shockTimer = 0;
+        state.nextShock  = 80 + Math.random() * 100; // 次の衝撃間隔をリセット
+      };
+
+      // sin山のdy
+      const sinPulseDy = (phaseT, dur, ampScale, H) =>
+        -H * 0.26 * ampScale * Math.sin((phaseT / dur) * Math.PI)
+        + (Math.random()-0.5) * 1.2;
+
+      const shockLoop = () => {
         if (!this.active) return;
         this.animId = requestAnimationFrame(shockLoop);
         const W = this.canvas.width, H = this.canvas.height;
 
-        // 残響：clearRectの代わりに半透明で塗り重ねる
         ctx.fillStyle = 'rgba(5,5,3,0.13)';
         ctx.fillRect(0, 0, W, H);
 
-        if (state.headX === 0) { state.headX = W * 0.08; state.baseY = H * 0.5; }
+        if (state.headX === 0) {
+          state.headX = W * 0.08;
+          state.baseY = H * (0.28 + Math.random() * 0.44);
+        }
 
         state.shockTimer++;
         state.phaseT++;
         let dy = 0;
 
+        // ── フェーズ処理 ──────────────────────────
         if (state.phase === 0) {
-          dy = Math.sin(state.shockTimer * 0.08) * 2.5 + (Math.random()-0.5) * 1.0;
-          if (state.shockTimer >= state.nextShock) { state.phase = 1; state.phaseT = 0; }
+          // 静寂
+          dy = Math.sin(state.shockTimer * 0.07) * 1.8 + (Math.random()-0.5) * 0.8;
+          if (state.shockTimer >= state.nextShock) launchPulse();
+
         } else if (state.phase === 1) {
-          const p = state.phaseT / 3;
-          dy = -H * 0.26 * Math.sin(p * Math.PI * 0.5) * (1 - p * 0.3);
-          dy += (Math.random()-0.5) * 4;
-          if (state.phaseT >= 3) { state.phase = 2; state.phaseT = 0; }
+          // sin山
+          dy = sinPulseDy(state.phaseT, state.pulseDur, state.ampScale, H);
+          if (state.phaseT >= state.pulseDur) {
+            state.pulseCount++;
+            if (state.pattern === 'double' && state.pulseCount < 2) {
+              state.phase = 2; state.phaseT = 0; // gap へ
+            } else {
+              state.phase = 3; state.phaseT = 0; // 収束へ
+            }
+          }
+
         } else if (state.phase === 2) {
-          const p = state.phaseT / 4;
-          dy = H * 0.36 * Math.sin(p * Math.PI);
-          dy += (Math.random()-0.5) * 5;
-          if (state.phaseT >= 4) { state.phase = 3; state.phaseT = 0; }
+          // double用gap
+          dy = (Math.random()-0.5) * 1.0;
+          if (state.phaseT >= state.gapDur) {
+            state.ampScale *= 0.75;
+            state.pulseDur  = 10 + Math.floor(Math.random() * 5);
+            state.phase = 1; state.phaseT = 0;
+          }
+
         } else if (state.phase === 3) {
+          // sin後の微細収束
+          const dec = Math.exp(-state.phaseT * 0.22);
+          dy = (Math.random()-0.5) * dec * 2.0;
+          if (state.phaseT >= 14) {
+            // 次のパルス待ちへ戻る（点列は消さない）
+            state.phase      = 0;
+            state.phaseT     = 0;
+            state.shockTimer = 0;
+            state.nextShock  = 70 + Math.random() * 90;
+          }
+
+        } else if (state.phase === 10) {
+          // classic: 上昇（3f）
+          const p = state.phaseT / 3;
+          dy = -H * 0.26 * state.ampScale * Math.sin(p * Math.PI * 0.5) * (1 - p * 0.3);
+          dy += (Math.random()-0.5) * 4;
+          if (state.phaseT >= 3) { state.phase = 11; state.phaseT = 0; }
+
+        } else if (state.phase === 11) {
+          // classic: 下降（4f）
+          const p = state.phaseT / 4;
+          dy = H * 0.36 * state.ampScale * Math.sin(p * Math.PI);
+          dy += (Math.random()-0.5) * 5;
+          if (state.phaseT >= 4) { state.phase = 12; state.phaseT = 0; }
+
+        } else if (state.phase === 12) {
+          // classic: 減衰振動（28f）
           const dec = Math.exp(-state.phaseT * 0.18);
-          dy = -H * 0.13 * dec * Math.sin(state.phaseT * 0.9) + (Math.random()-0.5) * dec * 3;
-          if (state.phaseT >= 28) { state.phase = 4; state.phaseT = 0; }
-        } else if (state.phase === 4) {
+          dy = -H * 0.13 * state.ampScale * dec * Math.sin(state.phaseT * 0.9)
+             + (Math.random()-0.5) * dec * 3;
+          if (state.phaseT >= 28) { state.phase = 13; state.phaseT = 0; }
+
+        } else if (state.phase === 13) {
+          // classic: 収束（20f）→ 次のパルス待ちへ
           const dec = Math.exp(-state.phaseT * 0.12);
           dy = (Math.random()-0.5) * dec * 2;
           if (state.phaseT >= 20) {
-            state.phase = 0; state.phaseT = 0; state.shockTimer = 0;
-            state.nextShock = 100 + Math.random() * 140;
+            state.phase      = 0;
+            state.phaseT     = 0;
+            state.shockTimer = 0;
+            state.nextShock  = 70 + Math.random() * 90;
           }
         }
 
         const margin = H * 0.1;
         const newY = Math.max(margin, Math.min(H - margin, state.baseY + dy));
-        state.points.push({ x: state.headX, y: newY, shock: state.phase >= 1 && state.phase <= 3 });
+        state.points.push({ x: state.headX, y: newY });
         state.headX += state.spd;
 
-        if (state.headX > W * 0.92) {
-          state.points = []; state.headX = W * 0.08;
-          state.shockTimer = 0; state.phase = 0; state.phaseT = 0;
-          state.nextShock = 80 + Math.random() * 100;
-        }
+        // 右端到達で新ライン
+        if (state.headX > W * 0.92) newLine(W, H);
 
         if (state.points.length < 2) return;
         const totalPts = state.points.length;
@@ -577,12 +670,13 @@ class ObsSection {
         for (let i = 1; i < totalPts; i++) {
           const a = state.points[i-1], b = state.points[i];
           const distFromTip = totalPts - i;
-          const fadeLen = Math.min(totalPts, W * 0.55 / state.spd);
+          const fadeLen = Math.min(totalPts, W * 0.58 / state.spd);
           const alpha = Math.max(0, 1 - distFromTip / fadeLen);
-          const isShocking = state.phase >= 1 && state.phase <= 3;
-          const lw = isShocking
-            ? 2.5 + (state.phase <= 2 ? 3.5 : 1.5) * (1 - state.phaseT / 10)
-            : 2.0;
+          const isSinPulse  = state.phase === 1;
+          const isClassicPk = state.phase === 10 || state.phase === 11;
+          const lw = isSinPulse
+            ? 2.0 + 2.5 * Math.sin((state.phaseT / state.pulseDur) * Math.PI)
+            : isClassicPk ? 4.5 : 2.0;
           ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
           ctx.strokeStyle = `rgba(184,150,12,${alpha * 0.88})`;
           ctx.lineWidth = Math.max(0.5, lw * alpha);
@@ -590,7 +684,8 @@ class ObsSection {
         }
 
         const tip = state.points[totalPts-1];
-        const glowR = state.phase >= 1 && state.phase <= 2 ? 10 : 4;
+        const glowR = (state.phase === 1 || state.phase === 10 || state.phase === 11)
+          ? 4 + 6 * Math.sin(Math.min(1, state.phaseT / 6) * Math.PI * 0.5) : 4;
         const grd = ctx.createRadialGradient(tip.x, tip.y, 0, tip.x, tip.y, glowR);
         grd.addColorStop(0, 'rgba(220,190,40,0.9)'); grd.addColorStop(1, 'rgba(184,150,12,0)');
         ctx.beginPath(); ctx.arc(tip.x, tip.y, glowR, 0, Math.PI*2);
