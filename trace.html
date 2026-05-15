@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trace — WELK 人が歩く研究所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gold:#B8960C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
+    html{scroll-behavior:smooth}
+    body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none;transition:color .6s}
+    .logo:hover{color:rgba(234,229,220,.72)}
+    .nav-links{display:flex;gap:40px;list-style:none}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
+
+    /* hero */
+    .page-hero{position:relative;z-index:1;min-height:52vh;display:flex;align-items:flex-end;padding:120px 52px 64px;overflow:hidden}
+    .hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .hero-text{position:relative;z-index:1}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:16px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.5;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
+    .ph-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.1em;color:rgba(234,229,220,.22);margin-top:16px;display:block;opacity:0;animation:fadeUp 2s ease 1.0s forwards}
+
+    /* observation */
+    .obs{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;padding:0 52px}
+    .obs-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .obs-inner{position:relative;z-index:10;max-width:360px;padding:0;pointer-events:none;
+      background:linear-gradient(to right, rgba(5,5,3,0.82) 70%, rgba(5,5,3,0) 100%);
+      padding:24px 32px 24px 0;
+    }
+    .obs-num{font-family:'IM Fell English',serif;font-style:italic;font-size:9px;letter-spacing:.4em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;transition:opacity 2.2s ease}
+    .obs-title{font-weight:200;font-size:clamp(17px,2.2vw,26px);line-height:1.7;color:rgba(234,229,220,0);filter:blur(10px);transform:translateY(8px);transition:color 3s cubic-bezier(.08,.92,.2,1),filter 3s cubic-bezier(.08,.92,.2,1),transform 2.5s cubic-bezier(.08,.92,.2,1);margin-bottom:1.5em}
+    .obs-desc{font-weight:200;font-size:clamp(12px,1.4vw,15px);line-height:2.1;color:rgba(234,229,220,0);filter:blur(8px);transition:color 3s cubic-bezier(.08,.92,.2,1) .7s,filter 3s cubic-bezier(.08,.92,.2,1) .7s}
+    .obs-inner.revealed .obs-num{opacity:.6}
+    .obs-inner.revealed .obs-title{color:rgba(234,229,220,.78);filter:blur(0);transform:none}
+    .obs-inner.revealed .obs-desc{color:rgba(234,229,220,.4);filter:blur(0)}
+
+    .s-rule{position:relative;z-index:1;width:.5px;height:80px;background:linear-gradient(to bottom,transparent,var(--goldD),transparent);margin:0 auto;opacity:0;transition:opacity 1.8s ease}
+    .s-rule.up{opacity:.32}
+
+    footer{position:relative;z-index:1;padding:60px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
+    .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
+    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(max-width:640px){
+      nav{padding:18px 22px}.nav-links{gap:22px}
+      .page-hero{padding:100px 26px 52px}
+      .obs{padding:0 26px}
+      footer{padding:44px 26px}
+      .obs-canvas{filter:brightness(1.5)}
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">WELK</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="trace.html" class="cur">Trace</a></li>
+    <li><a href="journal.html">Journal</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <canvas class="hero-canvas" id="hero-c"></canvas>
+  <div class="hero-text">
+    <span class="ph-en">Trace / Observation</span>
+    <h1 class="ph-title">身体が残した<br>痕跡を、見る。</h1>
+    <span class="ph-sub">— what the body leaves behind</span>
+  </div>
+</div>
+
+<div class="s-rule"></div>
+
+<section class="obs" id="obs-01">
+  <canvas class="obs-canvas" id="c-01"></canvas>
+  <div class="obs-inner" id="inner-01">
+    <span class="obs-num">Observation 01</span>
+    <div class="obs-title">左右は、<br>決して対称ではない。</div>
+    <div class="obs-desc">左足が残した軌跡と、<br>右足が残した軌跡は、<br>いつも違う形をしている。</div>
+  </div>
+</section>
+
+<div class="s-rule"></div>
+
+<section class="obs" id="obs-02">
+  <canvas class="obs-canvas" id="c-02"></canvas>
+  <div class="obs-inner" id="inner-02">
+    <span class="obs-num">Observation 02</span>
+    <div class="obs-title">着地は、<br>衝撃である。</div>
+    <div class="obs-desc">足が地面に触れる瞬間、<br>身体は正直になる。<br>蓄積された庇いが、その形に現れる。</div>
+  </div>
+</section>
+
+<div class="s-rule"></div>
+
+<section class="obs" id="obs-03">
+  <canvas class="obs-canvas" id="c-03"></canvas>
+  <div class="obs-inner" id="inner-03">
+    <span class="obs-num">Observation 03</span>
+    <div class="obs-title">推進力は、<br>途中で変わる。</div>
+    <div class="obs-desc">前へ向かおうとするエネルギーが、<br>どこかで方向を変える。<br>その変化の中に、身体の意図がある。</div>
+  </div>
+</section>
+
+<div class="s-rule"></div>
+
+<section class="obs" id="obs-04">
+  <canvas class="obs-canvas" id="c-04"></canvas>
+  <div class="obs-inner" id="inner-04">
+    <span class="obs-num">Observation 04</span>
+    <div class="obs-title">身体は、<br>横に揺れている。</div>
+    <div class="obs-desc">まっすぐ歩いているつもりでも、<br>軌道は左右に揺れ続ける。<br>その振れ幅に、疲労が宿る。</div>
+  </div>
+</section>
+
+<div class="s-rule"></div>
+
+<section class="obs" id="obs-05">
+  <canvas class="obs-canvas" id="c-05"></canvas>
+  <div class="obs-inner" id="inner-05">
+    <span class="obs-num">Observation 05</span>
+    <div class="obs-title">回転は、<br>途中で失われる。</div>
+    <div class="obs-desc">足首が描くはずの円弧が、<br>どこかで崩れる。<br>その崩れた形が、摩耗の痕跡だ。</div>
+  </div>
+</section>
+
+<div class="s-rule"></div>
+
+<footer>
+  <div class="f-logo">WELK</div>
+  <p class="f-copy">© 2026 一般社団法人WELK 人が歩く研究所 · Osaka, Japan</p>
+</footer>
+
+<script>
+'use strict';
+(() => {
+
+/* ══════════════════════════════════════════════
+   PERLIN NOISE
+══════════════════════════════════════════════ */
+const P = (() => {
+  const pm=new Uint8Array(512), p2=new Uint8Array(256);
+  for(let i=0;i<256;i++)p2[i]=i;
+  for(let i=255;i>0;i--){const j=Math.random()*(i+1)|0;[p2[i],p2[j]]=[p2[j],p2[i]]}
+  for(let i=0;i<512;i++)pm[i]=p2[i&255];
+  const f=t=>t*t*t*(t*(t*6-15)+10),l=(a,b,t)=>a+t*(b-a);
+  const g=(h,x,y)=>{const v=h&3,u=v<2?x:y,w=v<2?y:x;return((h&1)?-u:u)+((h&2)?-w:w)};
+  return(x,y)=>{
+    const X=Math.floor(x)&255,Y=Math.floor(y)&255;
+    x-=Math.floor(x);y-=Math.floor(y);
+    const u=f(x),v=f(y),a=pm[X]+Y,b=pm[X+1]+Y;
+    return l(l(g(pm[a],x,y),g(pm[b],x-1,y),u),l(g(pm[a+1],x,y-1),g(pm[b+1],x-1,y-1),u),v);
+  };
+})();
+
+/* ══════════════════════════════════════════════
+   LIVING LINE ENGINE
+   「進もうとする線」の核心エンジン
+
+   各ラインは先端(head)と点列(trail)で構成される。
+   先端はPerlinノイズで方向を変えながら前進する。
+   後方は軌跡として薄く残る。
+══════════════════════════════════════════════ */
+class LivingLine {
+  constructor(opts = {}) {
+    // 線の個性パラメータ
+    this.noiseScale  = opts.noiseScale  ?? 0.004;  // 角度変化の細かさ
+    this.noiseAmp    = opts.noiseAmp    ?? 1.8;    // 角度変化の大きさ
+    this.baseAngle   = opts.baseAngle   ?? 0;      // 進行基本方向
+    this.baseSpeed   = opts.baseSpeed   ?? 1.2;    // 基本速度
+    this.speedJitter = opts.speedJitter ?? 0.6;    // 速度のゆらぎ
+    this.maxLen      = opts.maxLen      ?? 220;    // 軌跡の最大長
+    this.trailFade   = opts.trailFade   ?? 0.92;   // 軌跡の透明度減衰
+    this.lineAlpha   = opts.lineAlpha   ?? 0.55;   // 主線alpha
+    this.lineWidth   = opts.lineWidth   ?? 1.1;    // 主線の太さ
+    this.color       = opts.color       ?? [184,150,12]; // RGB
+    this.sidebias    = opts.sidebias    ?? 0;      // 横方向バイアス（左右差用）
+
+    // 特殊ふるまい
+    this.shockMode   = opts.shockMode   ?? false;  // Shock：震え
+    this.driveMode   = opts.driveMode   ?? false;  // Drive：失速
+
+    // 状態
+    this.x    = 0;
+    this.y    = 0;
+    this.angle = this.baseAngle;
+    this.speed = this.baseSpeed;
+    this.trail = []; // {x, y, alpha, width}
+    this.noiseT = Math.random() * 1000;
+    this.age    = 0;
+
+    // Drive失速用
+    this.stall      = 0;   // 失速係数 0→1
+    this.stallTimer = 0;
+  }
+
+  reset(x, y) {
+    this.x          = x;
+    this.y          = y;
+    this.angle      = this.baseAngle + (Math.random() - 0.5) * 0.4;
+    this.speed      = this.baseSpeed;
+    this.trail      = [];
+    this.noiseT     = Math.random() * 1000;
+    this.age        = 0;
+    this.stall      = 0;
+    this.stallTimer = 0;
+    this.phraseAge    = 0;
+    this.phraseDur    = (this._phraseDurBase ?? 80) + Math.random() * 80;
+    this.phraseTarget = this.angle;
+    this.phraseSpeed  = this.baseSpeed;
+    this._stopped     = false;
+  }
+
+  update(t) {
+    this.age++;
+    this.noiseT += 0.008;
+
+    this.phraseAge = (this.phraseAge ?? 0) + 1;
+    const durBase = this._phraseDurBase ?? 50;
+    if (this.phraseAge > this.phraseDur) {
+      this.phraseAge  = 0;
+      this.phraseDur  = durBase + Math.random() * durBase * 0.6;
+      const turnAmp   = this._phraseTurnAmp ?? 2.8;
+      const turn = (Math.random() - 0.5) * Math.PI * turnAmp;
+      this.phraseTarget = this.angle + turn;
+      if (Math.random() < 0.5) {
+        this.phraseTarget = this.angle + (Math.random() < 0.5 ? 1 : -1) * (Math.PI * 1.0 + Math.random() * 1.0);
+      }
+      this.phraseSpeed = this.baseSpeed; // 速度はbaseSpeedで固定
+    }
+
+    if (!this._swayMode) {
+      const phaseDiff = this.phraseTarget - this.angle;
+      const normDiff  = ((phaseDiff + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+      this.angle += normDiff * 0.018;
+      const jitter = P(this.x * 0.004, this.noiseT * 2.2) * 0.22;
+      this.angle += jitter;
+    }
+
+    // 速度：ゆらぎを最小限に
+    const speedN = P(this.noiseT * 1.5, this.age * 0.02);
+    let spd = this.baseSpeed * (0.92 + speedN * 0.16);
+
+    if (this.driveMode) {
+      this.stallTimer = (this.stallTimer ?? 0) + 1;
+      if (this.stallTimer > 60 + Math.random() * 40) {
+        this.stall = Math.min((this.stall ?? 0) + 0.015, 1.0);
+      }
+      spd *= (1 - (this.stall ?? 0) * 0.8);
+      // 失速後：noiseAmpを上げて方向が変わり始める
+      if ((this.stall ?? 0) > 0.4) {
+        const extraNoise = P(this.x * 0.006, this.noiseT * 3) * (this.stall ?? 0) * 1.8;
+        this.angle += extraNoise * 0.08;
+      }
+    }
+
+    if (this.shockMode) {
+      const freq = this._shockFreq ?? 0.008;
+      const amp  = this._shockAmp  ?? 1.2;
+      if (Math.random() < freq) {
+        // 衝撃：鋭く方向転換
+        this.angle += (Math.random() < 0.5 ? 1 : -1) * (0.6 + Math.random() * amp);
+        this.phraseTarget = this.angle;
+        spd *= 0.2 + Math.random() * 0.5;
+      }
+    }
+
+    // Obs 04 横振れ：大きなS字蛇行
+    if (this._swayMode) {
+      this._swayT = (this._swayT ?? 0) + 0.022;
+      // 進行方向に対して垂直な大きな振れを加える
+      const swayAmount = Math.sin(this._swayT) * 0.12 +
+                         Math.sin(this._swayT * 2.3 + 1.2) * 0.06; // 不規則な振れ
+      this.angle += swayAmount;
+    }
+
+    // Obs 05 回転ロス：大きな円→徐々に崩れる
+    if (this._rotMode) {
+      this._rotPhase = (this._rotPhase ?? 0) + 1;
+      // 円弧の半径：最初は大きく、徐々に崩れて小さくなる
+      const cycleLen = 200; // 1周のフレーム数
+      const cyclePos = this._rotPhase % (cycleLen * 3);
+      // 3周ごとに崩れが進む
+      const decay = Math.min(Math.floor(this._rotPhase / cycleLen) * 0.25, 0.85);
+      // 定速で曲がり続ける（円弧）+ 崩れノイズ
+      const baseRotSpeed = 0.032 * (1 - decay * 0.6); // 崩れると回転も小さくなる
+      const collapseNoise = P(this.noiseT * 4, this._rotPhase * 0.01) * decay * 0.15;
+      this.angle += baseRotSpeed + collapseNoise;
+      // 崩れた分だけ速度も落ちる
+      spd *= (1 - decay * 0.4);
+    }
+
+    spd = Math.max(spd, 0.12);
+    this.speed = spd;
+
+    this.x += Math.cos(this.angle) * spd;
+    this.y += Math.sin(this.angle) * spd;
+
+    // 平行度制御：followerはleaderの角度に近づく
+    if (this._follower === undefined && this._maxAngleDiff !== undefined) {
+      // このlineがフォロワー → leaderの角度と比較して範囲内に収める
+    }
+    if (this._follower) {
+      const leader = this._follower;
+      const maxDiff = this._maxAngleDiff ?? 0.45;
+      // 角度差を-π〜πに正規化
+      let diff = this.angle - leader.angle;
+      diff = ((diff + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+      // 差が許容範囲を超えたら引き戻す
+      if (Math.abs(diff) > maxDiff) {
+        const correction = (diff > 0 ? 1 : -1) * (Math.abs(diff) - maxDiff);
+        this.angle -= correction * 0.06; // ゆっくり修正
+      }
+    }
+
+    this.trail.unshift({ x: this.x, y: this.y });
+  }
+
+  draw(ctx, t) {
+    if (this.trail.length < 2) return;
+    const [R, G, B] = this.color;
+
+    // 2Hzの太さ変動（asymのみ）
+    let lw = this.lineWidth;
+    if (this._widthFreq && t !== undefined) {
+      const hz  = this._widthFreq;
+      const ph  = this._widthPhase ?? 0;
+      const osc = Math.sin(t * 0.001 * hz * Math.PI * 2 + ph); // t=ms→Hz換算
+      lw = this._widthBase + osc * this._widthAmp * 0.5;
+      lw = Math.max(lw, 0.4);
+    }
+
+    const alpha = this.driveMode
+      ? this.lineAlpha * Math.max(0.15, 1 - (this.stall??0) * 0.8)
+      : this.lineAlpha;
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = `rgb(${R},${G},${B})`;
+    ctx.lineWidth   = lw;
+    ctx.lineCap     = 'round';
+    ctx.lineJoin    = 'round';
+
+    ctx.beginPath();
+    ctx.moveTo(this.trail[this.trail.length-1].x, this.trail[this.trail.length-1].y);
+    for (let i = this.trail.length-2; i >= 0; i--) {
+      const p = this.trail[i];
+      let ox = 0, oy = 0;
+      if (this.shockMode && i < 3) {
+        ox = (Math.random()-0.5)*0.7;
+        oy = (Math.random()-0.5)*0.7;
+      }
+      ctx.lineTo(p.x+ox, p.y+oy);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // 画面外チェック
+  isOutOfBounds(W, H, margin = 60) {
+    return this.x < -margin || this.x > W + margin || this.y < -margin || this.y > H + margin;
+  }
+}
+
+/* ══════════════════════════════════════════════
+   OBS SECTION
+   各観測セクションを管理するクラス
+══════════════════════════════════════════════ */
+class ObsSection {
+  constructor(canvasId, type) {
+    this.canvas = document.getElementById(canvasId);
+    this.ctx    = this.canvas.getContext('2d');
+    this.type   = type;
+    this.W      = 0;
+    this.H      = 0;
+    this.active = false;
+    this.animId = null;
+    this.lines  = [];
+    this.centerActivated = false; // 中央到達フラグ
+
+    // セクション到達後の遅延タイマー
+    this.revealDelay = null;
+  }
+
+  resize() {
+    const el = this.canvas.parentElement;
+    this.W = this.canvas.width  = el.offsetWidth  || innerWidth;
+    this.H = this.canvas.height = el.offsetHeight || innerHeight;
+  }
+
+  _buildLines() {
+    this.lines = [];
+    const W = this.W, H = this.H;
+
+    if (this.type === 'asym') {
+      // Obs 01 左右非対称：直線メイン、心拍リズムで太さ変動、平行気味
+      const sharedAngle = -Math.PI * 0.5 + (Math.random()-0.5)*0.15; // ほぼ上方向
+
+      const lineA = new LivingLine({
+        baseAngle:   sharedAngle,
+        noiseAmp:    0.04,
+        noiseScale:  0.001,
+        baseSpeed:   1.0, speedJitter: 0.15,
+        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
+        color: [184,150,12],
+      });
+      lineA._phraseDurBase = 800;
+      lineA._phraseTurnAmp = 1.2;
+      lineA._widthBase     = 5.0;
+      lineA._widthAmp      = 2.8;
+      lineA._widthFreq     = 0.67;
+      lineA._widthPhase    = 0;
+      lineA._isLeader      = true;
+      lineA.reset(W * 0.33, H + 8); // 下端・左寄り
+
+      const lineB = new LivingLine({
+        baseAngle:   sharedAngle + (Math.random()-0.5)*0.2,
+        noiseAmp:    0.04,
+        noiseScale:  0.001,
+        baseSpeed:   1.0, speedJitter: 0.12,
+        maxLen: 9999, lineAlpha: 0.72, lineWidth: 2.5,
+        color: [220, 80, 140],  // ピンク
+      });
+      lineB._phraseDurBase = 700;
+      lineB._phraseTurnAmp = 1.0;
+      lineB._widthBase     = 2.5;
+      lineB._widthAmp      = 1.8;
+      lineB._widthFreq     = 0.67;
+      lineB._widthPhase    = Math.PI;
+      lineB._follower      = lineA;
+      lineB._maxAngleDiff  = 0.0375;
+      lineB.reset(W * 0.67, H + 8); // 下端・右寄り（1/3間隔）
+      this.lines = [lineA, lineB];
+
+    } else if (this.type === 'shock') {
+      // Obs 02 着地衝撃：ほぼ直進、ときどき鋭く衝撃
+      const line = new LivingLine({
+        baseAngle:   Math.random() * Math.PI * 2,
+        noiseAmp:    0.15, noiseScale: 0.001,
+        baseSpeed:   1.0, speedJitter: 0.2,
+        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
+        shockMode: true,
+        color: [184,150,12],
+      });
+      line._phraseDurBase = 600; // 長い直進
+      line._shockFreq = 0.006;
+      line._shockAmp  = 1.4;
+      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
+      this.lines = [line];
+
+    } else if (this.type === 'drive') {
+      // Obs 03 推進力の変容：最初は長くまっすぐ、徐々に変化
+      const line = new LivingLine({
+        baseAngle:   Math.random() * Math.PI * 2,
+        noiseAmp:    0.12, noiseScale: 0.001,
+        baseSpeed:   1.5, speedJitter: 0.15,
+        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
+        driveMode: true,
+        color: [184,150,12],
+      });
+      line._phraseDurBase = 800; // 最初は非常に長いフレーズ
+      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
+      this.lines = [line];
+
+    } else if (this.type === 'sway') {
+      // Obs 04 横振れ：画面端まで直進、端で折り返す
+      const line = new LivingLine({
+        baseAngle:   Math.random() * Math.PI * 2,
+        noiseAmp:    0.0, noiseScale: 0.001, // ノイズなし
+        baseSpeed:   1.1, speedJitter: 0.0,
+        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
+        color: [184,150,12],
+      });
+      line._swayMode   = true;
+      line._swayT      = 0;
+      line._phraseDurBase = 9999; // フレーズ切り替えなし
+      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
+      this.lines = [line];
+
+    } else if (this.type === 'rotation') {
+      // Obs 05 回転ロス：大きな円→徐々に崩れる
+      const line = new LivingLine({
+        baseAngle:   Math.random() * Math.PI * 2,
+        noiseAmp:    0.15, noiseScale: 0.001,
+        baseSpeed:   0.9, speedJitter: 0.15,
+        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
+        color: [184,150,12],
+      });
+      line._rotMode   = true;
+      line._rotPhase  = 0;
+      line._phraseDurBase = 9999;
+      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
+      this.lines = [line];
+    }
+  }
+
+  _resetLines() {
+    const W = this.W, H = this.H;
+    for (const line of this.lines) {
+      // 少しずれた位置からリスタート
+      const startX = W * (0.35 + Math.random() * 0.3);
+      const startY = H * (0.45 + Math.random() * 0.15);
+      line.reset(startX, startY);
+    }
+  }
+
+  start() {
+    this.active = true;
+    this.resize();
+    this._buildLines();
+
+    // 中央到達後、少し遅れて線が立ち上がる
+    this.revealDelay = setTimeout(() => {
+      this._buildLines();
+    }, 800);
+
+    const loop = (t) => {
+      if (!this.active) return;
+      this.animId = requestAnimationFrame(loop);
+
+      const { ctx, W, H } = this;
+
+      // クリア→軌跡のみ再描画（ビネットはCSSで対応）
+      ctx.clearRect(0, 0, W, H);
+
+      for (const line of this.lines) {
+        line.update(t);
+
+        const mg = 12;
+        if (line._swayMode) {
+          // sway：端に到達したら即座に反射（直進を維持）
+          if (line.x < mg)     { line.angle =  (Math.random()-0.5)*0.3;         line.phraseTarget = line.angle; }
+          if (line.x > W - mg) { line.angle =  Math.PI + (Math.random()-0.5)*0.3; line.phraseTarget = line.angle; }
+          if (line.y < mg)     { line.angle =  Math.PI*0.5 + (Math.random()-0.5)*0.3; line.phraseTarget = line.angle; }
+          if (line.y > H - mg) { line.angle = -Math.PI*0.5 + (Math.random()-0.5)*0.3; line.phraseTarget = line.angle; }
+        } else {
+          // 通常反射
+          if (line.x < mg)     { line.angle = (Math.random()-0.5)*Math.PI*0.8;          line.phraseTarget = line.angle; }
+          if (line.x > W - mg) { line.angle = Math.PI+(Math.random()-0.5)*Math.PI*0.8;  line.phraseTarget = line.angle; }
+          if (line.y < mg)     { line.angle = Math.PI*0.5+(Math.random()-0.5)*Math.PI*0.8; line.phraseTarget = line.angle; }
+          if (line.y > H - mg) { line.angle = -Math.PI*0.5+(Math.random()-0.5)*Math.PI*0.8; line.phraseTarget = line.angle; }
+        }
+
+        line.draw(ctx, t);
+      }
+    };
+    requestAnimationFrame(loop);
+  }
+
+  stop() {
+    this.active = false;
+    if (this.animId) cancelAnimationFrame(this.animId);
+    if (this.revealDelay) clearTimeout(this.revealDelay);
+    this.ctx.clearRect(0, 0, this.W, this.H);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   HERO CANVAS — 静かな波紋
+══════════════════════════════════════════════ */
+const heroCv  = document.getElementById('hero-c');
+const heroCtx = heroCv.getContext('2d');
+function resizeHero(){
+  heroCv.width  = heroCv.parentElement.offsetWidth  || innerWidth;
+  heroCv.height = heroCv.parentElement.offsetHeight || innerHeight;
+}
+resizeHero();
+const heroRipples = [];
+let lastHR = 0;
+function heroLoop(t) {
+  requestAnimationFrame(heroLoop);
+  const W = heroCv.width, H = heroCv.height;
+  heroCtx.fillStyle = 'rgba(5,5,3,0.05)'; heroCtx.fillRect(0,0,W,H);
+  const vg = heroCtx.createRadialGradient(W/2,H/2,H*.04,W/2,H/2,H*.9);
+  vg.addColorStop(0,'rgba(5,5,3,0)'); vg.addColorStop(1,'rgba(5,5,3,0.65)');
+  heroCtx.fillStyle=vg; heroCtx.fillRect(0,0,W,H);
+
+  if (t - lastHR > 3000 + Math.random()*1500) {
+    lastHR = t;
+    if (heroRipples.length >= 5) heroRipples.shift();
+    heroRipples.push({x:W*(.25+Math.random()*.5),y:H*(.25+Math.random()*.5),r:0,maxR:50+Math.random()*70,speed:.42+Math.random()*.28,life:1});
+  }
+  for (let i=heroRipples.length-1;i>=0;i--) {
+    const rp=heroRipples[i];
+    rp.r+=rp.speed; rp.life=1-rp.r/rp.maxR;
+    if(rp.life<=0){heroRipples.splice(i,1);continue}
+    heroCtx.beginPath(); heroCtx.arc(rp.x,rp.y,rp.r,0,Math.PI*2);
+    heroCtx.strokeStyle=`rgba(184,150,12,${rp.life*.15})`; heroCtx.lineWidth=.5*rp.life; heroCtx.stroke();
+  }
+}
+requestAnimationFrame(heroLoop);
+
+/* ══════════════════════════════════════════════
+   SECTION INSTANCES
+══════════════════════════════════════════════ */
+const sec01 = new ObsSection('c-01', 'asym');
+const sec02 = new ObsSection('c-02', 'shock');
+const sec03 = new ObsSection('c-03', 'drive');
+const sec04 = new ObsSection('c-04', 'sway');
+const sec05 = new ObsSection('c-05', 'rotation');
+
+const secMap = {
+  'obs-01': sec01, 'obs-02': sec02, 'obs-03': sec03,
+  'obs-04': sec04, 'obs-05': sec05,
+};
+
+const visIO = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    const sec   = secMap[en.target.id];
+    const num   = en.target.id.split('-')[1];
+    const inner = document.getElementById('inner-'+num);
+    if (!sec) return;
+    if (en.isIntersecting) {
+      sec.start();
+      if (inner) setTimeout(() => inner.classList.add('revealed'), 600);
+    } else {
+      sec.stop();
+      if (inner) inner.classList.remove('revealed');
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.obs').forEach(el => visIO.observe(el));
+
+const rIO = new IntersectionObserver(entries => {
+  entries.forEach(en => { if(en.isIntersecting){en.target.classList.add('up');rIO.unobserve(en.target)} });
+}, { threshold: .3 });
+document.querySelectorAll('.s-rule').forEach(el => rIO.observe(el));
+
+addEventListener('resize', () => {
+  resizeHero();
+  Object.values(secMap).forEach(s => s.resize());
+});
+
+})();
+</script>
+</body>
+</html>
