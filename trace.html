@@ -28,6 +28,8 @@
     .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:16px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
     .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.5;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
     .ph-sub{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.1em;color:rgba(234,229,220,.22);margin-top:16px;display:block;opacity:0;animation:fadeUp 2s ease 1.0s forwards}
+    /* animationが効かない環境向け：2.5s後に強制表示 */
+    .ph-en,.ph-title,.ph-sub{animation-fill-mode:forwards}
 
     /* observation */
     .obs{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:flex-start;overflow:hidden;padding:0 52px}
@@ -50,7 +52,21 @@
     .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
     .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
 
-    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    /* Obs03専用：文字を下部に固定、描画を全面開放 */
+    #obs-03{align-items:flex-end;padding-bottom:52px;min-height:100vh}
+    #obs-03 .obs-inner{
+      position:absolute;bottom:52px;left:52px;
+      max-width:420px;
+      background:linear-gradient(to top, rgba(5,5,3,0.95) 55%, rgba(5,5,3,0) 100%);
+      padding:40px 32px 16px 0;
+    }
+    /* transitionに依存せず常時表示 */
+    #obs-03 .obs-num  {opacity:.6 !important}
+    #obs-03 .obs-title{color:rgba(234,229,220,.82) !important;filter:blur(0) !important;transform:none !important}
+    #obs-03 .obs-desc {color:rgba(234,229,220,.45) !important;filter:blur(0) !important}
+    @media(max-width:640px){
+      #obs-03 .obs-inner{left:26px;bottom:36px}
+    }
     @media(max-width:640px){
       nav{padding:18px 22px}.nav-links{gap:22px}
       .page-hero{padding:100px 26px 52px}
@@ -449,18 +465,8 @@ class ObsSection {
       this.lines = [];
 
     } else if (this.type === 'drive') {
-      // Obs 03 推進力の変容：最初は長くまっすぐ、徐々に変化
-      const line = new LivingLine({
-        baseAngle:   Math.random() * Math.PI * 2,
-        noiseAmp:    0.12, noiseScale: 0.001,
-        baseSpeed:   1.5, speedJitter: 0.15,
-        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
-        driveMode: true,
-        color: [184,150,12],
-      });
-      line._phraseDurBase = 800; // 最初は非常に長いフレーズ
-      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
-      this.lines = [line];
+      // Obs 03 は専用エンジンで描画
+      this.lines = [];
 
     } else if (this.type === 'sway') {
       // Obs 04 横振れ：画面端まで直進、端で折り返す
@@ -696,6 +702,353 @@ class ObsSection {
       return;
     }
 
+    // ── Obs 03 drive: 圧縮→解放→尾流エンジン ─────────────
+    // 「線が動く」ではなく「力が発生・解放・減衰する」
+    // 接地→荷重→推進解放→尾流減衰 を定点で繰り返す
+    if (this.type === 'drive') {
+      const { ctx } = this;
+
+      // フェーズ定義
+      // 0: 静寂    — ほぼ何もない、薄い残光だけ
+      // 1: 接地    — 局所的に空間が沈む・圧縮
+      // 2: 荷重    — 密度が後方に集積
+      // 3: 解放    — エネルギーが前方へ抜ける（尾流発生）
+      // 4: 減衰    — 尾流がゆっくり床へ沈む
+
+      const PHASE_DUR = {
+        silence:  55,   // 静寂の長さ（フレーム）
+        ground:   18,   // 接地圧縮
+        load:     22,   // 荷重蓄積
+        release:  30,   // 解放推進
+        decay:    50,   // 減衰
+      };
+
+      // 発生位置：画面全体からランダムに（余白を考慮）
+      // 前回位置から一定距離以上離れるまで再抽選
+      const getOrigin = (W, H, prevX, prevY) => {
+        const minDist = Math.min(W, H) * 0.28; // 最低でも画面短辺の28%離れる
+        let x, y, tries = 0;
+        do {
+          x = W * (0.15 + Math.random() * 0.70);
+          y = H * (0.18 + Math.random() * 0.64);
+          tries++;
+        } while (
+          tries < 20 &&
+          prevX !== undefined &&
+          Math.hypot(x - prevX, y - prevY) < minDist
+        );
+        return { x, y };
+      };
+
+      const state = {
+        phase:  0,
+        phaseT: 0,
+        ox: 0, oy: 0,
+
+        // サイズスケール（0.6〜1.4倍でランダム）
+        scale: 1.0,
+
+        // 回転角度
+        // currentRotation: 実効角度（毎フレーム rotSpeed で増加）
+        // rotSpeed       : フレームあたりの回転量（フェーズ間でジャンプ）
+        // prevRotation   : 前回サイクルの開始角度（比較用）
+        targetRotation:  0,
+        currentRotation: 0,
+        prevRotation:    -999,
+        rotSpeed:        0.012,
+
+        quality: 1.0,
+        qualityHistory: [],
+        compressParticles: [],
+        streamParticles: [],
+        reactionLines: [],
+        ghosts: [],
+      };
+
+      // 前回と60°以上差のある角度を選ぶ（フェーズ間ジャンプ用）
+      const pickRotation = (prev) => {
+        const minDiff = Math.PI / 3; // 60°
+        let angle, tries = 0;
+        do {
+          angle = Math.random() * Math.PI * 2; // 0〜360°全方向
+          tries++;
+        } while (tries < 30 && prev !== -999 && Math.abs(angle - prev) < minDiff);
+        return angle;
+      };
+
+      const init = (W, H) => {
+        const o = getOrigin(W, H, state.ox || undefined, state.oy || undefined);
+        state.phase  = 0;
+        state.phaseT = 0;
+        state.ox = o.x; state.oy = o.y;
+        state.scale = (0.6 + Math.random() * 0.8) * 1.5 * 1.5;
+
+        // サイクル開始時の角度を決定
+        state.currentRotation = pickRotation(state.prevRotation);
+        state.prevRotation    = state.currentRotation;
+        // フェーズ内回転速度（0.008〜0.022 rad/frame）
+        state.rotSpeed = (0.008 + Math.random() * 0.014)
+                       * (Math.random() < 0.5 ? 1 : -1); // CW/CCWランダム
+
+        state.compressParticles = [];
+        state.streamParticles   = [];
+        state.reactionLines     = [];
+      };
+
+      // 角度を currentRotation で回転するヘルパー
+      const rot = (angle) => angle + state.currentRotation;
+      const sc  = (v)     => v * state.scale;
+
+      // 圧縮粒子：後方（rotation基準）に密度が集まる
+      const spawnCompress = (ox, oy, quality, count) => {
+        for (let i = 0; i < count; i++) {
+          // 後方 = rotation + π、そこから±0.6radに広がる
+          const angle = rot(Math.PI + (Math.random()-0.5) * 1.2);
+          const v = sc(0.15 + Math.random() * 0.35);
+          state.compressParticles.push({
+            x: ox + (Math.random()-0.5)*sc(8),
+            y: oy + (Math.random()-0.5)*sc(6),
+            vx: Math.cos(angle)*v, vy: Math.sin(angle)*v,
+            a: 0.18 + Math.random()*0.14,
+            r: sc(1.2 + Math.random()*2.4),
+            life: 1.0,
+            decay: 0.016 + Math.random()*0.010,
+            quality,
+          });
+        }
+      };
+
+      // 尾流粒子：前方（rotation基準）へ抜ける
+      const spawnStream = (ox, oy, quality, count) => {
+        for (let i = 0; i < count; i++) {
+          const spread = (1 - quality) * 0.9;
+          // 前方 = rotation、そこから±spreadに広がる
+          const angle  = rot((Math.random()-0.5) * spread);
+          const speed  = sc((2.4 + Math.random()*2.2) * (0.5 + quality*0.5));
+          const length = sc(quality * 38 + Math.random() * 24);
+          state.streamParticles.push({
+            x:  ox + (Math.random()-0.5)*sc(10),
+            y:  oy + (Math.random()-0.5)*sc(6),
+            vx: Math.cos(angle)*speed,
+            vy: Math.sin(angle)*speed * (1-quality*0.7),
+            a:  0.62 + quality*0.28,
+            r:  sc(0.5 + Math.random()*0.9),
+            life: 1.0,
+            decay: 0.016 + Math.random()*0.010 * (1.5 - quality*0.5),
+            length, quality,
+          });
+        }
+      };
+
+      // 地面反力線：rotation方向の垂直軸で返る
+      const spawnReaction = (ox, oy) => {
+        const count = 3 + Math.floor(Math.random()*3);
+        // 反力方向 = rotation - π/2 (進行方向の90°側、地面から返る感覚)
+        const reactionAngle = rot(-Math.PI * 0.5);
+        for (let i = 0; i < count; i++) {
+          const v = sc(1.2 + Math.random()*1.0);
+          const spread = (Math.random()-0.5)*0.4;
+          state.reactionLines.push({
+            x: ox + (Math.random()-0.5)*sc(16),
+            y: oy + (Math.random()-0.5)*sc(10),
+            vx: Math.cos(reactionAngle + spread)*v,
+            vy: Math.sin(reactionAngle + spread)*v,
+            len: sc(8 + Math.random()*14),
+            a: 0.55 + Math.random()*0.25,
+            life: 1.0,
+            decay: 0.055 + Math.random()*0.025,
+          });
+        }
+      };
+
+      const driveLoop = () => {
+        if (!this.active) return;
+        this.animId = requestAnimationFrame(driveLoop);
+        const W = this.canvas.width, H = this.canvas.height;
+
+        // 残響：半透明塗り（ghost痕跡を残す）
+        ctx.fillStyle = 'rgba(5,5,3,0.09)';
+        ctx.fillRect(0, 0, W, H);
+
+        if (state.ox === 0) init(W, H);
+        state.phaseT++;
+
+        // 毎フレーム：同一フェーズ内で currentRotation を回転
+        state.currentRotation += state.rotSpeed;
+
+        // ── フェーズ遷移 ───────────────────────────────
+        // フェーズ遷移時：rotSpeedを大きくランダムに変える（方向転換の感覚）
+        const advance = (nextPhase) => {
+          // フェーズごとに回転速度・方向をランダムに切り替え
+          // 速度幅を大きく取り、前フェーズと必ず方向が変わるようにする
+          const prevSign = Math.sign(state.rotSpeed);
+          state.rotSpeed = (0.018 + Math.random() * 0.028)
+                         * (Math.random() < 0.35 ? prevSign : -prevSign);
+          state.phase  = nextPhase;
+          state.phaseT = 0;
+        };
+
+        if (state.phase === 0) {
+          // 静寂：薄い残光だけ
+          if (state.phaseT >= PHASE_DUR.silence) advance(1);
+
+        } else if (state.phase === 1) {
+          // 接地：局所的に圧縮、空間が沈む
+          const p = state.phaseT / PHASE_DUR.ground;
+
+          // 圧縮粒子を少量ずつ生成
+          if (state.phaseT % 3 === 0) spawnCompress(state.ox, state.oy, state.quality, 2);
+
+          // 接地点が少し沈む（oy を一時的に下げる）
+          const sinkAmt = Math.sin(p * Math.PI) * 8;
+          state._sinkY = sinkAmt;
+
+          if (state.phaseT >= PHASE_DUR.ground) {
+            spawnReaction(state.ox, state.oy); // 地面反力
+            advance(2);
+          }
+
+        } else if (state.phase === 2) {
+          // 荷重：密度が後方へ蓄積
+          if (state.phaseT % 2 === 0) spawnCompress(state.ox, state.oy, state.quality, 3);
+          state._sinkY = (state._sinkY ?? 0) * 0.88; // 沈みが戻る
+
+          if (state.phaseT >= PHASE_DUR.load) advance(3);
+
+        } else if (state.phase === 3) {
+          // 解放：エネルギーが前方へ抜ける
+          const p = state.phaseT / PHASE_DUR.release;
+          // 解放初期が最も多く、後半は薄れる
+          const density = Math.sin(p * Math.PI) * (10 + state.quality * 10);
+          if (state.phaseT % 2 === 0) {
+            spawnStream(state.ox, state.oy, state.quality, Math.ceil(density * 0.6));
+          }
+          state._sinkY = (state._sinkY ?? 0) * 0.92;
+
+          if (state.phaseT >= PHASE_DUR.release) advance(4);
+
+        } else if (state.phase === 4) {
+          // 減衰：尾流が床へ沈む、次サイクルへ
+          if (state.phaseT >= PHASE_DUR.decay) {
+            // 推進品質を更新（ランダムに変動→連続性の演出）
+            const newQ = Math.max(0.2, Math.min(1.0,
+              state.quality + (Math.random()-0.42) * 0.35
+            ));
+            state.qualityHistory.push(newQ);
+            if (state.qualityHistory.length > 6) state.qualityHistory.shift();
+            state.quality = state.qualityHistory.reduce((s,v)=>s+v,0)
+                          / state.qualityHistory.length;
+
+            // 発生点を少しシフト（連続歩行の感覚）
+            const o = getOrigin(W, H);
+            state.ox = o.x; state.oy = o.y;
+            state._sinkY = 0;
+            advance(0);
+          }
+        }
+
+        const sinkY = state._sinkY ?? 0;
+
+        // ── 描画：圧縮粒子（接地点付近に滞留） ────────
+        for (let i = state.compressParticles.length-1; i >= 0; i--) {
+          const p = state.compressParticles[i];
+          p.x += p.vx; p.y += p.vy;
+          p.vx *= 0.88; p.vy *= 0.88;
+          p.life -= p.decay; p.a *= 0.93;
+          if (p.life <= 0 || p.a < 0.004) { state.compressParticles.splice(i,1); continue; }
+          // 質の悪い推進：より赤みがかった色（滞留・濁り）
+          const R = Math.round(184 + (1-p.quality)*40);
+          const G = Math.round(150 - (1-p.quality)*60);
+          const gr = ctx.createRadialGradient(p.x, p.y+sinkY*0.3, 0, p.x, p.y+sinkY*0.3, p.r*p.life);
+          gr.addColorStop(0, `rgba(${R},${G},12,${p.a*p.life})`);
+          gr.addColorStop(1, `rgba(${R},${G},12,0)`);
+          ctx.beginPath(); ctx.arc(p.x, p.y+sinkY*0.3, Math.max(0.1,p.r*p.life), 0, Math.PI*2);
+          ctx.fillStyle = gr; ctx.fill();
+        }
+
+        // ── 描画：地面反力線 ────────────────────────────
+        ctx.lineCap = 'round';
+        for (let i = state.reactionLines.length-1; i >= 0; i--) {
+          const r = state.reactionLines[i];
+          r.x += r.vx; r.y += r.vy;
+          r.life -= r.decay; r.a *= 0.90;
+          if (r.life <= 0 || r.a < 0.005) { state.reactionLines.splice(i,1); continue; }
+          ctx.beginPath();
+          ctx.moveTo(r.x, r.y);
+          ctx.lineTo(r.x + r.vx*r.len*r.life, r.y + r.vy*r.len*r.life);
+          ctx.strokeStyle = `rgba(220,195,50,${r.a*r.life})`;
+          ctx.lineWidth = 0.8 * r.life;
+          ctx.stroke();
+        }
+
+        // ── 描画：尾流粒子（解放→前方へ抜ける） ────────
+        for (let i = state.streamParticles.length-1; i >= 0; i--) {
+          const p = state.streamParticles[i];
+          p.x += p.vx; p.y += p.vy;
+          p.vx *= 0.97; p.vy *= 0.97;
+          p.life -= p.decay; p.a *= 0.963;
+          if (p.life <= 0 || p.a < 0.004 || p.x > W*0.97) {
+            state.streamParticles.splice(i,1); continue;
+          }
+
+          // 尾流：先端が明るく、後方が薄い
+          const tipAlpha = p.a * p.life;
+          const tailAlpha = tipAlpha * 0.25;
+          const dx = -p.vx * p.length * p.life;
+          const dy = -p.vy * p.length * p.life;
+
+          // 良い推進：細く明るい。悪い推進：太く濁る
+          const lw = p.quality > 0.6
+            ? 0.5 + (1-p.life)*0.8
+            : 1.2 + (1-p.quality)*2.0;
+
+          const gr = ctx.createLinearGradient(p.x, p.y, p.x+dx, p.y+dy);
+          const R = Math.round(220 - (1-p.quality)*36);
+          const G = Math.round(195 - (1-p.quality)*80);
+          gr.addColorStop(0, `rgba(${R},${G},45,${tipAlpha})`);
+          gr.addColorStop(1, `rgba(184,150,12,${tailAlpha})`);
+
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x+dx, p.y+dy);
+          ctx.strokeStyle = gr;
+          ctx.lineWidth = Math.max(0.2, lw);
+          ctx.stroke();
+
+          // 先端の微細光点
+          if (p.life > 0.4) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, Math.max(0.1, p.r*p.life*p.quality), 0, Math.PI*2);
+            ctx.fillStyle = `rgba(225,200,55,${tipAlpha*0.7})`;
+            ctx.fill();
+          }
+        }
+
+        // ── 描画：接地点の圧縮感（中心のかすかな光） ──
+        if (state.phase >= 1 && state.phase <= 3) {
+          const pNorm = state.phaseT / (state.phase === 1 ? PHASE_DUR.ground :
+                        state.phase === 2 ? PHASE_DUR.load : PHASE_DUR.release);
+          const intensity = state.phase === 1
+            ? Math.sin(pNorm * Math.PI) * 0.45
+            : state.phase === 2
+              ? 0.25 + pNorm * 0.15
+              : Math.max(0, 0.4 - pNorm * 0.4);
+
+          const cx = state.ox, cy = state.oy + sinkY;
+          const r  = sc(8 + (1-state.quality)*6 + (state.phase===2 ? pNorm*8 : 0));
+          const gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+          gr.addColorStop(0, `rgba(200,170,20,${intensity})`);
+          gr.addColorStop(0.5, `rgba(184,150,12,${intensity*0.3})`);
+          gr.addColorStop(1, 'rgba(184,150,12,0)');
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2);
+          ctx.fillStyle = gr; ctx.fill();
+        }
+      };
+      requestAnimationFrame(driveLoop);
+      this.revealDelay = setTimeout(() => {}, 800);
+      return;
+    }
+
     // 中央到達後、少し遅れて線が立ち上がる
     this.revealDelay = setTimeout(() => {
       this._buildLines();
@@ -777,6 +1130,14 @@ function heroLoop(t) {
   }
 }
 requestAnimationFrame(heroLoop);
+
+// Hero文字：animation終了後に確実にopacity:1を維持（forwards が効かない環境対策）
+setTimeout(() => {
+  document.querySelectorAll('.ph-en,.ph-title,.ph-sub').forEach(el => {
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  });
+}, 2800);
 
 /* ══════════════════════════════════════════════
    SECTION INSTANCES
