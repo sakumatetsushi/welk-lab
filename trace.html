@@ -52,7 +52,17 @@
     .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
     .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
 
-    /* Obs03専用：文字を下部に固定、描画を全面開放 */
+    /* Obs04専用 */
+    #obs-04{align-items:flex-start;padding-top:0}
+    #obs-04 .obs-inner{
+      position:absolute;top:88px;left:52px;max-width:380px;
+      background:none;
+      padding:0;
+    }
+    #obs-04 .obs-num  {opacity:.6 !important}
+    #obs-04 .obs-title{color:rgba(234,229,220,.82)!important;filter:blur(0)!important;transform:none!important}
+    #obs-04 .obs-desc {color:rgba(234,229,220,.45)!important;filter:blur(0)!important}
+    @media(max-width:640px){#obs-04 .obs-inner{left:26px;bottom:36px}}
     #obs-03{align-items:flex-end;padding-bottom:52px;min-height:100vh}
     #obs-03 .obs-inner{
       position:absolute;bottom:52px;left:52px;
@@ -469,19 +479,8 @@ class ObsSection {
       this.lines = [];
 
     } else if (this.type === 'sway') {
-      // Obs 04 横振れ：画面端まで直進、端で折り返す
-      const line = new LivingLine({
-        baseAngle:   Math.random() * Math.PI * 2,
-        noiseAmp:    0.0, noiseScale: 0.001, // ノイズなし
-        baseSpeed:   1.1, speedJitter: 0.0,
-        maxLen: 9999, lineAlpha: 0.92, lineWidth: 5.0,
-        color: [184,150,12],
-      });
-      line._swayMode   = true;
-      line._swayT      = 0;
-      line._phraseDurBase = 9999; // フレーズ切り替えなし
-      line.reset(W*(0.2+Math.random()*0.6), H*(0.2+Math.random()*0.6));
-      this.lines = [line];
+      // Obs 04 は独立エンジンで描画
+      this.lines = [];
 
     } else if (this.type === 'rotation') {
       // Obs 05 回転ロス：大きな円→徐々に崩れる
@@ -1049,7 +1048,204 @@ class ObsSection {
       return;
     }
 
-    // 中央到達後、少し遅れて線が立ち上がる
+    // ── Obs 04 sway: 2D 身体軸エンジン ────────────────────────
+    // 縦柱＋断面楕円アニメーションで立体感・ねじれを表現
+    if (this.type === 'sway') {
+      const { ctx } = this;
+      const SEGS = 12;
+      const segs = Array.from({ length: SEGS }, (_, i) => ({
+        t: i / (SEGS - 1),
+        offsetX: 0, velX: 0,
+        twist: 0, twistVel: 0,
+      }));
+      const ev = {
+        phase: 0, phaseT: 0,
+        waitT: 0, waitDur: 80 + Math.random() * 60,
+        dir: 1, mag: 0,
+        fatigue: 0, cycleN: 0,
+      };
+      const advEv = (next) => { ev.phase = next; ev.phaseT = 0; };
+
+      const swayLoop = () => {
+        if (!this.active) return;
+        this.animId = requestAnimationFrame(swayLoop);
+        const W = this.canvas.width, H = this.canvas.height;
+        const cx = W * 0.72;
+        const yTop = 0, yBot = H * 0.92, colH = yBot - yTop;
+        const baseW = Math.min(W, H) * 0.068;
+
+        ctx.fillStyle = `rgba(5,5,3,${0.08 + ev.fatigue * 0.04})`;
+        ctx.fillRect(0, 0, W, H);
+
+        ev.phaseT++;
+
+        // フェーズ制御
+        if (ev.phase === 0) {
+          ev.waitT++;
+          if (ev.waitT >= ev.waitDur) {
+            ev.waitT = 0;
+            ev.dir   = Math.random() < 0.5 ? 1 : -1;
+            ev.mag   = (0.05 + Math.random() * 0.09 + ev.fatigue * 0.05) * W;
+            ev.waitDur = 65 + Math.random() * 70;
+            advEv(1);
+          }
+        } else if (ev.phase === 1) {
+          if (ev.phaseT >= 55) advEv(2);
+        } else if (ev.phase === 2) {
+          if (ev.phaseT >= 42) advEv(3);
+        } else if (ev.phase === 3) {
+          if (ev.phaseT >= 52) {
+            ev.cycleN++;
+            ev.fatigue = Math.min(0.8, ev.cycleN * 0.07);
+            advEv(0);
+          }
+        }
+
+        // セグメント更新
+        segs.forEach(seg => {
+          const ti  = 1 - seg.t;
+          const lag = Math.round(seg.t * 28);
+          const ept = Math.max(0, ev.phaseT - lag);
+          let tx = 0, tt = 0;
+          if (ev.phase === 1) {
+            const p = Math.min(1, ept / 45);
+            const e = 1 - Math.pow(1 - p, 2.5);
+            tx = ev.dir * ev.mag * (ti * 0.9 + 0.1) * e;
+            tt = ev.dir * (0.32 + ev.fatigue * 0.14) * (seg.t - 0.5) * e;
+          } else if (ev.phase === 2) {
+            const p = Math.min(1, ept / 35);
+            const b = Math.max(0, 1 - p * 1.6);
+            const bn = Math.sin(p * Math.PI) * 0.22;
+            tx = ev.dir * ev.mag * (ti * 0.9 + 0.1) * (b - bn);
+            tt = ev.dir * (0.2 + ev.fatigue * 0.08) * (seg.t - 0.5) * b;
+          } else if (ev.phase === 3) {
+            const p = Math.min(1, ept / 40);
+            tx = ev.dir * ev.mag * (ti * 0.9 + 0.1) * -Math.sin(p * Math.PI) * 0.18;
+            tt = ev.dir * 0.09 * (seg.t - 0.5) * Math.sin(p * Math.PI);
+          }
+          seg.velX     += (tx - seg.offsetX) * 0.055; seg.velX     *= 0.80; seg.offsetX  += seg.velX;
+          seg.twistVel += (tt - seg.twist)   * 0.07;  seg.twistVel *= 0.82; seg.twist    += seg.twistVel;
+        });
+
+        // 制御点
+        const pts = segs.map(s => ({
+          x: cx + s.offsetX,
+          y: yTop + s.t * colH,
+          tw: s.twist, t: s.t,
+        }));
+        const hw = (t) => baseW * Math.sqrt(1 - Math.pow(t * 2 - 1, 2) * 0.42) + baseW * 0.12;
+        const ex = (pt, side) => {
+          const h = hw(pt.t);
+          return pt.x + side * h * (1 + side * Math.cos(pt.tw) * 0.22);
+        };
+
+        // ── 描画 ────────────────────────────────────────
+        ctx.fillStyle = `rgba(5,5,3,${0.06 + ev.fatigue * 0.03})`;
+        ctx.fillRect(0, 0, W, H);
+
+        const DRAW_SLICES = 60;
+        const getSlice = (frac) => {
+          const si = frac * (pts.length - 1);
+          const lo = Math.floor(si), hi = Math.min(pts.length - 1, lo + 1);
+          const lt = si - lo;
+          return {
+            x:  pts[lo].x  + (pts[hi].x  - pts[lo].x)  * lt,
+            y:  pts[lo].y  + (pts[hi].y  - pts[lo].y)  * lt,
+            tw: pts[lo].tw + (pts[hi].tw  - pts[lo].tw) * lt,
+            t:  pts[lo].t  + (pts[hi].t   - pts[lo].t)  * lt,
+            h:  hw(pts[lo].t + (pts[hi].t - pts[lo].t) * lt),
+          };
+        };
+
+        // 柱の太さ：画面幅の4〜6%程度（細く・スマートに）
+        const R = Math.min(W, H) * 0.038;
+
+        // ── 細線による筒表現 ─────────────────────────────
+        // N本の縦ラインが円筒表面を等角度で走る。
+        // 各ラインのX位置 = cx + offsetX + R * cos(角度 + twist)
+        // twistが高さごとに変わるので、ラインが螺旋を描く。
+
+        const LINE_N = 28;
+        ctx.lineCap = 'round';
+
+        // 光源方向（固定）：左上から当たる
+        const LIGHT_ANGLE = -Math.PI * 0.3;
+
+        for (let li = 0; li < LINE_N; li++) {
+          const baseAngle = (li / LINE_N) * Math.PI * 2;
+
+          const lineX = [], lineY = [], lineAlpha = [], lineLW = [];
+
+          for (let si = 0; si <= DRAW_SLICES; si++) {
+            const s = getSlice(si / DRAW_SLICES);
+            const spiralBase = s.t * Math.PI * 0.10;  // 静止素地（ごく控えめ）
+            const twistAmt   = s.tw * 9.0;             // ねじれ強化（5.0→9.0）
+            const angle = baseAngle + spiralBase + twistAmt;
+
+            lineX.push(s.x + R * Math.cos(angle));
+            lineY.push(s.y + R * 0.13 * Math.sin(angle));
+
+            // 陰影計算：光源角度との差でライン輝度を決定
+            // ねじれ時は各高さで angle が変わるため
+            // 明暗帯が斜めに走り「ねじれの陰影」が生まれる
+            const diffAngle = angle - LIGHT_ANGLE;
+            const lighting  = Math.cos(diffAngle); // -1(影)〜+1(光)
+            const brightness = (lighting + 1) * 0.5; // 0〜1
+
+            lineAlpha.push(0.03 + brightness * 0.72);
+            lineLW.push(0.25 + brightness * 2.2);
+          }
+
+          // セグメント単位で描画（各点の輝度が独立して変わる）
+          for (let si = 0; si < DRAW_SLICES; si++) {
+            const a  = (lineAlpha[si] + lineAlpha[si+1]) * 0.5;
+            const lw = (lineLW[si]    + lineLW[si+1])    * 0.5;
+            const loadBright = (ev.phase === 1)
+              ? lineAlpha[si] * ev.dir * Math.cos(baseAngle) * 0.22 * Math.min(1, ev.phaseT/30)
+              : 0;
+            const Rc = Math.min(255, Math.round(184 + loadBright * 40 + lineAlpha[si] * 18));
+            const Gc = Math.min(255, Math.round(150 + loadBright * 20 + lineAlpha[si] * 8));
+            ctx.beginPath();
+            ctx.moveTo(lineX[si], lineY[si]);
+            ctx.lineTo(lineX[si+1], lineY[si+1]);
+            ctx.strokeStyle = `rgba(${Rc},${Gc},12,${a})`;
+            ctx.lineWidth   = lw;
+            ctx.stroke();
+          }
+        }
+
+        // ── 荷重時の内部グロー（片側密度） ──────────────
+        const maxO = Math.max(...segs.map(s => Math.abs(s.offsetX)));
+        if (maxO > 1) {
+          const dom = segs.reduce((a, b) => Math.abs(a.offsetX) > Math.abs(b.offsetX) ? a : b);
+          const gx = cx + dom.offsetX * 0.5;
+          const gy = yTop + colH * 0.5;
+          const gr = ctx.createRadialGradient(gx, gy, 0, gx, gy, R * 3.5);
+          gr.addColorStop(0, `rgba(184,150,12,${Math.min(0.14, maxO/W * 0.55 + ev.fatigue * 0.05)})`);
+          gr.addColorStop(1, 'rgba(184,150,12,0)');
+          ctx.beginPath();
+          ctx.ellipse(gx, gy, R * 3.5, colH * 0.45, 0, 0, Math.PI * 2);
+          ctx.fillStyle = gr;
+          ctx.fill();
+        }
+
+        // ── 底面の接地感 ──────────────────────────────────
+        { const b = getSlice(0);
+          const gr = ctx.createRadialGradient(b.x, b.y + 6, 0, b.x, b.y + 6, R * 2.2);
+          gr.addColorStop(0, 'rgba(0,0,0,0.5)');
+          gr.addColorStop(1, 'rgba(0,0,0,0)');
+          ctx.beginPath();
+          ctx.ellipse(b.x, b.y + 6, R * 2.2, R * 0.4, 0, 0, Math.PI * 2);
+          ctx.fillStyle = gr;
+          ctx.fill();
+        }
+
+
+      };
+      requestAnimationFrame(swayLoop);
+      this.revealDelay = setTimeout(() => {}, 800);
+      return;
+    }
     this.revealDelay = setTimeout(() => {
       this._buildLines();
     }, 800);
@@ -1093,6 +1289,11 @@ class ObsSection {
     if (this.animId) cancelAnimationFrame(this.animId);
     if (this.revealDelay) clearTimeout(this.revealDelay);
     this.ctx.clearRect(0, 0, this.W, this.H);
+    // obs04 3D canvas のクリア
+    if (this.type === 'sway') {
+      const c3d = document.getElementById('c-04-3d');
+      if (c3d) { const g = c3d.getContext('2d'); if (g) g.clearRect(0,0,c3d.width,c3d.height); }
+    }
   }
 }
 
