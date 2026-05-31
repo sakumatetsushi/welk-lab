@@ -151,16 +151,6 @@
   </div>
 </section>
 
-<div class="s-rule"></div>
-
-<section class="obs" id="obs-05">
-  <canvas class="obs-canvas" id="c-05"></canvas>
-  <div class="obs-inner" id="inner-05">
-    <span class="obs-num">Observation 05</span>
-    <div class="obs-title">回転は、<br>途中で失われる。</div>
-    <div class="obs-desc">足首が描くはずの円弧が、<br>どこかで崩れる。<br>その崩れた形が、摩耗の痕跡だ。</div>
-  </div>
-</section>
 
 <div class="s-rule"></div>
 
@@ -545,7 +535,7 @@ class ObsSection {
       const newLine = (W, H) => {
         state.points     = [];
         state.headX      = W * 0.08;
-        state.baseY      = H * (0.28 + Math.random() * 0.44);
+        state.baseY      = H * (0.38 + Math.random() * 0.34);
         state.shockTimer = 0;
         state.phase      = 0;
         state.phaseT     = 0;
@@ -581,7 +571,7 @@ class ObsSection {
 
         if (state.headX === 0) {
           state.headX = W * 0.08;
-          state.baseY = H * (0.28 + Math.random() * 0.44);
+          state.baseY = H * (0.38 + Math.random() * 0.34);
         }
 
         state.shockTimer++;
@@ -1347,11 +1337,10 @@ const sec01 = new ObsSection('c-01', 'asym');
 const sec02 = new ObsSection('c-02', 'shock');
 const sec03 = new ObsSection('c-03', 'drive');
 const sec04 = new ObsSection('c-04', 'sway');
-const sec05 = new ObsSection('c-05', 'rotation');
 
 const secMap = {
   'obs-01': sec01, 'obs-02': sec02, 'obs-03': sec03,
-  'obs-04': sec04, 'obs-05': sec05,
+  'obs-04': sec04,
 };
 
 const visIO = new IntersectionObserver(entries => {
