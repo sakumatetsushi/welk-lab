@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Story — WELK 人が歩く研究所</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:  #B8960C;
+      --goldL: #C9A84C;
+      --goldD: #6B5A0A;
+      --ink:   #050503;
+      --paper: #EAE5DC;
+    }
+    html, body {
+      width: 100%; height: 100%;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: 'Noto Serif JP', serif;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 52px;
+      pointer-events: none;
+    }
+    .logo {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 14px; letter-spacing: .28em;
+      color: rgba(234,229,220,.38); text-decoration: none;
+      pointer-events: all; transition: color .6s;
+    }
+    .logo:hover { color: rgba(234,229,220,.72); }
+    .nav-links { display: flex; gap: 40px; list-style: none; pointer-events: all; }
+    .nav-links a {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 11px; letter-spacing: .18em;
+      color: rgba(234,229,220,.28); text-decoration: none; transition: color .5s;
+    }
+    .nav-links a:hover, .nav-links a.cur { color: rgba(234,229,220,.72); }
+
+    /* ── Stage ── */
+    #stage {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* ── Slides ── */
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity .8s cubic-bezier(.4,0,.2,1);
+      pointer-events: none;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .slide.exit { opacity: 0; }
+
+    /* 通常ストーリースライド */
+    .slide-story {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* イラスト領域 */
+    .illust-wrap {
+      position: relative;
+      width: min(88vw, 148vh);   /* 見開き比率 2:1 を維持 */
+      aspect-ratio: 2 / 1;
+      margin: 0 auto;
+    }
+    .illust-wrap img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    /* プレースホルダー（イラスト未登録時） */
+    .illust-placeholder {
+      width: 100%; height: 100%;
+      background: rgba(184,150,12,.04);
+      border: .5px solid rgba(184,150,12,.12);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 18px;
+    }
+    .illust-placeholder .ph-num {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 11px; letter-spacing: .3em; color: rgba(184,150,12,.35);
+    }
+    .illust-placeholder .ph-title {
+      font-weight: 200; font-size: clamp(15px,2vw,22px);
+      color: rgba(234,229,220,.45); letter-spacing: .08em; text-align: center;
+      line-height: 1.9; padding: 0 24px;
+    }
+    .illust-placeholder .ph-sub {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 10px; letter-spacing: .22em; color: rgba(184,150,12,.28);
+    }
+    /* 見開き中央線 */
+    .illust-placeholder::after {
+      content: '';
+      position: absolute; left: 50%; top: 8%; bottom: 8%;
+      width: .5px; background: rgba(184,150,12,.08);
+      transform: translateX(-50%);
+    }
+
+    /* キャプション */
+    .caption {
+      margin-top: 22px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .6s ease .4s, transform .6s ease .4s;
+    }
+    .slide.active .caption { opacity: 1; transform: none; }
+    .caption-name {
+      font-weight: 200; font-size: clamp(12px,1.3vw,15px);
+      color: rgba(234,229,220,.52); letter-spacing: .12em;
+    }
+    .caption-role {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 10px; letter-spacing: .2em; color: var(--goldD);
+      margin-top: 6px;
+    }
+
+    /* ── 最終スライド ── */
+    .slide-final {
+      flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+    }
+    .final-question {
+      font-weight: 200;
+      font-size: clamp(18px, 3vw, 36px);
+      line-height: 2.0;
+      color: rgba(234,229,220,.82);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1.2s ease .3s, transform 1.2s ease .3s;
+    }
+    .slide-final.active .final-question { opacity: 1; transform: none; }
+    .final-logo {
+      margin-top: 52px;
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 13px; letter-spacing: .38em;
+      color: var(--goldD);
+      opacity: 0;
+      transition: opacity 1.4s ease 1.0s;
+    }
+    .slide-final.active .final-logo { opacity: 1; }
+
+    /* ── UI：STORY番号（左上） ── */
+    #story-num {
+      position: fixed; top: 28px; left: 52px; z-index: 200;
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 9px; letter-spacing: .38em;
+      color: var(--goldD);
+      transition: opacity .4s;
+    }
+
+    /* ── UI：インジケーター（右下） ── */
+    #indicator {
+      position: fixed; bottom: 36px; right: 52px; z-index: 200;
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 9px; letter-spacing: .22em;
+      color: rgba(234,229,220,.28);
+    }
+
+    /* ── UI：左右ボタン ── */
+    .nav-btn {
+      position: fixed; top: 50%; z-index: 200;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      padding: 20px 24px;
+      color: rgba(184,150,12,.35);
+      font-size: 18px;
+      transition: color .4s;
+      outline: none;
+    }
+    .nav-btn:hover { color: rgba(184,150,12,.75); }
+    #btn-prev { left: 12px; }
+    #btn-next { right: 12px; }
+    .nav-btn svg { display: block; width: 20px; height: 20px; }
+
+    /* ── 進行バー（下端） ── */
+    #progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 1px;
+      background: var(--goldD);
+      width: 0%;
+      transition: width linear;
+      z-index: 200;
+      opacity: .45;
+    }
+
+    /* ── 背景Canvas（静かな粒子） ── */
+    #bg-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 18px 22px; }
+      .nav-links { gap: 22px; }
+      #story-num { top: 18px; left: 22px; }
+      #indicator  { bottom: 28px; right: 22px; }
+      .illust-wrap {
+        width: min(96vw, 120vh);
+      }
+      .caption { margin-top: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">WELK</a>
+  <ul class="nav-links">
+    <li><a href="about.html">About</a></li>
+    <li><a href="trace.html">Trace</a></li>
+    <li><a href="story.html" class="cur">Story</a></li>
+    <li><a href="journal.html">Journal</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- STORY番号 -->
+<div id="story-num">STORY 01</div>
+
+<!-- ページインジケーター -->
+<div id="indicator">1 / 6</div>
+
+<!-- 左右ボタン -->
+<button id="btn-prev" class="nav-btn" aria-label="前へ">
+  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1">
+    <polyline points="13,4 7,10 13,16"/>
+  </svg>
+</button>
+<button id="btn-next" class="nav-btn" aria-label="次へ">
+  <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1">
+    <polyline points="7,4 13,10 7,16"/>
+  </svg>
+</button>
+
+<!-- 進行バー -->
+<div id="progress-bar"></div>
+
+<!-- ── スライドステージ ── -->
+<div id="stage">
+
+  <!-- Story 01 -->
+  <div class="slide slide-story active" data-index="0">
+    <div class="illust-wrap">
+      <!-- イラスト画像はここに: <img src="story01.jpg" alt="Story 01"> -->
+      <div class="illust-placeholder">
+        <span class="ph-num">Story 01</span>
+        <p class="ph-title">三十年、同じ道を歩いてきた。<br>けれど今日の景色は、どこか違う。</p>
+        <span class="ph-sub">— illustration placeholder —</span>
+      </div>
+    </div>
+    <div class="caption">
+      <div class="caption-name">山田 哲也 · 62歳</div>
+      <div class="caption-role">建設業 / 大阪</div>
+    </div>
+  </div>
+
+  <!-- Story 02 -->
+  <div class="slide slide-story" data-index="1">
+    <div class="illust-wrap">
+      <div class="illust-placeholder">
+        <span class="ph-num">Story 02</span>
+        <p class="ph-title">膝が痛くなってから、<br>散歩が怖くなった。でも、行く。</p>
+        <span class="ph-sub">— illustration placeholder —</span>
+      </div>
+    </div>
+    <div class="caption">
+      <div class="caption-name">中村 幸子 · 71歳</div>
+      <div class="caption-role">元看護師 / 神戸</div>
+    </div>
+  </div>
+
+  <!-- Story 03 -->
+  <div class="slide slide-story" data-index="2">
+    <div class="illust-wrap">
+      <div class="illust-placeholder">
+        <span class="ph-num">Story 03</span>
+        <p class="ph-title">子どもたちが巣立って、<br>はじめて自分のための一歩を踏んだ。</p>
+        <span class="ph-sub">— illustration placeholder —</span>
+      </div>
+    </div>
+    <div class="caption">
+      <div class="caption-name">佐藤 裕子 · 55歳</div>
+      <div class="caption-role">主婦・介護職 / 京都</div>
+    </div>
+  </div>
+
+  <!-- Story 04 -->
+  <div class="slide slide-story" data-index="3">
+    <div class="illust-wrap">
+      <div class="illust-placeholder">
+        <span class="ph-num">Story 04</span>
+        <p class="ph-title">現場を離れる日が来た。<br>それでも体は、前へ向こうとしている。</p>
+        <span class="ph-sub">— illustration placeholder —</span>
+      </div>
+    </div>
+    <div class="caption">
+      <div class="caption-name">田中 勝 · 67歳</div>
+      <div class="caption-role">元製造業 / 堺</div>
+    </div>
+  </div>
+
+  <!-- Story 05 -->
+  <div class="slide slide-story" data-index="4">
+    <div class="illust-wrap">
+      <div class="illust-placeholder">
+        <span class="ph-num">Story 05</span>
+        <p class="ph-title">転んでから、地面が怖くなった。<br>でも孫と歩く日を、まだ夢見ている。</p>
+        <span class="ph-sub">— illustration placeholder —</span>
+      </div>
+    </div>
+    <div class="caption">
+      <div class="caption-name">林 文子 · 74歳</div>
+      <div class="caption-role">元教員 / 東大阪</div>
+    </div>
+  </div>
+
+  <!-- 最終スライド -->
+  <div class="slide slide-final" data-index="5">
+    <p class="final-question">
+      あなたには、<br>まだ見たい景色がありますか。
+    </p>
+    <div class="final-logo">WELK</div>
+  </div>
+
+</div><!-- /stage -->
+
+<script>
+(() => {
+  /* ── 背景Canvas（静かな粒子） ── */
+  const cv  = document.getElementById('bg-canvas');
+  const ctx = cv.getContext('2d');
+  let W, H;
+  const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
+  resize(); addEventListener('resize', resize);
+
+  const particles = Array.from({ length: 55 }, () => ({
+    x: Math.random(), y: Math.random(),
+    vx: (Math.random() - .5) * .00006,
+    vy: -(Math.random() * .00003),
+    r:  .3 + Math.random() * .9,
+    phase: Math.random() * Math.PI * 2,
+    alpha: .04 + Math.random() * .14,
+  }));
+
+  const bgLoop = (t) => {
+    requestAnimationFrame(bgLoop);
+    ctx.fillStyle = 'rgba(5,5,3,0.04)';
+    ctx.fillRect(0, 0, W, H);
+    for (const p of particles) {
+      p.x = (p.x + p.vx + 1) % 1;
+      p.y = (p.y + p.vy + 1) % 1;
+      const a = p.alpha * (.3 + Math.sin(t * .00045 + p.phase) * .7);
+      ctx.beginPath();
+      ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(184,150,12,${a})`;
+      ctx.fill();
+    }
+  };
+  requestAnimationFrame(bgLoop);
+
+  /* ── スライド制御 ── */
+  const slides      = Array.from(document.querySelectorAll('.slide'));
+  const storyNum    = document.getElementById('story-num');
+  const indicator   = document.getElementById('indicator');
+  const progressBar = document.getElementById('progress-bar');
+  const btnPrev     = document.getElementById('btn-prev');
+  const btnNext     = document.getElementById('btn-next');
+
+  const TOTAL       = slides.length;
+  const STORY_COUNT = TOTAL - 1; // 最終スライドを除いたストーリー数
+  const AUTO_DELAY  = 12000;     // 自動再生間隔（ms）
+
+  let current   = 0;
+  let autoTimer = null;
+  let progTimer = null;
+  let isAnimating = false;
+
+  /* UI更新 */
+  const updateUI = (idx) => {
+    // STORY番号
+    if (idx < STORY_COUNT) {
+      storyNum.textContent = `STORY ${String(idx + 1).padStart(2, '0')}`;
+      storyNum.style.opacity = '1';
+    } else {
+      storyNum.style.opacity = '0';
+    }
+    // インジケーター
+    indicator.textContent = `${idx + 1} / ${TOTAL}`;
+  };
+
+  /* 自動再生の進行バー */
+  const startProgress = () => {
+    clearTimeout(progTimer);
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        progressBar.style.transition = `width ${AUTO_DELAY}ms linear`;
+        progressBar.style.width = '100%';
+      });
+    });
+  };
+  const stopProgress = () => {
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+  };
+
+  /* 自動再生 */
+  const startAuto = () => {
+    clearTimeout(autoTimer);
+    startProgress();
+    autoTimer = setTimeout(() => {
+      goTo((current + 1) % TOTAL);
+      startAuto();
+    }, AUTO_DELAY);
+  };
+  const stopAuto = () => {
+    clearTimeout(autoTimer);
+    stopProgress();
+  };
+
+  /* スライド遷移 */
+  const goTo = (idx, userAction = false) => {
+    if (isAnimating || idx === current) return;
+    isAnimating = true;
+
+    if (userAction) stopAuto();
+
+    const prev = slides[current];
+    const next = slides[idx];
+
+    prev.classList.remove('active');
+    prev.classList.add('exit');
+    next.classList.add('active');
+
+    current = idx;
+    updateUI(idx);
+
+    setTimeout(() => {
+      prev.classList.remove('exit');
+      isAnimating = false;
+      if (userAction) startAuto(); // 操作後も一定時間後に再開
+    }, 900);
+  };
+
+  /* 初期化 */
+  updateUI(0);
+  startAuto();
+
+  /* ボタン */
+  btnPrev.addEventListener('click', () => {
+    goTo((current - 1 + TOTAL) % TOTAL, true);
+  });
+  btnNext.addEventListener('click', () => {
+    goTo((current + 1) % TOTAL, true);
+  });
+
+  /* キーボード */
+  addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      goTo((current + 1) % TOTAL, true);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      goTo((current - 1 + TOTAL) % TOTAL, true);
+    }
+  });
+
+  /* スワイプ */
+  let touchStartX = 0, touchStartY = 0;
+  addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      if (dx < 0) goTo((current + 1) % TOTAL, true);
+      else         goTo((current - 1 + TOTAL) % TOTAL, true);
+    }
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
