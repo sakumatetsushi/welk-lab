@@ -70,20 +70,19 @@
 
     /* ══ 写真スライド ══ */
     .slide-photo {
+      display: flex; align-items: center; justify-content: center;
       background: var(--ink);
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-    /* メイン画像：全画面カバー */
     .photo-img {
-      position: absolute;
-      top: 0; left: 0;
+      position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
       object-position: center;
       display: block;
       z-index: 2;
     }
-    /* ぼかし背景：暗めにして主画像の後ろに */
+    /* ぼかし背景：同じ画像をフルカバーで敷き、ブラーをかける */
     .photo-bg {
       position: absolute;
       top: -5%; left: -5%;
@@ -91,7 +90,7 @@
       object-fit: cover;
       object-position: center;
       display: block;
-      filter: blur(18px) brightness(0.28);
+      filter: blur(20px) brightness(0.3);
       z-index: 1;
     }
     /* プレースホルダー（画像未登録時） */
