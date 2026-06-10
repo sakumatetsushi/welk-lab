@@ -7,7 +7,7 @@
   <title>Story — WELK 人が歩く研究所</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&family=Zen+Old+Mincho:wght@400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -70,13 +70,28 @@
 
     /* ══ 写真スライド ══ */
     .slide-photo {
-      background: #050503;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--ink);
+      position: relative; overflow: hidden;
     }
     .photo-img {
-      width: 100%;
-      height: 100%;
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
+      object-position: center;
       display: block;
+      z-index: 2;
+    }
+    /* ぼかし背景：同じ画像をフルカバーで敷き、ブラーをかける */
+    .photo-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: blur(22px) brightness(0.35) saturate(0.6);
+      transform: scale(1.08); /* blur端を隠す */
+      z-index: 1;
     }
     /* プレースホルダー（画像未登録時） */
     .photo-placeholder {
@@ -102,19 +117,21 @@
       text-align: center;
     }
     .caption-scene {
-      font-weight: 200;
+      font-family: 'Zen Old Mincho', 'Noto Serif JP', serif;
+      font-weight: 400;
       font-size: clamp(18px, 3.2vw, 42px);
       line-height: 1.8;
-      color: rgba(234,229,220,.92);
-      letter-spacing: .14em;
+      color: rgba(234,229,220,.88);
+      letter-spacing: .18em;
     }
-    /* キャプションのフェードイン（スライドがアクティブになった後少し遅れる） */
+    /* キャプション：1秒かけてうっすら浮かび上がる */
+    .photo-caption { opacity: 0; }
     .slide.active .photo-caption {
-      animation: captionIn .8s ease .5s both;
+      animation: captionFade 1.2s ease 0.8s both;
     }
-    @keyframes captionIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: none; }
+    @keyframes captionFade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
     /* ══ ナレーション・黒スライド ══ */
@@ -283,161 +300,181 @@
 
   <!-- 01 写真：まだ一緒に行きたい場所がある -->
   <div class="slide slide-photo active" data-index="0">
+    <img class="photo-bg" src="story01_01.png" alt="">
     <img class="photo-img" src="story01_01.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">まだ一緒に行きたい場所がある。</p>
+      <p class="caption-scene">まだ一緒に行きたい場所がある</p>
     </div>
   </div>
 
   <!-- 02 写真：朝 -->
   <div class="slide slide-photo" data-index="1">
+    <img class="photo-bg" src="story01_02.png" alt="">
     <img class="photo-img" src="story01_02.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">朝。</p>
+      <p class="caption-scene">朝</p>
     </div>
   </div>
 
   <!-- 03 写真：ホテルの窓 -->
   <div class="slide slide-photo" data-index="2">
+    <img class="photo-bg" src="story01_03.png" alt="">
     <img class="photo-img" src="story01_03.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">ホテルの窓。</p>
+      <p class="caption-scene">ホテルの窓</p>
     </div>
   </div>
 
   <!-- 04 写真：夫婦が景色を見ている -->
   <div class="slide slide-photo" data-index="3">
+    <img class="photo-bg" src="story01_04.png" alt="">
     <img class="photo-img" src="story01_04.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">夫婦が景色を見ている。</p>
+      <p class="caption-scene">夫婦が景色を見ている</p>
     </div>
   </div>
 
   <!-- 05 写真：以前なら予定を詰め込んでいた -->
   <div class="slide slide-photo" data-index="4">
+    <img class="photo-bg" src="story01_05.png" alt="">
     <img class="photo-img" src="story01_05.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">以前なら予定を詰め込んでいた。</p>
+      <p class="caption-scene">以前なら予定を詰め込んでいた</p>
     </div>
   </div>
 
   <!-- 06 写真：しかし今日は少し歩幅が違う -->
   <div class="slide slide-photo" data-index="5">
+    <img class="photo-bg" src="story01_06.png" alt="">
     <img class="photo-img" src="story01_06.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">しかし今日は<br>少し歩幅が違う。</p>
+      <p class="caption-scene">しかし今日は<br>少し歩幅が違う</p>
     </div>
   </div>
 
   <!-- 07 写真：観光地の地図を見る -->
   <div class="slide slide-photo" data-index="6">
+    <img class="photo-bg" src="story01_07.png" alt="">
     <img class="photo-img" src="story01_07.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">観光地の地図を見る。</p>
+      <p class="caption-scene">観光地の地図を見る</p>
     </div>
   </div>
 
   <!-- 08 写真：妻が先に歩く -->
   <div class="slide slide-photo" data-index="7">
+    <img class="photo-bg" src="story01_08.png" alt="">
     <img class="photo-img" src="story01_08.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">妻が先に歩く。</p>
+      <p class="caption-scene">妻が先に歩く</p>
     </div>
   </div>
 
   <!-- 09 写真：夫は後を追う -->
   <div class="slide slide-photo" data-index="8">
+    <img class="photo-bg" src="story01_09.png" alt="">
     <img class="photo-img" src="story01_09.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">夫は後を追う。</p>
+      <p class="caption-scene">夫は後を追う</p>
     </div>
   </div>
 
   <!-- 10 写真：石畳の路地 -->
   <div class="slide slide-photo" data-index="9">
+    <img class="photo-bg" src="story01_10.png" alt="">
     <img class="photo-img" src="story01_10.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">石畳の路地。</p>
+      <p class="caption-scene">石畳の路地</p>
     </div>
   </div>
 
   <!-- 11 写真：妻が振り返る -->
   <div class="slide slide-photo" data-index="10">
+    <img class="photo-bg" src="story01_11.png" alt="">
     <img class="photo-img" src="story01_11.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">妻が振り返る。</p>
+      <p class="caption-scene">妻が振り返る</p>
     </div>
   </div>
 
   <!-- 12 写真：夫は歩き出す -->
   <div class="slide slide-photo" data-index="11">
+    <img class="photo-bg" src="story01_12.png" alt="">
     <img class="photo-img" src="story01_12.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">夫は歩き出す。</p>
+      <p class="caption-scene">夫は歩き出す</p>
     </div>
   </div>
 
   <!-- 13 写真：一歩目を出す -->
   <div class="slide slide-photo" data-index="12">
+    <img class="photo-bg" src="story01_13.png" alt="">
     <img class="photo-img" src="story01_13.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">一歩目を出す。</p>
+      <p class="caption-scene">一歩目を出す</p>
     </div>
   </div>
 
   <!-- 14 写真：少しためらう -->
   <div class="slide slide-photo" data-index="13">
+    <img class="photo-bg" src="story01_14.png" alt="">
     <img class="photo-img" src="story01_14.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">少しためらう。</p>
+      <p class="caption-scene">少しためらう</p>
     </div>
   </div>
 
   <!-- 15 写真：それでも進む -->
   <div class="slide slide-photo" data-index="14">
+    <img class="photo-bg" src="story01_15.png" alt="">
     <img class="photo-img" src="story01_15.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">それでも進む。</p>
+      <p class="caption-scene">それでも進む</p>
     </div>
   </div>
 
   <!-- 16 写真：夕暮れ -->
   <div class="slide slide-photo" data-index="15">
+    <img class="photo-bg" src="story01_16.png" alt="">
     <img class="photo-img" src="story01_16.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">夕暮れ。</p>
+      <p class="caption-scene">夕暮れ</p>
     </div>
   </div>
 
   <!-- 17 写真：海辺 -->
   <div class="slide slide-photo" data-index="16">
+    <img class="photo-bg" src="story01_17.png" alt="">
     <img class="photo-img" src="story01_17.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">海辺。</p>
+      <p class="caption-scene">海辺</p>
     </div>
   </div>
 
   <!-- 18 写真：二人が並んで座る -->
   <div class="slide slide-photo" data-index="17">
+    <img class="photo-bg" src="story01_18.png" alt="">
     <img class="photo-img" src="story01_18.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">二人が並んで座る。</p>
+      <p class="caption-scene">二人が並んで座る</p>
     </div>
   </div>
 
   <!-- 19 写真：息を整える -->
   <div class="slide slide-photo" data-index="18">
+    <img class="photo-bg" src="story01_19.png" alt="">
     <img class="photo-img" src="story01_19.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">息を整える。</p>
+      <p class="caption-scene">息を整える</p>
     </div>
   </div>
 
   <!-- 20 写真：そして笑う -->
   <div class="slide slide-photo" data-index="19">
+    <img class="photo-bg" src="story01_20.png" alt="">
     <img class="photo-img" src="story01_20.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">そして笑う。</p>
+      <p class="caption-scene">そして笑う</p>
     </div>
   </div>
 
@@ -492,17 +529,19 @@
 
   <!-- 27 写真：街を歩く二人 -->
   <div class="slide slide-photo" data-index="26">
+    <img class="photo-bg" src="story01_27.png" alt="">
     <img class="photo-img" src="story01_27.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">街を歩く二人。</p>
+      <p class="caption-scene">街を歩く二人</p>
     </div>
   </div>
 
   <!-- 28 写真：また旅に出る二人 -->
   <div class="slide slide-photo" data-index="27">
+    <img class="photo-bg" src="story01_28.png" alt="">
     <img class="photo-img" src="story01_28.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">また旅に出る二人。</p>
+      <p class="caption-scene">また旅に出る二人</p>
     </div>
   </div>
 
