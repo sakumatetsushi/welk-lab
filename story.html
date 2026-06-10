@@ -70,28 +70,13 @@
 
     /* ══ 写真スライド ══ */
     .slide-photo {
-      display: flex; align-items: center; justify-content: center;
-      background: var(--ink);
-      position: relative; overflow: hidden;
+      background: #050503;
     }
     .photo-img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      object-position: center;
       display: block;
-      z-index: 2;
-    }
-    /* ぼかし背景：同じ画像をフルカバーで敷き、ブラーをかける */
-    .photo-bg {
-      position: absolute;
-      top: -5%; left: -5%;
-      width: 110%; height: 110%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      filter: blur(20px) brightness(0.3);
-      z-index: 1;
     }
     /* プレースホルダー（画像未登録時） */
     .photo-placeholder {
@@ -298,7 +283,6 @@
 
   <!-- 01 写真：まだ一緒に行きたい場所がある -->
   <div class="slide slide-photo active" data-index="0">
-    <img class="photo-bg" src="story01_01.png" alt="">
     <img class="photo-img" src="story01_01.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">まだ一緒に行きたい場所がある。</p>
@@ -307,7 +291,6 @@
 
   <!-- 02 写真：朝 -->
   <div class="slide slide-photo" data-index="1">
-    <img class="photo-bg" src="story01_02.png" alt="">
     <img class="photo-img" src="story01_02.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">朝。</p>
@@ -316,7 +299,6 @@
 
   <!-- 03 写真：ホテルの窓 -->
   <div class="slide slide-photo" data-index="2">
-    <img class="photo-bg" src="story01_03.png" alt="">
     <img class="photo-img" src="story01_03.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">ホテルの窓。</p>
@@ -325,7 +307,6 @@
 
   <!-- 04 写真：夫婦が景色を見ている -->
   <div class="slide slide-photo" data-index="3">
-    <img class="photo-bg" src="story01_04.png" alt="">
     <img class="photo-img" src="story01_04.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">夫婦が景色を見ている。</p>
@@ -334,7 +315,6 @@
 
   <!-- 05 写真：以前なら予定を詰め込んでいた -->
   <div class="slide slide-photo" data-index="4">
-    <img class="photo-bg" src="story01_05.png" alt="">
     <img class="photo-img" src="story01_05.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">以前なら予定を詰め込んでいた。</p>
@@ -343,7 +323,6 @@
 
   <!-- 06 写真：しかし今日は少し歩幅が違う -->
   <div class="slide slide-photo" data-index="5">
-    <img class="photo-bg" src="story01_06.png" alt="">
     <img class="photo-img" src="story01_06.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">しかし今日は<br>少し歩幅が違う。</p>
@@ -352,7 +331,6 @@
 
   <!-- 07 写真：観光地の地図を見る -->
   <div class="slide slide-photo" data-index="6">
-    <img class="photo-bg" src="story01_07.png" alt="">
     <img class="photo-img" src="story01_07.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">観光地の地図を見る。</p>
@@ -361,7 +339,6 @@
 
   <!-- 08 写真：妻が先に歩く -->
   <div class="slide slide-photo" data-index="7">
-    <img class="photo-bg" src="story01_08.png" alt="">
     <img class="photo-img" src="story01_08.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">妻が先に歩く。</p>
@@ -370,7 +347,6 @@
 
   <!-- 09 写真：夫は後を追う -->
   <div class="slide slide-photo" data-index="8">
-    <img class="photo-bg" src="story01_09.png" alt="">
     <img class="photo-img" src="story01_09.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">夫は後を追う。</p>
@@ -379,7 +355,6 @@
 
   <!-- 10 写真：石畳の路地 -->
   <div class="slide slide-photo" data-index="9">
-    <img class="photo-bg" src="story01_10.png" alt="">
     <img class="photo-img" src="story01_10.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">石畳の路地。</p>
@@ -388,7 +363,6 @@
 
   <!-- 11 写真：妻が振り返る -->
   <div class="slide slide-photo" data-index="10">
-    <img class="photo-bg" src="story01_11.png" alt="">
     <img class="photo-img" src="story01_11.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">妻が振り返る。</p>
@@ -397,7 +371,6 @@
 
   <!-- 12 写真：夫は歩き出す -->
   <div class="slide slide-photo" data-index="11">
-    <img class="photo-bg" src="story01_12.png" alt="">
     <img class="photo-img" src="story01_12.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">夫は歩き出す。</p>
@@ -406,7 +379,6 @@
 
   <!-- 13 写真：一歩目を出す -->
   <div class="slide slide-photo" data-index="12">
-    <img class="photo-bg" src="story01_13.png" alt="">
     <img class="photo-img" src="story01_13.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">一歩目を出す。</p>
@@ -415,7 +387,6 @@
 
   <!-- 14 写真：少しためらう -->
   <div class="slide slide-photo" data-index="13">
-    <img class="photo-bg" src="story01_14.png" alt="">
     <img class="photo-img" src="story01_14.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">少しためらう。</p>
@@ -424,7 +395,6 @@
 
   <!-- 15 写真：それでも進む -->
   <div class="slide slide-photo" data-index="14">
-    <img class="photo-bg" src="story01_15.png" alt="">
     <img class="photo-img" src="story01_15.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">それでも進む。</p>
@@ -433,7 +403,6 @@
 
   <!-- 16 写真：夕暮れ -->
   <div class="slide slide-photo" data-index="15">
-    <img class="photo-bg" src="story01_16.png" alt="">
     <img class="photo-img" src="story01_16.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">夕暮れ。</p>
@@ -442,7 +411,6 @@
 
   <!-- 17 写真：海辺 -->
   <div class="slide slide-photo" data-index="16">
-    <img class="photo-bg" src="story01_17.png" alt="">
     <img class="photo-img" src="story01_17.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">海辺。</p>
@@ -451,7 +419,6 @@
 
   <!-- 18 写真：二人が並んで座る -->
   <div class="slide slide-photo" data-index="17">
-    <img class="photo-bg" src="story01_18.png" alt="">
     <img class="photo-img" src="story01_18.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">二人が並んで座る。</p>
@@ -460,7 +427,6 @@
 
   <!-- 19 写真：息を整える -->
   <div class="slide slide-photo" data-index="18">
-    <img class="photo-bg" src="story01_19.png" alt="">
     <img class="photo-img" src="story01_19.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">息を整える。</p>
@@ -469,7 +435,6 @@
 
   <!-- 20 写真：そして笑う -->
   <div class="slide slide-photo" data-index="19">
-    <img class="photo-bg" src="story01_20.png" alt="">
     <img class="photo-img" src="story01_20.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">そして笑う。</p>
@@ -527,7 +492,6 @@
 
   <!-- 27 写真：街を歩く二人 -->
   <div class="slide slide-photo" data-index="26">
-    <img class="photo-bg" src="story01_27.png" alt="">
     <img class="photo-img" src="story01_27.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">街を歩く二人。</p>
@@ -536,7 +500,6 @@
 
   <!-- 28 写真：また旅に出る二人 -->
   <div class="slide slide-photo" data-index="27">
-    <img class="photo-bg" src="story01_28.png" alt="">
     <img class="photo-img" src="story01_28.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">また旅に出る二人。</p>
