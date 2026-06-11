@@ -51,7 +51,7 @@
     .slide {
       position: absolute; inset: 0;
       opacity: 0;
-      transition: opacity 4.5s ease;
+      transition: opacity 1s ease;
       pointer-events: none;
     }
     .slide.active { opacity: 1; pointer-events: all; }
@@ -92,8 +92,9 @@
       display: flex; align-items: center; justify-content: center;
       background: var(--ink);
     }
-    .narration-inner { max-width: 520px; padding: 0 48px; text-align: center; }
+    .narration-inner { max-width: 700px; padding: 0 48px; text-align: center; }
     .narration-text, .telop-text {
+      word-break: keep-all; overflow-wrap: break-word;
       font-family: 'Klee One', 'Noto Serif JP', serif;
       font-weight: 400;
       font-size: clamp(48px, 6.6vw, 84px);
@@ -244,7 +245,7 @@
   <div class="slide slide-photo" data-index="5">
     <img class="photo-img" src="story01_06.png" alt="">
     <div class="photo-caption">
-      <p class="caption-scene">しかし今日は<br>少し歩幅が違う</p>
+      <p class="caption-scene">しかし今日は少し歩幅が違う</p>
     </div>
   </div>
 
@@ -363,21 +364,14 @@
   <!-- 21 ナレーション（黒） -->
   <div class="slide slide-narration" data-index="20">
     <div class="narration-inner">
-      <p class="narration-text">
-        できなくなったわけじゃない。<br>
-        困っているわけでもない。<br>
-        それでも、<br>
-        身体は少しずつ変わり始める。
-      </p>
+      <p class="narration-text">できなくなったわけじゃない。困っているわけでもない。それでも、身体は少しずつ変わり始める。</p>
     </div>
   </div>
 
   <!-- 22 ナレーション（黒） -->
   <div class="slide slide-narration" data-index="21">
     <div class="narration-inner">
-      <p class="narration-text">
-        本当に失いたくないのは、<br>歩くことじゃない。
-      </p>
+      <p class="narration-text">本当に失いたくないのは、歩くことじゃない。</p>
     </div>
   </div>
 
@@ -427,7 +421,7 @@
 
   <!-- 29 テロップ（黒） -->
   <div class="slide slide-telop" data-index="28">
-    <p class="telop-text">まだ一緒に行きたい<br>場所がある。</p>
+    <p class="telop-text">まだ一緒に行きたい場所がある。</p>
   </div>
 
   <!-- 30 WELKロゴ（黒） -->
@@ -549,10 +543,14 @@
 
     if (userAction) stopAuto();
 
+    // 1秒で現在スライドを消す → 1秒後に次スライドを表示
     slides[current].classList.remove('active');
-    slides[idx].classList.add('active');
-    current = idx;
-    updateUI(idx);
+    const nextIdx = idx;
+    setTimeout(() => {
+      slides[nextIdx].classList.add('active');
+      current = nextIdx;
+      updateUI(nextIdx);
+    }, 1000);
 
     setTimeout(() => {
       isAnimating = false;
