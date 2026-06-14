@@ -15,19 +15,18 @@
       --ink: #050503; --paper: #EAE5DC;
     }
     html, body {
-      width: 100%; height: 100%;
+      width: 100%;
       background: var(--ink);
       color: var(--paper);
       font-family: 'Noto Serif JP', serif;
-      overflow: hidden;
-      user-select: none;
     }
 
-    /* Nav */
+    /* Nav（他ページと同一） */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
       padding: 28px 52px; pointer-events: none;
+      background: linear-gradient(rgba(5,5,3,.95), rgba(5,5,3,0));
     }
     .logo {
       font-family: 'IM Fell English', serif; font-style: italic;
@@ -44,127 +43,102 @@
     }
     .nav-links a:hover, .nav-links a.cur { color: rgba(234,229,220,.72); }
 
-    /* Stage */
-    #stage { position: fixed; inset: 0; }
-
-    /* Slides */
-    .slide {
-      position: absolute; inset: 0;
-      opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
-    .slide.active { opacity: 1; pointer-events: all; }
-
-    /* 写真スライド */
-    .slide-photo { background: var(--ink); }
-    .photo-img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    .photo-caption {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 20% 5% 6%;
-      background: linear-gradient(to top, rgba(5,5,3,.85) 0%, rgba(5,5,3,.4) 50%, transparent 100%);
-      text-align: center;
-      z-index: 10;
-      opacity: 0;
-    }
-    .slide.active .photo-caption {
-      animation: fadeIn 2s ease 1s both;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    .caption-scene {
-      font-family: 'Klee One', 'Noto Serif JP', serif;
-      font-weight: 400;
-      font-size: clamp(26px, 3.9vw, 57px);
-      line-height: 1.8;
-      color: rgba(234,229,220,.9);
-      letter-spacing: .18em;
-    }
-
-    /* ナレーション */
-    .slide-narration, .slide-telop {
-      display: flex; align-items: center; justify-content: center;
-      background: var(--ink);
-    }
-    .narration-inner { width: 100%; padding: 0 10%; text-align: center; }
-    .narration-text, .telop-text {
-      display: block; width: 100%;
-      word-break: auto-phrase; overflow-wrap: anywhere;
-      font-family: 'Klee One', 'Noto Serif JP', serif;
-      font-weight: 400;
-      font-size: clamp(22px, 3.2vw, 42px);
-      line-height: 2.2; letter-spacing: .08em;
-      color: rgba(234,229,220,.82);
-      opacity: 0;
-    }
-    .telop-text { font-size: clamp(24px, 3.5vw, 46px); letter-spacing: .12em; }
-    .slide.active .narration-text,
-    .slide.active .telop-text {
-      animation: fadeIn 2s ease .4s both;
-    }
-
-    /* ロゴスライド */
-    .slide-logo {
+    /* Hero */
+    .hero {
+      height: 50vh;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      background: var(--ink); gap: 20px;
+      gap: 24px;
+      padding-top: 60px;
     }
-    .logo-welk {
+    .hero-title {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: clamp(28px, 5vw, 60px); letter-spacing: .38em;
-      color: var(--goldD); opacity: 0;
+      font-weight: normal;
+      font-size: clamp(24px, 4vw, 44px);
+      letter-spacing: .22em;
+      color: rgba(234,229,220,.6);
     }
-    .logo-tagline {
-      font-weight: 200; font-size: 11px; letter-spacing: .22em;
-      color: rgba(234,229,220,.28); opacity: 0;
+    .hero-sub {
+      font-family: 'Klee One', 'Noto Serif JP', serif;
+      font-weight: 400;
+      font-size: clamp(12px, 1.6vw, 15px);
+      letter-spacing: .14em;
+      color: rgba(234,229,220,.25);
     }
-    .slide.active .logo-welk { animation: fadeIn 1.6s ease .6s both; }
-    .slide.active .logo-tagline { animation: fadeIn 1.6s ease 1.2s both; }
 
-    /* UI */
-    #story-num {
-      position: fixed; top: 28px; left: 52px; z-index: 200;
+    /* Cards */
+    .cards {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 0 36px 140px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 48px;
+    }
+    .card {
+      display: block;
+      text-decoration: none;
+      overflow: hidden;
+      transition: transform .5s;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    .card-thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+    }
+    .card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .8s;
+    }
+    .card:hover .card-thumb img { transform: scale(1.03); }
+    .card-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(transparent 40%, rgba(5,5,3,.75));
+    }
+
+    .card-body { padding: 22px 4px 0; }
+    .card-num {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 9px; letter-spacing: .38em; color: var(--goldD);
-      transition: opacity .6s;
+      font-size: 9px; letter-spacing: .38em;
+      color: var(--goldD);
+      margin-bottom: 10px;
     }
-    #indicator {
-      position: fixed; bottom: 36px; right: 52px; z-index: 200;
-      font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 9px; letter-spacing: .22em; color: rgba(234,229,220,.25);
+    .card-title {
+      font-family: 'Klee One', 'Noto Serif JP', serif;
+      font-weight: 400;
+      font-size: clamp(18px, 2.6vw, 26px);
+      letter-spacing: .12em;
+      line-height: 1.8;
+      color: rgba(234,229,220,.82);
+      margin-bottom: 10px;
     }
-    .nav-btn {
-      position: fixed; top: 50%; z-index: 200;
-      transform: translateY(-50%);
-      background: none; border: none; cursor: pointer;
-      padding: 20px 24px; color: rgba(184,150,12,.28);
-      transition: color .4s; outline: none;
+    .card-desc {
+      font-weight: 200;
+      font-size: clamp(11px, 1.3vw, 13px);
+      letter-spacing: .08em;
+      line-height: 1.9;
+      color: rgba(234,229,220,.3);
     }
-    .nav-btn:hover { color: rgba(184,150,12,.72); }
-    #btn-prev { left: 8px; }
-    #btn-next { right: 8px; }
-    .nav-btn svg { display: block; width: 22px; height: 22px; }
-    #progress-bar {
-      position: fixed; bottom: 0; left: 0;
-      height: 1px; background: var(--goldD);
-      width: 0%; z-index: 200; opacity: .4;
-      transition: width linear;
-    }
+
+    /* Canvas */
     #bg-canvas {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
     }
 
     @media (max-width: 640px) {
       nav { padding: 18px 22px; }
       .nav-links { gap: 20px; }
-      #story-num { top: 18px; left: 22px; }
-      #indicator { bottom: 24px; right: 22px; }
+      .hero { height: 40vh; }
+      .cards {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 20px 100px;
+      }
     }
   </style>
 </head>
@@ -183,263 +157,43 @@
   </ul>
 </nav>
 
-<div id="story-num">STORY 01</div>
-<div id="indicator">1 / 30</div>
+<section class="hero">
+  <h1 class="hero-title">Story</h1>
+  <p class="hero-sub">まだ見たい景色がある</p>
+</section>
 
-<button id="btn-prev" class="nav-btn" aria-label="前へ">
-  <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.2">
-    <polyline points="14,4 8,11 14,18"/>
-  </svg>
-</button>
-<button id="btn-next" class="nav-btn" aria-label="次へ">
-  <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.2">
-    <polyline points="8,4 14,11 8,18"/>
-  </svg>
-</button>
+<section class="cards">
 
-<div id="progress-bar"></div>
-
-<div id="stage">
-
-
-  <!-- 01 写真：まだ一緒に行きたい場所がある -->
-  <div class="slide slide-photo active" data-index="0">
-    <img class="photo-img" src="story01_01.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">まだ一緒に行きたい場所がある</p>
+  <!-- Story 01 -->
+  <a class="card" href="stories/story01/index.html">
+    <div class="card-thumb">
+      <img src="stories/story01/01.png" alt="">
     </div>
-  </div>
-
-  <!-- 02 写真：朝 -->
-  <div class="slide slide-photo" data-index="1">
-    <img class="photo-img" src="story01_02.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">朝</p>
+    <div class="card-body">
+      <p class="card-num">STORY 01</p>
+      <p class="card-title">まだ一緒に行きたい場所がある</p>
+      <p class="card-desc">歩幅が変わっても、隣を歩きたい人がいる。</p>
     </div>
-  </div>
+  </a>
 
-  <!-- 03 写真：ホテルの窓 -->
-  <div class="slide slide-photo" data-index="2">
-    <img class="photo-img" src="story01_03.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">ホテルの窓</p>
+  <!-- Story 02 -->
+  <a class="card" href="stories/story02/index.html">
+    <div class="card-thumb">
+      <img src="stories/story02/01.png" alt="">
     </div>
-  </div>
-
-  <!-- 04 写真：夫婦が景色を見ている -->
-  <div class="slide slide-photo" data-index="3">
-    <img class="photo-img" src="story01_04.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">夫婦が景色を見ている</p>
+    <div class="card-body">
+      <p class="card-num">STORY 02</p>
+      <p class="card-title">まだ彩りたい空間がある</p>
+      <p class="card-desc">膝の違和感を感じながらも、花で特別な日を作り続ける。</p>
     </div>
-  </div>
+  </a>
 
-  <!-- 05 写真：以前なら予定を詰め込んでいた -->
-  <div class="slide slide-photo" data-index="4">
-    <img class="photo-img" src="story01_05.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">以前なら予定を詰め込んでいた</p>
-    </div>
-  </div>
-
-  <!-- 06 写真：しかし今日は少し歩幅が違う -->
-  <div class="slide slide-photo" data-index="5">
-    <img class="photo-img" src="story01_06.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">しかし今日は少し歩幅が違う</p>
-    </div>
-  </div>
-
-  <!-- 07 写真：観光地の地図を見る -->
-  <div class="slide slide-photo" data-index="6">
-    <img class="photo-img" src="story01_07.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">観光地の地図を見る</p>
-    </div>
-  </div>
-
-  <!-- 08 写真：妻が先に歩く -->
-  <div class="slide slide-photo" data-index="7">
-    <img class="photo-img" src="story01_08.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">妻が先に歩く</p>
-    </div>
-  </div>
-
-  <!-- 09 写真：夫は後を追う -->
-  <div class="slide slide-photo" data-index="8">
-    <img class="photo-img" src="story01_09.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">夫は後を追う</p>
-    </div>
-  </div>
-
-  <!-- 10 写真：石畳の路地 -->
-  <div class="slide slide-photo" data-index="9">
-    <img class="photo-img" src="story01_10.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">石畳の路地</p>
-    </div>
-  </div>
-
-  <!-- 11 写真：妻が振り返る -->
-  <div class="slide slide-photo" data-index="10">
-    <img class="photo-img" src="story01_11.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">妻が振り返る</p>
-    </div>
-  </div>
-
-  <!-- 12 写真：夫は歩き出す -->
-  <div class="slide slide-photo" data-index="11">
-    <img class="photo-img" src="story01_12.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">夫は歩き出す</p>
-    </div>
-  </div>
-
-  <!-- 13 写真：一歩目を出す -->
-  <div class="slide slide-photo" data-index="12">
-    <img class="photo-img" src="story01_13.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">一歩目を出す</p>
-    </div>
-  </div>
-
-  <!-- 14 写真：少しためらう -->
-  <div class="slide slide-photo" data-index="13">
-    <img class="photo-img" src="story01_14.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">少しためらう</p>
-    </div>
-  </div>
-
-  <!-- 15 写真：それでも進む -->
-  <div class="slide slide-photo" data-index="14">
-    <img class="photo-img" src="story01_15.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">それでも進む</p>
-    </div>
-  </div>
-
-  <!-- 16 写真：夕暮れ -->
-  <div class="slide slide-photo" data-index="15">
-    <img class="photo-img" src="story01_16.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">夕暮れ</p>
-    </div>
-  </div>
-
-  <!-- 17 写真：海辺 -->
-  <div class="slide slide-photo" data-index="16">
-    <img class="photo-img" src="story01_17.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">海辺</p>
-    </div>
-  </div>
-
-  <!-- 18 写真：二人が並んで座る -->
-  <div class="slide slide-photo" data-index="17">
-    <img class="photo-img" src="story01_18.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">二人が並んで座る</p>
-    </div>
-  </div>
-
-  <!-- 19 写真：息を整える -->
-  <div class="slide slide-photo" data-index="18">
-    <img class="photo-img" src="story01_19.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">息を整える</p>
-    </div>
-  </div>
-
-  <!-- 20 写真：そして笑う -->
-  <div class="slide slide-photo" data-index="19">
-    <img class="photo-img" src="story01_20.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">そして笑う</p>
-    </div>
-  </div>
-
-  <!-- 21 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="20">
-    <div class="narration-inner">
-      <p class="narration-text">できなくなったわけじゃない。<br>困っているわけでもない。<br>それでも、身体は少しずつ変わり始める。</p>
-    </div>
-  </div>
-
-  <!-- 22 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="21">
-    <div class="narration-inner">
-      <p class="narration-text">本当に失いたくないのは、<br>歩くことじゃない。</p>
-    </div>
-  </div>
-
-  <!-- 23 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="22">
-    <div class="narration-inner">
-      <p class="narration-text">一緒に出かけること。</p>
-    </div>
-  </div>
-
-  <!-- 24 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="23">
-    <div class="narration-inner">
-      <p class="narration-text">新しい景色を見ること。</p>
-    </div>
-  </div>
-
-  <!-- 25 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="24">
-    <div class="narration-inner">
-      <p class="narration-text">同じ時間を重ねること。</p>
-    </div>
-  </div>
-
-  <!-- 26 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="25">
-    <div class="narration-inner">
-      <p class="narration-text">隣を歩くこと。</p>
-    </div>
-  </div>
-
-  <!-- 27 写真：街を歩く二人 -->
-  <div class="slide slide-photo" data-index="26">
-    <img class="photo-img" src="story01_27.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">街を歩く二人</p>
-    </div>
-  </div>
-
-  <!-- 28 写真：また旅に出る二人 -->
-  <div class="slide slide-photo" data-index="27">
-    <img class="photo-img" src="story01_28.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">また旅に出る二人</p>
-    </div>
-  </div>
-
-  <!-- 29 テロップ（黒） -->
-  <div class="slide slide-telop" data-index="28">
-    <p class="telop-text">まだ一緒に<br>行きたい場所がある。</p>
-  </div>
-
-  <!-- 30 WELKロゴ（黒） -->
-  <div class="slide slide-logo" data-index="29">
-    <div class="logo-welk">WELK</div>
-    <div class="logo-tagline">歩くことから始まるイノチの跳躍</div>
-  </div>
-
-
-</div><!-- /stage -->
+</section>
 
 <script>
-
 (() => {
-  /* ── 背景Canvas（静かな粒子、写真スライド以外で薄く浮かぶ） ── */
-  const cv  = document.getElementById('bg-canvas');
-  const bgCtx = cv.getContext('2d');
+  const cv = document.getElementById('bg-canvas');
+  const ctx = cv.getContext('2d');
   let W, H;
   const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
   resize(); addEventListener('resize', resize);
@@ -452,151 +206,22 @@
     alpha: .03 + Math.random()*.10,
   }));
 
-  let bgOpacity = 0; // 写真スライド時は粒子を薄く
-  const bgLoop = (t) => {
-    requestAnimationFrame(bgLoop);
-    bgCtx.clearRect(0, 0, W, H);
+  const loop = (t) => {
+    requestAnimationFrame(loop);
+    ctx.clearRect(0, 0, W, H);
     for (const p of ptcls) {
       p.x = (p.x + p.vx + 1) % 1;
       p.y = (p.y + p.vy + 1) % 1;
-      const a = p.alpha * bgOpacity * (.3 + Math.sin(t*.00045+p.phase)*.7);
+      const a = p.alpha * 0.5 * (.3 + Math.sin(t*.00045+p.phase)*.7);
       if (a < 0.002) continue;
-      bgCtx.beginPath();
-      bgCtx.arc(p.x*W, p.y*H, p.r, 0, Math.PI*2);
-      bgCtx.fillStyle = `rgba(184,150,12,${a})`;
-      bgCtx.fill();
+      ctx.beginPath();
+      ctx.arc(p.x*W, p.y*H, p.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(184,150,12,${a})`;
+      ctx.fill();
     }
   };
-  requestAnimationFrame(bgLoop);
-
-  /* ── スライドデータ ── */
-  const slides      = Array.from(document.querySelectorAll('.slide'));
-  const TOTAL       = slides.length;
-  const storyNumEl  = document.getElementById('story-num');
-  const indicatorEl = document.getElementById('indicator');
-  const progressBar = document.getElementById('progress-bar');
-  const btnPrev     = document.getElementById('btn-prev');
-  const btnNext     = document.getElementById('btn-next');
-
-  // 各スライドの自動再生時間（ms）
-  // 写真：6秒、ナレーション：5秒、テロップ：6秒、ロゴ：8秒
-  const DURATIONS = slides.map(s => {
-    if (s.classList.contains('slide-narration')) return 4000;
-    if (s.classList.contains('slide-telop'))     return 4000;
-    if (s.classList.contains('slide-logo'))      return 4000;
-    return 4000; // photo
-  });
-
-  let current     = 0;
-  let autoTimer   = null;
-  let isAnimating = false;
-  let userPaused  = false;
-
-  /* UI更新 */
-  const updateUI = (idx) => {
-    const slide = slides[idx];
-    const isPhoto = slide.classList.contains('slide-photo');
-
-    // 粒子：黒背景スライドは少し見せる、写真は隠す
-    bgOpacity = isPhoto ? 0 : 0.7;
-
-    // STORY番号（全スライド共通でSTORY 01を表示）
-    storyNumEl.textContent = 'STORY 01';
-    storyNumEl.style.opacity = '1';
-
-    // インジケーター
-    indicatorEl.textContent = `${idx + 1} / ${TOTAL}`;
-  };
-
-  /* 進行バー */
-  const startProgress = (dur) => {
-    progressBar.style.transition = 'none';
-    progressBar.style.width = '0%';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      progressBar.style.transition = `width ${dur}ms linear`;
-      progressBar.style.width = '100%';
-    }));
-  };
-  const stopProgress = () => {
-    progressBar.style.transition = 'none';
-    progressBar.style.width = '0%';
-  };
-
-  /* 自動再生 */
-  const startAuto = () => {
-    clearTimeout(autoTimer);
-    const dur = DURATIONS[current];
-    startProgress(dur);
-    autoTimer = setTimeout(() => {
-      goTo((current + 1) % TOTAL);
-    }, dur);
-  };
-  const stopAuto = () => {
-    clearTimeout(autoTimer);
-    stopProgress();
-    userPaused = true;
-  };
-
-  /* スライド遷移 */
-  const goTo = (idx, userAction = false) => {
-    if (isAnimating || idx === current) return;
-    isAnimating = true;
-
-    if (userAction) stopAuto();
-
-    // 1秒で現在スライドを消す → 1秒後に次スライドを表示
-    slides[current].classList.remove('active');
-    const nextIdx = idx;
-    setTimeout(() => {
-      slides[nextIdx].classList.add('active');
-      current = nextIdx;
-      updateUI(nextIdx);
-    }, 1000);
-
-    setTimeout(() => {
-      isAnimating = false;
-      // ユーザー操作後も3秒後に自動再生を再開
-      if (userAction) {
-        clearTimeout(autoTimer);
-        autoTimer = setTimeout(startAuto, 3000);
-      } else {
-        startAuto();
-      }
-    }, 1000);
-  };
-
-  /* 初期化 */
-  updateUI(0);
-  startAuto();
-
-  /* ボタン */
-  btnPrev.addEventListener('click', () => goTo((current - 1 + TOTAL) % TOTAL, true));
-  btnNext.addEventListener('click', () => goTo((current + 1) % TOTAL, true));
-
-  /* キーボード */
-  addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')
-      goTo((current + 1) % TOTAL, true);
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp')
-      goTo((current - 1 + TOTAL) % TOTAL, true);
-  });
-
-  /* スワイプ */
-  let tx = 0, ty = 0;
-  addEventListener('touchstart', e => {
-    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
-  }, { passive: true });
-  addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - tx;
-    const dy = e.changedTouches[0].clientY - ty;
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-      if (dx < 0) goTo((current + 1) % TOTAL, true);
-      else         goTo((current - 1 + TOTAL) % TOTAL, true);
-    }
-  }, { passive: true });
-
+  requestAnimationFrame(loop);
 })();
-
 </script>
 </body>
 </html>
