@@ -2,14 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <!-- 【公開チェック】正式公開時にこの行を削除すること -->
-  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WELK — 人が歩く研究所</title>
-  <meta name="description" content="歩くことは、世界に触れることだった。">
+  <meta name="description" content="一般社団法人WELK 人が歩く研究所。歩行を測ることから始め、人の歩みの質と、その先にある景色を支える方法を探る研究所です。">
+  <meta name="theme-color" content="#050503">
+  <meta property="og:title" content="WELK — 人が歩く研究所">
+  <meta property="og:description" content="歩くことは、世界に触れることだった。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WELK">
+  <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -195,6 +199,7 @@
     .j-eye {
       font-family: 'IM Fell English', serif; font-style: italic;
       font-size: 10px; letter-spacing: .38em;
+      font-weight: 400;
       color: var(--goldD); display: block; margin-bottom: 18px;
     }
     .j-title {
@@ -250,6 +255,7 @@
     .section-eye {
       font-family: 'IM Fell English', serif; font-style: italic;
       font-size: 10px; letter-spacing: .38em;
+      font-weight: 400;
       color: var(--goldD); display: block;
       text-align: center;
       margin-bottom: 58px;
@@ -268,6 +274,7 @@
     .ce-eye {
       font-family: 'IM Fell English', serif; font-style: italic;
       font-size: 10px; letter-spacing: .38em;
+      font-weight: 400;
       color: var(--goldD);
     }
     .ce-text {
@@ -306,12 +313,57 @@
       .j-cta { font-size: 13px; padding: 12px 28px; }
       .scroll-ind span { font-size: 10px; }
     }
+
+    @media (max-width: 430px) {
+      nav { padding: 18px 20px; }
+      .nav-links { gap: 0; }
+      .nav-links li:not(:last-child) { display: none; }
+      .nav-links a {
+        font-size: 10px;
+        letter-spacing: .12em;
+      }
+      #snd {
+        right: max(18px, env(safe-area-inset-right));
+        bottom: max(18px, env(safe-area-inset-bottom));
+        padding: 7px 12px;
+      }
+      #about, #journal, .section-block, #contact-entry {
+        padding: 72px 24px;
+      }
+      .word-line {
+        font-size: clamp(15px, 4.2vw, 17px);
+        line-height: 1.75;
+        letter-spacing: .045em;
+        margin-bottom: 1.25em;
+      }
+      .section-eye { margin-bottom: 42px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero-text,
+      .line,
+      .hero-en,
+      .scroll-ind,
+      .word-line,
+      .divider,
+      .section-eye,
+      .thought {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+        filter: none !important;
+        opacity: 1 !important;
+      }
+      .word-line { color: rgba(234,229,220,.62); }
+      .scroll-line { animation: none !important; }
+    }
   </style>
 </head>
 <body>
 
-<canvas id="c"></canvas>
-<button id="snd">&#9675; sound</button>
+<canvas id="c" aria-hidden="true"></canvas>
+<button id="snd" type="button" aria-label="環境音を再生する" aria-pressed="false">&#9675; sound</button>
 
 <nav>
   <a class="logo" href="index.html">WELK</a>
@@ -354,7 +406,7 @@
 
     <!-- ブロック2：歩くことは、労働であり、祈りであり、自由だった。 -->
     <div class="thought-group">
-      <span class="word-line" data-delay="0"    data-dur="3.0s" data-drift="8.0s" data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.15px">歩くことは、</span>
+      <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.0s" data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.15px">歩くことは、</span>
       <!-- 労働：短い間 -->
       <span class="word-line" data-delay="900"  data-dur="3400" data-drift="7.2s" data-dy0="0.1px"  data-dy1="-0.18px" data-dy2="0.08px">労働であり、</span>
       <!-- 祈り：少し長い間 -->
@@ -401,7 +453,7 @@
 <section class="section-block" id="welk-is">
   <div class="section-inner">
 
-    <span class="section-eye">What WELK Is</span>
+    <h2 class="section-eye">What WELK Is</h2>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8s"  data-dy0="0px"    data-dy1="0.22px"  data-dy2="-0.15px">WELKは、</span>
@@ -450,7 +502,7 @@
 <section class="section-block" id="action">
   <div class="section-inner">
 
-    <span class="section-eye">What We Do</span>
+    <h2 class="section-eye">What We Do</h2>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8s"  data-dy0="0px"    data-dy1="0.22px" data-dy2="-0.15px">一歩のなかにある力を、</span>
@@ -491,7 +543,7 @@
 <section class="section-block" id="meet">
   <div class="section-inner">
 
-    <span class="section-eye">Who We Hope to Meet</span>
+    <h2 class="section-eye">Who We Hope to Meet</h2>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8s"  data-dy0="0px"    data-dy1="0.22px"  data-dy2="-0.15px">現場で、</span>
@@ -537,7 +589,7 @@
 <section class="section-block" id="begin">
   <div class="section-inner">
 
-    <span class="section-eye">What Can Begin</span>
+    <h2 class="section-eye">What Can Begin</h2>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8s"   data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.15px">小さな歩行実証を始める。</span>
@@ -578,9 +630,9 @@
 ═══════════════════════════════════════════ -->
 <section id="journal">
   <div class="j-inner thought">
-    <span class="j-eye">Journal</span>
+    <h2 class="j-eye">Journal</h2>
     <p class="j-title">はじまりの一歩手前</p>
-    <a class="j-cta" href="https://note.com/welk_lab" target="_blank" rel="noopener">研究日誌を読む</a>
+    <a class="j-cta" href="https://note.com/welk_lab" target="_blank" rel="noopener noreferrer">研究日誌を読む</a>
   </div>
 </section>
 
@@ -590,7 +642,7 @@
 ═══════════════════════════════════════════ -->
 <section id="contact-entry">
   <div class="thought">
-    <span class="ce-eye">Contact</span>
+    <h2 class="ce-eye">Contact</h2>
     <p class="ce-text">
       歩くことの意味を、<br>
       ともに見つめ、広げていく方へ。<br><br>
@@ -612,6 +664,8 @@
   ═══════════════════════════════════════════ */
   const cv  = document.getElementById('c');
   const ctx = cv.getContext('2d');
+  const isMobile = matchMedia('(max-width: 640px)').matches;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let W, H, t0 = null;
 
   function resize() { W = cv.width = innerWidth; H = cv.height = innerHeight; }
@@ -640,8 +694,8 @@
      RIPPLE SYSTEM — 非ニュートン流体
   ═══════════════════════════════════════════ */
   const ripples = [];
-  const MAX_RIPPLES = 10;  // 同時存在数の上限
-  const SEG = 24;          // セグメント数（48→24に削減）
+  const MAX_RIPPLES = isMobile ? 7 : 10; // 同時存在数の上限
+  const SEG = isMobile ? 18 : 24;        // セグメント数
 
   function spawnRipple(x, y, type = 'stable', str = 1.0) {
     // 上限を超えたら最も古い波紋を削除
@@ -747,18 +801,9 @@
   }
 
   /* ═══════════════════════════════════════════
-     RIPPLE INTERFERENCE — 波紋干渉（軽量版）
-     干渉波紋の生成は廃止。干渉検出のみ。
-  ═══════════════════════════════════════════ */
-  function checkInterference() {
-    // MAX_RIPPLES上限があるためO(n²)のコストは最大100回で安全
-    // 干渉波紋の自動生成は廃止（連鎖爆発を防ぐ）
-  }
-
-  /* ═══════════════════════════════════════════
      PARTICLES + 引力応答
   ═══════════════════════════════════════════ */
-  const particles = Array.from({ length: 120 }, () => ({
+  const particles = Array.from({ length: isMobile ? 72 : 120 }, () => ({
     x: Math.random() * 1,
     y: Math.random() * 1,
     vx: (Math.random() - .5) * 0.00009,
@@ -806,7 +851,6 @@
     if (trails.length >= MAX_TRAIL) trails.shift();
     trails.push({
       x, y,
-      points: [{ x, y }],
       life: 1,
       decay: 0.0008 + Math.random() * 0.0004,
     });
@@ -900,8 +944,12 @@
   /* ═══════════════════════════════════════════
      MAIN LOOP
   ═══════════════════════════════════════════ */
+  let lastFrame = 0;
   function loop(now) {
     requestAnimationFrame(loop);
+    if (reduceMotion) return;
+    if (isMobile && now - lastFrame < 1000 / 30) return;
+    lastFrame = now;
     if (!t0) t0 = now;
 
     // bg
@@ -920,7 +968,6 @@
     drawTrails(now);
     autoSpawn(now);
     mouseSpawn(now);
-    checkInterference();
 
     for (let i = ripples.length - 1; i >= 0; i--) {
       const rp = ripples[i];
@@ -965,9 +1012,20 @@
   ═══════════════════════════════════════════ */
 
   // 各 word-line に沈殿アニメーションを適用
+  function toMs(value, fallback = 3200) {
+    if (!value) return fallback;
+    const raw = String(value).trim();
+    if (raw.endsWith('ms')) return parseFloat(raw);
+    if (raw.endsWith('s')) return parseFloat(raw) * 1000;
+    return Number(raw) || fallback;
+  }
+
   function settleWord(el) {
-    const delay   = parseInt(el.dataset.delay  ?? 0);
-    const dur     = parseInt(el.dataset.dur    ?? 3200);
+    if (el.dataset.settledOnce === '1') return;
+    el.dataset.settledOnce = '1';
+
+    const delay   = toMs(el.dataset.delay, 0);
+    const dur     = toMs(el.dataset.dur, 3200);
     const drift   = el.dataset.drift  ?? '9s';
     const dy0     = el.dataset.dy0    ?? '0px';
     const dy1     = el.dataset.dy1    ?? '0.2px';
@@ -1045,7 +1103,7 @@
 
   function initAudio() {
     if (aCtx) return;
-    aCtx = new (AudioContext || webkitAudioContext)();
+    aCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = aCtx.createGain();
     masterGain.gain.setValueAtTime(0, aCtx.currentTime);
     masterGain.gain.linearRampToValueAtTime(0.08, aCtx.currentTime + 3.5);
@@ -1098,11 +1156,17 @@
       initAudio();
       if (aCtx.state === 'suspended') aCtx.resume();
       soundOn = true;
-      this.textContent = '● sound'; this.classList.add('on');
+      this.textContent = '● sound';
+      this.classList.add('on');
+      this.setAttribute('aria-pressed', 'true');
+      this.setAttribute('aria-label', '環境音を停止する');
     } else {
       aCtx && aCtx.suspend();
       soundOn = false;
-      this.textContent = '○ sound'; this.classList.remove('on');
+      this.textContent = '○ sound';
+      this.classList.remove('on');
+      this.setAttribute('aria-pressed', 'false');
+      this.setAttribute('aria-label', '環境音を再生する');
     }
   });
 })();
