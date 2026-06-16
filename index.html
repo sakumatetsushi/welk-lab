@@ -238,10 +238,68 @@
       50%      { opacity: .7;  transform: scaleY(1.12); }
     }
 
+    /* section blocks */
+    .section-block {
+      position: relative; z-index: 1;
+      min-height: 80vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 130px 52px;
+    }
+    .section-inner { max-width: 540px; text-align: center; }
+    .section-eye {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 10px; letter-spacing: .38em;
+      color: var(--goldD); display: block;
+      text-align: center;
+      margin-bottom: 58px;
+      opacity: 0; transition: opacity 2.2s ease;
+    }
+    .section-eye.up { opacity: 1; }
+
+    /* contact-entry */
+    #contact-entry {
+      position: relative; z-index: 1;
+      padding: 120px 52px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 30px;
+    }
+    .ce-eye {
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 10px; letter-spacing: .38em;
+      color: var(--goldD);
+    }
+    .ce-text {
+      font-weight: 200;
+      font-size: clamp(14px, 1.6vw, 17px);
+      letter-spacing: .08em; line-height: 2.0;
+      color: rgba(234,229,220,.35);
+      text-align: center;
+    }
+    .ce-cta {
+      display: inline-block; padding: 12px 36px;
+      border: .5px solid rgba(184,150,12,.18);
+      color: rgba(184,150,12,.45); text-decoration: none;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 200;
+      font-size: clamp(12px, 1.3vw, 14px);
+      letter-spacing: .14em;
+      transition: all .5s;
+    }
+    .ce-cta:hover {
+      border-color: rgba(184,150,12,.45);
+      color: rgba(184,150,12,.72);
+      background: rgba(184,150,12,.03);
+    }
+
+    /* thought reveal for contact and journal */
+    .thought { opacity: 0; transform: translateY(10px); transition: opacity 1.8s ease, transform 1.8s ease; }
+    .thought.up { opacity: 1; transform: none; }
+
     @media (max-width: 640px) {
       nav { padding: 18px 22px; }
       .nav-links { gap: 22px; }
-      #about, #journal { padding: 80px 28px; }
+      #about, #journal, .section-block, #contact-entry { padding: 80px 28px; }
       .word-line { margin-bottom: 1.8em; }
       .hero-brand { font-size: 11px; letter-spacing: .45em; margin-bottom: 40px; }
       .hero-en { font-size: 11px; }
@@ -336,11 +394,92 @@
   </div>
 </section>
 
+
+<!-- ── WELKが行うこと ── -->
+<section class="section-block" id="action">
+  <div class="section-inner">
+
+    <span class="section-eye">What We Do</span>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8s" data-dy0="0px" data-dy1="0.22px" data-dy2="-0.15px">一歩のなかにある力を、</span>
+      <span class="word-line heavy" data-delay="1400" data-dur="4200" data-drift="11s" data-dy0="0px" data-dy1="0.18px" data-dy2="-0.2px">読み取る。</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.2s" data-dy0="0.05px" data-dy1="-0.18px" data-dy2="0.12px">下腿に装着した小さなセンサーが、</span>
+      <span class="word-line" data-delay="1100" data-dur="3400" data-drift="9s"   data-dy0="-0.08px" data-dy1="0.2px" data-dy2="0.1px">着地の衝撃、推進の力、左右の差を</span>
+      <span class="word-line" data-delay="2200" data-dur="3600" data-drift="9.5s" data-dy0="0px" data-dy1="0.15px" data-dy2="-0.18px">記録する。</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8.8s" data-dy0="0.1px" data-dy1="-0.15px" data-dy2="0.08px">歩行を「数値」ではなく、</span>
+      <span class="word-line" data-delay="1200" data-dur="3500" data-drift="10s"  data-dy0="-0.1px" data-dy1="0.22px" data-dy2="-0.08px">「動きの質」として可視化し、</span>
+      <span class="word-line heavy" data-delay="2800" data-dur="4400" data-drift="12s" data-dy0="0px" data-dy1="0.15px" data-dy2="-0.22px">歩いた本人に返す。</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.5s" data-dy0="0px" data-dy1="0.2px" data-dy2="-0.12px">気づきは、</span>
+      <span class="word-line" data-delay="1000" data-dur="3400" data-drift="9.2s" data-dy0="-0.06px" data-dy1="0.18px" data-dy2="0.1px">測定者のものではない。</span>
+      <span class="word-line heavy" data-delay="2600" data-dur="4800" data-drift="13s" data-dy0="0px" data-dy1="0.12px" data-dy2="-0.2px">歩いた人自身のものである。</span>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ── ともに広げたい連携 ── -->
+<section class="section-block" id="together">
+  <div class="section-inner">
+
+    <span class="section-eye">Together</span>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8s" data-dy0="0px" data-dy1="0.22px" data-dy2="-0.15px">現場で、</span>
+      <span class="word-line" data-delay="1100" data-dur="3800" data-drift="10s" data-dy0="-0.1px" data-dy1="0.25px" data-dy2="0.08px">身体の変化に向き合う人たちがいる。</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.5s" data-dy0="0.08px" data-dy1="-0.18px" data-dy2="0.12px">建設、製造、介護、医療──</span>
+      <span class="word-line" data-delay="1200" data-dur="3500" data-drift="9.8s" data-dy0="-0.1px" data-dy1="0.2px" data-dy2="-0.1px">熟練の技術が、</span>
+      <span class="word-line heavy" data-delay="2800" data-dur="4500" data-drift="12s" data-dy0="0px" data-dy1="0.18px" data-dy2="-0.25px">身体とともにある場所。</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="thought-group">
+      <span class="word-line" data-delay="0"    data-dur="3200" data-drift="9s" data-dy0="0.05px" data-dy1="-0.15px" data-dy2="0.18px">研究者、技術者、政策に携わる人。</span>
+      <span class="word-line" data-delay="1400" data-dur="3800" data-drift="10.5s" data-dy0="-0.08px" data-dy1="0.22px" data-dy2="-0.12px">「人が歩くこと」の意味を、</span>
+      <span class="word-line heavy" data-delay="3200" data-dur="5000" data-drift="14s" data-dy0="0px" data-dy1="0.15px" data-dy2="-0.2px">ともに問い直したい。</span>
+    </div>
+
+  </div>
+</section>
+
+
 <section id="journal">
   <div class="j-inner thought">
     <span class="j-eye">Journal</span>
     <p class="j-title">はじまりの一歩手前</p>
     <a class="j-cta" href="https://note.com/welk_lab" target="_blank" rel="noopener">研究日誌を読む</a>
+  </div>
+</section>
+
+
+<!-- ── Contactへの静かな入口 ── -->
+<section id="contact-entry">
+  <div class="thought">
+    <span class="ce-eye">Contact</span>
+    <p class="ce-text">活動について話してみたい方、<br>連携の可能性を考えている方へ。</p>
+    <a class="ce-cta" href="contact.html">連携の可能性を話す</a>
   </div>
 </section>
 
@@ -770,7 +909,7 @@
     });
   }, { threshold: 0.3 });
 
-  document.querySelectorAll('.divider').forEach(d => dividerObserver.observe(d));
+  document.querySelectorAll('.divider, .section-eye').forEach(d => dividerObserver.observe(d));
 
   // journal thought
   const jObserver = new IntersectionObserver(entries => {
@@ -780,7 +919,7 @@
       jObserver.unobserve(en.target);
     });
   }, { threshold: 0.2 });
-  document.querySelectorAll('#journal .thought').forEach(el => jObserver.observe(el));
+  document.querySelectorAll('#journal .thought, #contact-entry .thought').forEach(el => jObserver.observe(el));
 
   /* ═══════════════════════════════════════════
      SOUND ENGINE
