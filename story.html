@@ -2,16 +2,22 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Story — WELK 人が歩く研究所</title>
+  <meta name="description" content="WELK 人が歩く研究所のStory。歩くことの先にある景色を、静かな物語として記録します。">
+  <meta name="theme-color" content="#050503">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WELK 人が歩く研究所">
+  <meta property="og:title" content="Story — WELK 人が歩く研究所">
+  <meta property="og:description" content="WELK 人が歩く研究所のStory。歩くことの先にある景色を、静かな物語として記録します。">
+  <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;family=Klee+One:wght@400;600&amp;display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --gold: #B8960C; --goldL: #C9A84C; --goldD: #6B5A0A;
+      --gold: #B8960C; --goldL: #C9A84C; --goldD: #8A7412;
       --ink: #050503; --paper: #EAE5DC;
     }
     html, body {
@@ -63,7 +69,7 @@
       font-weight: 400;
       font-size: clamp(12px, 1.6vw, 15px);
       letter-spacing: .14em;
-      color: rgba(234,229,220,.25);
+      color: rgba(234,229,220,.36);
     }
 
     /* Cards */
@@ -104,7 +110,7 @@
     .card-body { padding: 22px 4px 0; }
     .card-num {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 9px; letter-spacing: .38em;
+      font-size: 10px; letter-spacing: .34em;
       color: var(--goldD);
       margin-bottom: 10px;
     }
@@ -131,8 +137,10 @@
     }
 
     @media (max-width: 640px) {
-      nav { padding: 18px 22px; }
-      .nav-links { gap: 20px; }
+      nav { padding: 16px 18px; gap: 14px; align-items: flex-start; }
+      .nav-links { gap: 8px 16px; flex-wrap: wrap; justify-content: flex-end; max-width: 238px; }
+      .nav-links a { font-size: 10px; letter-spacing: .12em; }
+      .logo { font-size: 13px; letter-spacing: .22em; }
       .hero { height: 40vh; }
       .cards {
         grid-template-columns: 1fr;
@@ -146,7 +154,7 @@
 
 <canvas id="bg-canvas"></canvas>
 
-<nav>
+<nav aria-label="Primary">
   <a class="logo" href="index.html">WELK</a>
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>
@@ -157,6 +165,7 @@
   </ul>
 </nav>
 
+<main>
 <section class="hero">
   <h1 class="hero-title">Story</h1>
   <p class="hero-sub">まだ見たい景色がある</p>
@@ -167,7 +176,7 @@
   <!-- Story 01 -->
   <a class="card" href="stories/story01/index.html">
     <div class="card-thumb">
-      <img src="stories/story01/01.png" alt="">
+      <img src="stories/story01/01.png" alt="まだ一緒に行きたい場所がある">
     </div>
     <div class="card-body">
       <p class="card-num">STORY 01</p>
@@ -179,7 +188,7 @@
   <!-- Story 02 -->
   <a class="card" href="stories/story02/index.html">
     <div class="card-thumb">
-      <img src="stories/story02/01.png" alt="">
+      <img src="stories/story02/01.png" alt="まだ彩りたい空間がある">
     </div>
     <div class="card-body">
       <p class="card-num">STORY 02</p>
@@ -189,6 +198,7 @@
   </a>
 
 </section>
+</main>
 
 <script>
 (() => {

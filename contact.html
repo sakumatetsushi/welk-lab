@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
+    :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#8A7412;--ink:#050503;--paper:#EAE5DC}
     html{scroll-behavior:smooth}
     body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
     #c{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
@@ -53,11 +53,11 @@
 
     /* form */
     .form-row{margin-bottom:20px}
-    .form-label{display:block;font-size:10px;letter-spacing:.1em;color:rgba(234,229,220,.32);margin-bottom:8px}
+    .form-label{display:block;font-size:11px;letter-spacing:.08em;color:rgba(234,229,220,.42);margin-bottom:8px}
     .form-input,.form-textarea{width:100%;padding:12px 16px;background:rgba(234,229,220,.03);border:.5px solid rgba(234,229,220,.1);color:var(--paper);font-size:13px;font-family:'Noto Serif JP',serif;font-weight:200;transition:border-color .3s}
     .form-input:focus,.form-textarea:focus{outline:none;border-color:rgba(184,150,12,.4)}
     .form-textarea{height:100px;resize:vertical}
-    .form-submit{width:100%;padding:14px;background:rgba(184,150,12,.12);color:rgba(184,150,12,.75);border:.5px solid rgba(184,150,12,.3);font-size:13px;font-family:'Noto Serif JP',serif;font-weight:200;letter-spacing:.1em;cursor:pointer;transition:all .4s;margin-top:8px}
+    .form-submit{width:100%;padding:14px;background:rgba(184,150,12,.12);color:rgba(184,150,12,.78);border:.5px solid rgba(184,150,12,.34);font-size:13px;font-family:'Noto Serif JP',serif;font-weight:200;letter-spacing:.1em;cursor:pointer;transition:all .4s;margin-top:8px}
     .form-submit:hover{background:rgba(184,150,12,.2);color:var(--goldL);border-color:rgba(184,150,12,.5)}
     .form-note{margin-top:12px;font-size:10px;color:rgba(234,229,220,.25);line-height:1.8}
 
@@ -65,7 +65,7 @@
     .link-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(184,150,12,.08)}
     .link-card{background:var(--ink);padding:26px 24px;text-decoration:none;display:block;transition:background .4s}
     .link-card:hover{background:rgba(184,150,12,.03)}
-    .lc-service{font-family:'IM Fell English',serif;font-style:italic;font-size:9px;letter-spacing:.25em;color:var(--goldD);margin-bottom:8px;display:block}
+    .lc-service{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.22em;color:var(--goldD);margin-bottom:8px;display:block}
     .lc-desc{font-weight:200;font-size:13px;color:rgba(234,229,220,.62)}
     .lc-sub{font-size:10px;color:rgba(234,229,220,.28);margin-top:5px}
 
@@ -93,6 +93,7 @@
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>
     <li><a href="trace.html">Trace</a></li>
+    <li><a href="story.html">Story</a></li>
     <li><a href="journal.html">Journal</a></li>
     <li><a href="contact.html" class="cur">Contact</a></li>
   </ul>
@@ -103,8 +104,8 @@
   <div>
     <span class="ph-en">Contact</span>
     <h1 class="ph-title">
-      あなたの歩みの調べを、<br>
-      私たちに聴かせてほしい。
+      研究への参加や連携のご相談を、<br>
+      こちらからお聞かせください。
     </h1>
   </div>
 </div>
@@ -112,8 +113,8 @@
 <!-- 入口 -->
 <section class="sec" style="padding-top:40px;padding-bottom:40px">
   <div class="sec-inner reveal" style="display:flex;flex-direction:column;gap:18px;align-items:flex-start">
-    <a href="#participate" style="font-weight:200;font-size:clamp(13px,1.6vw,16px);color:rgba(184,150,12,.55);text-decoration:none;border-bottom:.5px solid rgba(184,150,12,.18);padding-bottom:2px;transition:color .4s">研究に参加したい方 →</a>
-    <a href="#collaborate" style="font-weight:200;font-size:clamp(13px,1.6vw,16px);color:rgba(184,150,12,.55);text-decoration:none;border-bottom:.5px solid rgba(184,150,12,.18);padding-bottom:2px;transition:color .4s">連携・共同研究・実証について相談したい方 →</a>
+    <a href="#participate" style="font-weight:200;font-size:clamp(13px,1.6vw,16px);color:rgba(184,150,12,.72);text-decoration:none;border-bottom:.5px solid rgba(184,150,12,.32);padding-bottom:2px;transition:color .4s">研究に参加いただける方 →</a>
+    <a href="#collaborate" style="font-weight:200;font-size:clamp(13px,1.6vw,16px);color:rgba(184,150,12,.72);text-decoration:none;border-bottom:.5px solid rgba(184,150,12,.32);padding-bottom:2px;transition:color .4s">連携・共同研究・実証についてご相談いただける方 →</a>
   </div>
 </section>
 
@@ -132,7 +133,7 @@
       個人を特定できる形では公開しません。ご希望の方には歩行データのフィードバックをお伝えします。
     </p>
 
-    <h3 class="sec-label reveal">こんな方に来てほしい</h3>
+    <h3 class="sec-label reveal">参加をご検討いただきたい方</h3>
     <ul class="cond-list reveal">
       <li class="cond-item"><div class="cond-dot"></div>長年、身体を使って働いてきた方（職種は問いません）</li>
       <li class="cond-item"><div class="cond-dot"></div>おおむね40〜70歳の方</li>
