@@ -11,6 +11,7 @@
   <meta property="og:title" content="About — WELK 人が歩く研究所">
   <meta property="og:description" content="一般社団法人WELK 人が歩く研究所の法人概要、設立の背景、歩行動態解析・ウェアラブル計測・実証研究の活動内容を紹介します。">
   <meta name="twitter:card" content="summary">
+  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -76,6 +77,14 @@
     .f-copy{font-size:11px;letter-spacing:.06em;color:rgba(234,229,220,.42)}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .ph-en,.ph-title,.pw,.reveal,.reason-item,.s-rule{
+        animation:none!important;transition:none!important;transform:none!important;filter:none!important;opacity:1!important
+      }
+      .pw{color:rgba(234,229,220,.62)!important}
+      .ph-canvas{display:none!important}
+    }
     @media(max-width:640px){
       nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 14px;flex-wrap:wrap;justify-content:flex-end;max-width:246px}.nav-links a{font-size:11px;letter-spacing:.08em}.logo{font-size:14px;letter-spacing:.18em}
       .page-hero,.why-sec,.corp-sec{padding-left:26px;padding-right:26px}
@@ -134,7 +143,7 @@
 
 <!-- ② 着地衝撃 -->
 <div class="phenomenon" id="ph-shock">
-  <canvas class="ph-canvas" id="c-shock"></canvas>
+  <canvas class="ph-canvas" id="c-shock" aria-hidden="true"></canvas>
   <div class="ph-inner">
     <span class="pw lg" data-delay="0"    data-dur="3400" data-dd="9s"  data-dy0="0px"   data-dy1=".25px">足が、地面に触れる。</span>
     <span class="pw sm" data-delay="1800" data-dur="3800" data-dd="11s" data-dy0="-.1px" data-dy1=".2px">その瞬間だけ、身体は正直になる。</span>
@@ -146,7 +155,7 @@
 
 <!-- ③ 左右差 -->
 <div class="phenomenon" id="ph-asym">
-  <canvas class="ph-canvas" id="c-asym"></canvas>
+  <canvas class="ph-canvas" id="c-asym" aria-hidden="true"></canvas>
   <div class="ph-inner">
     <span class="pw lg" data-delay="0"    data-dur="3400" data-dd="10s" data-dy0="0px"    data-dy1=".22px">同じ一歩は、一度もない。</span>
     <span class="pw sm" data-delay="2000" data-dur="3800" data-dd="12s" data-dy0="-.08px" data-dy1=".18px">左と右は、必ず違う物語を持っている。</span>
@@ -178,6 +187,7 @@
 <script>
 'use strict';
 (() => {
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ════════════════════════════════════════════════════════
    PERLIN NOISE — 流れ場の基礎
@@ -981,7 +991,7 @@ function triggerLoop(t) {
     }
   }
 }
-requestAnimationFrame(triggerLoop);
+if (!reduceMotion) requestAnimationFrame(triggerLoop);
 
 /* ════════════════════════════════════════════════════════
    VISIBILITY — セクション可視でstart/stop
@@ -1008,8 +1018,10 @@ const visIO = new IntersectionObserver(entries => {
     }
   });
 }, {threshold: 0.1});
-visIO.observe(shockEl);
-visIO.observe(asymEl);
+if (!reduceMotion) {
+  visIO.observe(shockEl);
+  visIO.observe(asymEl);
+}
 
 addEventListener('resize', () => {
   if (shockOn) shockFF.resize();

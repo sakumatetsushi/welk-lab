@@ -11,6 +11,7 @@
   <meta property="og:title" content="Story — WELK 人が歩く研究所">
   <meta property="og:description" content="WELK 人が歩く研究所のStory。歩くことの先にある景色を、静かな物語として記録します。">
   <meta name="twitter:card" content="summary">
+  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;family=Klee+One:wght@400;600&amp;display=swap" rel="stylesheet">
@@ -136,6 +137,15 @@
       position: fixed; inset: 0; z-index: -1; pointer-events: none;
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+      #bg-canvas { display: none !important; }
+    }
+
     @media (max-width: 640px) {
       nav { padding: 16px 18px; gap: 14px; align-items: flex-start; }
       .nav-links { gap: 8px 14px; flex-wrap: wrap; justify-content: flex-end; max-width: 246px; }
@@ -152,7 +162,7 @@
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
 
 <nav aria-label="Primary">
   <a class="logo" href="index.html">WELK</a>
@@ -202,11 +212,13 @@
 
 <script>
 (() => {
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cv = document.getElementById('bg-canvas');
   const ctx = cv.getContext('2d');
   let W, H;
   const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
   resize(); addEventListener('resize', resize);
+  if (reduceMotion) return;
 
   const ptcls = Array.from({ length: 40 }, () => ({
     x: Math.random(), y: Math.random(),

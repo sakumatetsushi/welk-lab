@@ -11,6 +11,7 @@
   <meta property="og:title" content="Contact — WELK 人が歩く研究所">
   <meta property="og:description" content="WELK 人が歩く研究所へのお問い合わせ。研究参加、連携・共同研究、実証研究の相談はこちらからご連絡ください。">
   <meta name="twitter:card" content="summary">
+  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
@@ -82,11 +83,18 @@
     .f-copy{font-size:11px;letter-spacing:.06em;color:rgba(234,229,220,.42)}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .ph-en,.ph-title,.reveal{
+        animation:none!important;transition:none!important;transform:none!important;filter:none!important;opacity:1!important
+      }
+      #c{display:none!important}
+    }
     @media(max-width:640px){nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 14px;flex-wrap:wrap;justify-content:flex-end;max-width:246px}.nav-links a{font-size:11px;letter-spacing:.08em}.logo{font-size:14px;letter-spacing:.18em}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.flow{grid-template-columns:repeat(2,1fr)}.link-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+<canvas id="c" aria-hidden="true"></canvas>
 
 <nav aria-label="Primary">
   <a class="logo" href="index.html">WELK</a>
@@ -151,6 +159,7 @@
     </div>
 
     <h2 class="sec-label reveal">ご連絡フォーム</h2>
+    <!-- 公開前チェック: mailtoフォームは環境依存のため、スマホ・PC・Chrome・Safariで送信テストする。現時点では外部フォームへ切り替えない。 -->
     <form class="reveal" action="mailto:info@welk-lab.jp" method="post" enctype="text/plain">
       <div class="form-row">
         <label class="form-label" for="contact-type">お問い合わせの種類</label>
@@ -241,8 +250,10 @@
 
 <script>
 (() => {
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const cv=document.getElementById('c'),ctx=cv.getContext('2d');
   let W,H;function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}resize();addEventListener('resize',resize);
+  if (reduceMotion) return;
   let mx=-1,my=-1;addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
   const particles=Array.from({length:80},()=>({x:Math.random(),y:Math.random(),vx:(Math.random()-.5)*.00008,vy:-(Math.random()*.00004),r:.3+Math.random()*1.1,phase:Math.random()*Math.PI*2,alpha:.06+Math.random()*.22}));
   const ripples=[];

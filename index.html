@@ -11,6 +11,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="WELK">
   <meta name="twitter:card" content="summary">
+  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
@@ -928,8 +929,8 @@
   ═══════════════════════════════════════════ */
   let lastFrame = 0;
   function loop(now) {
-    requestAnimationFrame(loop);
     if (reduceMotion) return;
+    requestAnimationFrame(loop);
     if (isMobile && now - lastFrame < 1000 / 30) return;
     lastFrame = now;
     if (!t0) t0 = now;
@@ -962,7 +963,7 @@
     // hero drift
     if (scrollY < H) driftHero(now);
   }
-  requestAnimationFrame(loop);
+  if (!reduceMotion) requestAnimationFrame(loop);
 
   // click/tap — クールダウンで連打防止
   let lastClick = 0;

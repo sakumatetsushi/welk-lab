@@ -11,6 +11,7 @@
   <meta property="og:title" content="Trace — WELK 人が歩く研究所">
   <meta property="og:description" content="WELKが歩行に残る左右差、着地の衝撃、推進力の変化を静かに見つめる観察ページです。">
   <meta name="twitter:card" content="summary">
+  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
@@ -71,6 +72,13 @@
     .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
     .f-copy{font-size:11px;letter-spacing:.06em;color:rgba(234,229,220,.42)}
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      .ph-en,.ph-title,.ph-sub,.obs-num,.obs-title,.obs-desc,.s-rule{
+        animation:none!important;transition:none!important;transform:none!important;filter:none!important;opacity:1!important
+      }
+      .hero-canvas,.obs-canvas{display:none!important}
+    }
     @media(max-width:640px){
       nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 14px;flex-wrap:wrap;justify-content:flex-end;max-width:246px}.nav-links a{font-size:11px;letter-spacing:.08em}.logo{font-size:14px;letter-spacing:.18em}
       .page-hero{padding:100px 26px 52px}
@@ -96,7 +104,7 @@
 
 <main>
 <div class="page-hero">
-  <canvas class="hero-canvas" id="hero-c"></canvas>
+  <canvas class="hero-canvas" id="hero-c" aria-hidden="true"></canvas>
   <div class="hero-text">
     <span class="ph-en">Trace / Observation</span>
     <h1 class="ph-title">身体が残した<br>痕跡を、見る。</h1>
@@ -114,7 +122,7 @@
 <div class="s-rule"></div>
 
 <section class="obs" id="obs-01">
-  <canvas class="obs-canvas" id="c-01"></canvas>
+  <canvas class="obs-canvas" id="c-01" aria-hidden="true"></canvas>
   <div class="obs-inner" id="inner-01">
     <span class="obs-num">Observation 01</span>
     <h2 class="obs-title">左右は、<br>決して対称ではない。</h2>
@@ -125,7 +133,7 @@
 <div class="s-rule"></div>
 
 <section class="obs" id="obs-02">
-  <canvas class="obs-canvas" id="c-02"></canvas>
+  <canvas class="obs-canvas" id="c-02" aria-hidden="true"></canvas>
   <div class="obs-inner" id="inner-02">
     <span class="obs-num">Observation 02</span>
     <h2 class="obs-title">着地は、<br>衝撃である。</h2>
@@ -136,7 +144,7 @@
 <div class="s-rule"></div>
 
 <section class="obs" id="obs-03">
-  <canvas class="obs-canvas" id="c-03"></canvas>
+  <canvas class="obs-canvas" id="c-03" aria-hidden="true"></canvas>
   <div class="obs-inner" id="inner-03">
     <span class="obs-num">Observation 03</span>
     <h2 class="obs-title">推進力は、<br>途中で変わる。</h2>
@@ -157,6 +165,7 @@
 <script>
 'use strict';
 (() => {
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ══════════════════════════════════════════════
    PERLIN NOISE
@@ -1115,7 +1124,7 @@ function heroLoop(t) {
     heroCtx.strokeStyle=`rgba(184,150,12,${rp.life*.15})`; heroCtx.lineWidth=.5*rp.life; heroCtx.stroke();
   }
 }
-requestAnimationFrame(heroLoop);
+if (!reduceMotion) requestAnimationFrame(heroLoop);
 
 // Hero文字：animation終了後に確実にopacity:1を維持（forwards が効かない環境対策）
 setTimeout(() => {
@@ -1152,7 +1161,7 @@ const visIO = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.3 });
 
-document.querySelectorAll('.obs').forEach(el => visIO.observe(el));
+if (!reduceMotion) document.querySelectorAll('.obs').forEach(el => visIO.observe(el));
 
 const rIO = new IntersectionObserver(entries => {
   entries.forEach(en => { if(en.isIntersecting){en.target.classList.add('up');rIO.unobserve(en.target)} });
