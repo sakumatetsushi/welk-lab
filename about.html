@@ -4,7 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — WELK 人が歩く研究所</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <meta name="description" content="一般社団法人WELK 人が歩く研究所の法人概要、設立の背景、歩行動態解析・ウェアラブル計測・実証研究の活動内容を紹介します。">
+  <meta name="theme-color" content="#050503">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WELK 人が歩く研究所">
+  <meta property="og:title" content="About — WELK 人が歩く研究所">
+  <meta property="og:description" content="一般社団法人WELK 人が歩く研究所の法人概要、設立の背景、歩行動態解析・ウェアラブル計測・実証研究の活動内容を紹介します。">
+  <meta name="twitter:card" content="summary">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{--gold:#B8960C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
@@ -26,7 +33,7 @@
     /* ── why ── */
     .why-sec{position:relative;z-index:1;padding:80px 52px}
     .sec-inner{max-width:680px;margin:0 auto}
-    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-weight:200;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
     .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
     .reason-list{list-style:none}
     .reason-item{display:flex;gap:22px;padding:22px 0;border-bottom:.5px solid rgba(234,229,220,.06);opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
@@ -70,9 +77,11 @@
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     @media(max-width:640px){
-      nav{padding:18px 22px}.nav-links{gap:22px}
+      nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 16px;flex-wrap:wrap;justify-content:flex-end;max-width:238px}.nav-links a{font-size:10px;letter-spacing:.12em}.logo{font-size:13px;letter-spacing:.22em}
       .page-hero,.why-sec,.corp-sec{padding-left:26px;padding-right:26px}
       .ph-inner{padding:60px 24px}
+      .corp-table tr{display:grid;grid-template-columns:96px 1fr;column-gap:12px}
+      .corp-table .tl{min-width:0}
       /* スマホのみCanvasを明るく補正 */
       .ph-canvas{filter:brightness(1.55)}
     }
@@ -80,17 +89,17 @@
 </head>
 <body>
 
-<nav>
+<nav aria-label="Primary">
   <a class="logo" href="index.html">WELK</a>
   <ul class="nav-links">
     <li><a href="about.html" class="cur">About</a></li>
     <li><a href="trace.html">Trace</a></li>
-    <li><a href="story.html">Story</a></li>
     <li><a href="journal.html">Journal</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
 
+<main>
 <div class="page-hero">
   <div>
     <span class="ph-en">About</span>
@@ -100,7 +109,7 @@
 
 <section class="why-sec">
   <div class="sec-inner">
-    <div class="sec-label reveal">なぜ、この研究所を作ったのか</div>
+    <h2 class="sec-label reveal">なぜ、この研究所を作ったのか</h2>
 
     <div class="reason-item" style="display:block;padding:0 0 32px;border-bottom:none">
       <p class="ri-text">膝の痛みを恐れ、歩くことを怖がる人がいる。<br>それがとても悲しいと思った。</p>
@@ -148,18 +157,18 @@
 
 <section class="corp-sec">
   <div class="sec-inner">
-    <div class="sec-label reveal">法人概要</div>
+    <h2 class="sec-label reveal">法人概要</h2>
     <table class="corp-table">
       <tr class="reveal"><td class="tl">法人名</td><td class="tv">一般社団法人WELK 人が歩く研究所</td></tr>
       <tr class="reveal"><td class="tl">英語名</td><td class="tv">WELK Institute for Human Gait</td></tr>
       <tr class="reveal"><td class="tl">所在地</td><td class="tv">大阪府</td></tr>
-      <!-- 【確認】登記完了済みなら「設立準備中」を削除すること -->
       <tr class="reveal"><td class="tl">設立</td><td class="tv">2026年</td></tr>
       <tr class="reveal"><td class="tl">活動内容</td><td class="tv">歩行動態解析・ウェアラブル計測・実証研究</td></tr>
       <tr class="reveal"><td class="tl">代表理事</td><td class="tv">佐久間 徹志</td></tr>
     </table>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="f-logo">WELK</div>

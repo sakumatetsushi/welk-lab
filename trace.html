@@ -2,12 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trace — WELK 人が歩く研究所</title>
+  <meta name="description" content="WELKが歩行に残る左右差、着地の衝撃、推進力の変化を静かに見つめる観察ページです。">
+  <meta name="theme-color" content="#050503">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WELK 人が歩く研究所">
+  <meta property="og:title" content="Trace — WELK 人が歩く研究所">
+  <meta property="og:description" content="WELKが歩行に残る左右差、着地の衝撃、推進力の変化を静かに見つめる観察ページです。">
+  <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--gold:#B8960C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
@@ -64,10 +70,12 @@
     footer{position:relative;z-index:1;padding:60px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
     .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
     .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     @media(max-width:640px){
-      nav{padding:18px 22px}.nav-links{gap:22px}
+      nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 16px;flex-wrap:wrap;justify-content:flex-end;max-width:238px}.nav-links a{font-size:10px;letter-spacing:.12em}.logo{font-size:13px;letter-spacing:.22em}
       .page-hero{padding:100px 26px 52px}
       .obs{padding:0 26px}
+      .obs-inner{top:88px;left:26px;right:26px;max-width:none;padding-right:24px!important}
       footer{padding:44px 26px}
       .obs-canvas{filter:brightness(1.5)}
     }
@@ -75,17 +83,17 @@
 </head>
 <body>
 
-<nav>
+<nav aria-label="Primary">
   <a class="logo" href="index.html">WELK</a>
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>
     <li><a href="trace.html" class="cur">Trace</a></li>
-    <li><a href="story.html">Story</a></li>
     <li><a href="journal.html">Journal</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
 
+<main>
 <div class="page-hero">
   <canvas class="hero-canvas" id="hero-c"></canvas>
   <div class="hero-text">
@@ -108,7 +116,7 @@
   <canvas class="obs-canvas" id="c-01"></canvas>
   <div class="obs-inner" id="inner-01">
     <span class="obs-num">Observation 01</span>
-    <div class="obs-title">左右は、<br>決して対称ではない。</div>
+    <h2 class="obs-title">左右は、<br>決して対称ではない。</h2>
     <div class="obs-desc">左足が残した軌跡と、<br>右足が残した軌跡は、<br>いつも違う形をしている。</div>
   </div>
 </section>
@@ -119,7 +127,7 @@
   <canvas class="obs-canvas" id="c-02"></canvas>
   <div class="obs-inner" id="inner-02">
     <span class="obs-num">Observation 02</span>
-    <div class="obs-title">着地は、<br>衝撃である。</div>
+    <h2 class="obs-title">着地は、<br>衝撃である。</h2>
     <div class="obs-desc">足が地面に触れる瞬間、<br>身体は正直になる。<br>蓄積された庇いが、その形に現れる。</div>
   </div>
 </section>
@@ -130,7 +138,7 @@
   <canvas class="obs-canvas" id="c-03"></canvas>
   <div class="obs-inner" id="inner-03">
     <span class="obs-num">Observation 03</span>
-    <div class="obs-title">推進力は、<br>途中で変わる。</div>
+    <h2 class="obs-title">推進力は、<br>途中で変わる。</h2>
     <div class="obs-desc">前へ向かおうとするエネルギーが、<br>どこかで方向を変える。<br>その変化の中に、身体の意図がある。</div>
   </div>
 </section>
@@ -138,6 +146,7 @@
 
 
 <div class="s-rule"></div>
+</main>
 
 <footer>
   <div class="f-logo">WELK</div>

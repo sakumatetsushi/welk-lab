@@ -2,12 +2,18 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Journal — WELK 人が歩く研究所</title>
+  <meta name="description" content="WELK 人が歩く研究所の研究日誌。歩くことについて考えたこと、研究の断片、問いの記録をnoteへつなぎます。">
+  <meta name="theme-color" content="#050503">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="WELK 人が歩く研究所">
+  <meta property="og:title" content="Journal — WELK 人が歩く研究所">
+  <meta property="og:description" content="WELK 人が歩く研究所の研究日誌。歩くことについて考えたこと、研究の断片、問いの記録をnoteへつなぎます。">
+  <meta name="twitter:card" content="summary">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{--gold:#B8960C;--goldL:#C9A84C;--goldD:#6B5A0A;--ink:#050503;--paper:#EAE5DC}
@@ -28,7 +34,7 @@
 
     .sec{position:relative;z-index:1;padding:80px 52px}
     .sec-inner{max-width:720px;margin:0 auto}
-    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px;opacity:0;filter:blur(6px);transform:translateY(12px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-weight:200;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px;opacity:0;filter:blur(6px);transform:translateY(12px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease}
     .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
     .sec-label.up{opacity:1;filter:blur(0);transform:none}
 
@@ -54,23 +60,23 @@
     .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-    @media(max-width:640px){nav{padding:18px 22px}.nav-links{gap:22px}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.article-card{padding:28px 24px}}
+    @media(max-width:640px){nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 16px;flex-wrap:wrap;justify-content:flex-end;max-width:238px}.nav-links a{font-size:10px;letter-spacing:.12em}.logo{font-size:13px;letter-spacing:.22em}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.article-card{padding:28px 24px}}
   </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 
-<nav>
+<nav aria-label="Primary">
   <a class="logo" href="index.html">WELK</a>
   <ul class="nav-links">
     <li><a href="about.html">About</a></li>
     <li><a href="trace.html">Trace</a></li>
-    <li><a href="story.html">Story</a></li>
     <li><a href="journal.html" class="cur">Journal</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
 </nav>
 
+<main>
 <div class="page-hero">
   <div>
     <span class="ph-en">Journal</span>
@@ -81,12 +87,12 @@
 
 <section class="sec">
   <div class="sec-inner">
-    <div class="sec-label">最新の記録</div>
+    <h2 class="sec-label">最新の記録</h2>
 
     <div class="articles">
-      <a class="article-card" href="https://note.com/welk_lab/n/n9741b4f4527b" target="_blank" rel="noopener">
+      <a class="article-card" href="https://note.com/welk_lab/n/n9741b4f4527b" target="_blank" rel="noopener noreferrer">
         <span class="ac-num">No. 01 &nbsp;·&nbsp; 2026</span>
-        <div class="ac-title">はじまりの一歩手前</div>
+        <h3 class="ac-title">はじまりの一歩手前</h3>
         <p class="ac-body">公園のベンチで杖をつく人を見た。その人の目に、諦めと、少しの寂しさがありました。そこからすべてが始まった。</p>
         <span class="ac-link">noteで読む →</span>
       </a>
@@ -103,10 +109,11 @@
 
     <div class="note-cta">
       <p class="note-cta-text">すべての記録はnoteで公開しています。</p>
-      <a class="note-btn" href="https://note.com/welk_lab" target="_blank" rel="noopener">note を読む</a>
+      <a class="note-btn" href="https://note.com/welk_lab" target="_blank" rel="noopener noreferrer">note を読む</a>
     </div>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="f-logo">WELK</div>
