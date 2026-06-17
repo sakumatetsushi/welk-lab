@@ -20,20 +20,20 @@
 
     /* ── Nav ── */
     nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
-    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:15px;letter-spacing:.24em;color:rgba(234,229,220,.52);text-decoration:none}
     .nav-links{display:flex;gap:40px;list-style:none}
-    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.14em;color:rgba(234,229,220,.46);text-decoration:none;transition:color .5s}
     .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
 
     /* ── page hero ── */
     .page-hero{position:relative;z-index:1;min-height:48vh;display:flex;align-items:flex-end;padding:120px 52px 60px}
-    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.28em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
     .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.6;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
 
     /* ── why ── */
     .why-sec{position:relative;z-index:1;padding:80px 52px}
     .sec-inner{max-width:680px;margin:0 auto}
-    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-weight:200;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-weight:200;font-size:12px;letter-spacing:.22em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:44px}
     .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
     .reason-list{list-style:none}
     .reason-item{display:flex;gap:22px;padding:22px 0;border-bottom:.5px solid rgba(234,229,220,.06);opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
@@ -66,18 +66,18 @@
     .corp-table{width:100%;border-collapse:collapse}
     .corp-table tr{border-bottom:.5px solid rgba(234,229,220,.07)}
     .corp-table td{padding:14px 0;font-size:13px;vertical-align:top}
-    .corp-table .tl{color:rgba(234,229,220,.32);min-width:140px;font-size:11px;letter-spacing:.05em}
+    .corp-table .tl{color:rgba(234,229,220,.48);min-width:140px;font-size:12px;letter-spacing:.03em}
     .corp-table .tv{color:rgba(234,229,220,.65);font-weight:200}
     .reveal{opacity:0;filter:blur(8px);transform:translateY(16px);transition:opacity 1.8s ease,filter 1.8s ease,transform 1.8s ease}
     .reveal.up{opacity:1;filter:blur(0);transform:none}
 
     footer{position:relative;z-index:1;padding:44px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
     .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
-    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+    .f-copy{font-size:11px;letter-spacing:.06em;color:rgba(234,229,220,.42)}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
     @media(max-width:640px){
-      nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 16px;flex-wrap:wrap;justify-content:flex-end;max-width:238px}.nav-links a{font-size:10px;letter-spacing:.12em}.logo{font-size:13px;letter-spacing:.22em}
+      nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 14px;flex-wrap:wrap;justify-content:flex-end;max-width:246px}.nav-links a{font-size:11px;letter-spacing:.08em}.logo{font-size:14px;letter-spacing:.18em}
       .page-hero,.why-sec,.corp-sec{padding-left:26px;padding-right:26px}
       .ph-inner{padding:60px 24px}
       .corp-table tr{display:grid;grid-template-columns:96px 1fr;column-gap:12px}

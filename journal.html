@@ -21,20 +21,20 @@
     body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
     #c{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
     nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
-    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:14px;letter-spacing:.28em;color:rgba(234,229,220,.38);text-decoration:none;transition:color .6s}
+    .logo{font-family:'IM Fell English',serif;font-style:italic;font-size:15px;letter-spacing:.24em;color:rgba(234,229,220,.52);text-decoration:none;transition:color .6s}
     .logo:hover{color:rgba(234,229,220,.72)}
     .nav-links{display:flex;gap:40px;list-style:none}
-    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.18em;color:rgba(234,229,220,.28);text-decoration:none;transition:color .5s}
+    .nav-links a{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.14em;color:rgba(234,229,220,.46);text-decoration:none;transition:color .5s}
     .nav-links a:hover,.nav-links a.cur{color:rgba(234,229,220,.72)}
 
     .page-hero{position:relative;z-index:1;min-height:52vh;display:flex;align-items:flex-end;padding:120px 52px 64px}
-    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.38em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
+    .ph-en{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.28em;color:var(--goldD);display:block;margin-bottom:20px;opacity:0;animation:fadeUp 1.8s ease .3s forwards}
     .ph-title{font-weight:200;font-size:clamp(26px,4vw,48px);line-height:1.6;color:rgba(234,229,220,.86);opacity:0;animation:fadeUp 2s ease .6s forwards}
-    .ph-sub{margin-top:20px;font-weight:200;font-size:clamp(12px,1.4vw,15px);color:rgba(234,229,220,.35);line-height:2.0;opacity:0;animation:fadeUp 2s ease 1s forwards}
+    .ph-sub{margin-top:20px;font-weight:200;font-size:clamp(14px,1.4vw,16px);color:rgba(234,229,220,.52);line-height:2.0;opacity:0;animation:fadeUp 2s ease 1s forwards}
 
     .sec{position:relative;z-index:1;padding:80px 52px}
     .sec-inner{max-width:720px;margin:0 auto}
-    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-weight:200;font-size:10px;letter-spacing:.32em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px;opacity:0;filter:blur(6px);transform:translateY(12px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease}
+    .sec-label{font-family:'IM Fell English',serif;font-style:italic;font-weight:200;font-size:12px;letter-spacing:.22em;color:var(--goldD);display:flex;align-items:center;gap:14px;margin-bottom:48px;opacity:0;filter:blur(6px);transform:translateY(12px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease}
     .sec-label::after{content:'';flex:1;height:.5px;background:var(--goldD);opacity:.3;max-width:64px}
     .sec-label.up{opacity:1;filter:blur(0);transform:none}
 
@@ -43,24 +43,24 @@
     .article-card{background:var(--ink);padding:36px 40px;text-decoration:none;display:block;transition:background .4s;opacity:0;filter:blur(6px);transform:translateY(14px);transition:opacity 1.6s ease,filter 1.6s ease,transform 1.6s ease,background .4s}
     .article-card.up{opacity:1;filter:blur(0);transform:none}
     .article-card:hover{background:rgba(184,150,12,.03)}
-    .ac-num{font-family:'IM Fell English',serif;font-style:italic;font-size:10px;letter-spacing:.22em;color:var(--goldD);margin-bottom:14px;display:block}
+    .ac-num{font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.16em;color:var(--goldD);margin-bottom:14px;display:block}
     .ac-title{font-weight:200;font-size:clamp(15px,2vw,20px);color:rgba(234,229,220,.78);line-height:1.7;margin-bottom:12px}
-    .ac-body{font-weight:200;font-size:12px;color:rgba(234,229,220,.38);line-height:2.0}
-    .ac-link{display:inline-block;margin-top:18px;font-family:'IM Fell English',serif;font-style:italic;font-size:11px;letter-spacing:.14em;color:rgba(184,150,12,.72);border-bottom:.5px solid rgba(184,150,12,.36);padding-bottom:2px}
+    .ac-body{font-weight:200;font-size:14px;color:rgba(234,229,220,.52);line-height:2.0}
+    .ac-link{display:inline-block;margin-top:18px;font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.1em;color:rgba(184,150,12,.78);border-bottom:.5px solid rgba(184,150,12,.42);padding-bottom:2px}
 
     /* note cta */
     .note-cta{margin-top:64px;text-align:center;opacity:0;filter:blur(6px);transition:opacity 1.6s ease,filter 1.6s ease}
     .note-cta.up{opacity:1;filter:blur(0)}
-    .note-cta-text{font-weight:200;font-size:13px;color:rgba(234,229,220,.35);margin-bottom:24px;line-height:2}
+    .note-cta-text{font-weight:200;font-size:14px;color:rgba(234,229,220,.52);margin-bottom:24px;line-height:2}
     .note-btn{display:inline-block;padding:12px 36px;border:.5px solid rgba(184,150,12,.32);color:rgba(184,150,12,.72);text-decoration:none;font-family:'IM Fell English',serif;font-style:italic;font-size:12px;letter-spacing:.16em;transition:all .5s}
     .note-btn:hover{border-color:var(--goldL);color:var(--goldL);background:rgba(184,150,12,.04)}
 
     footer{position:relative;z-index:1;padding:44px 52px;text-align:center;border-top:.5px solid rgba(184,150,12,.06)}
     .f-logo{font-family:'IM Fell English',serif;font-style:italic;font-size:13px;letter-spacing:.28em;color:var(--goldD);margin-bottom:10px}
-    .f-copy{font-size:9px;letter-spacing:.1em;color:rgba(234,229,220,.16)}
+    .f-copy{font-size:11px;letter-spacing:.06em;color:rgba(234,229,220,.42)}
 
     @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-    @media(max-width:640px){nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 16px;flex-wrap:wrap;justify-content:flex-end;max-width:238px}.nav-links a{font-size:10px;letter-spacing:.12em}.logo{font-size:13px;letter-spacing:.22em}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.article-card{padding:28px 24px}}
+    @media(max-width:640px){nav{padding:16px 18px;gap:14px;align-items:flex-start}.nav-links{gap:8px 14px;flex-wrap:wrap;justify-content:flex-end;max-width:246px}.nav-links a{font-size:11px;letter-spacing:.08em}.logo{font-size:14px;letter-spacing:.18em}.page-hero{padding:100px 26px 48px}.sec{padding:60px 26px}.article-card{padding:28px 24px}}
   </style>
 </head>
 <body>
@@ -99,7 +99,7 @@
       </a>
 
       <div class="article-card" style="border-top:.5px solid rgba(184,150,12,.06);background:transparent;padding-top:48px">
-        <span class="ac-num" style="color:rgba(234,229,220,.25)">これから記録していく問い</span>
+        <span class="ac-num" style="color:rgba(234,229,220,.52)">これから記録していく問い</span>
         <ul style="list-style:none;margin-top:20px">
           <li style="font-weight:200;font-size:clamp(13px,1.5vw,16px);color:rgba(234,229,220,.4);line-height:2.4;padding:8px 0;border-bottom:.5px solid rgba(234,229,220,.04)">歩数計では見えないものは何か</li>
           <li style="font-weight:200;font-size:clamp(13px,1.5vw,16px);color:rgba(234,229,220,.4);line-height:2.4;padding:8px 0;border-bottom:.5px solid rgba(234,229,220,.04)">熟練者の足は、なぜ美しいのか</li>
