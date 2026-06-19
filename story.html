@@ -27,6 +27,20 @@
       color: var(--paper);
       font-family: 'Noto Serif JP', serif;
     }
+    h1, h2, h3, p,
+    .hero-sub, .card-title, .card-desc {
+      line-break: strict;
+      text-wrap: pretty;
+    }
+    h1, h2, h3, .hero-title, .card-title {
+      text-wrap: balance;
+    }
+    @supports (word-break: auto-phrase) {
+      h1, h2, h3, p,
+      .hero-sub, .card-title, .card-desc {
+        word-break: auto-phrase;
+      }
+    }
 
     /* Nav（他ページと同一） */
     nav {

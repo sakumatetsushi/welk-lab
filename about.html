@@ -18,6 +18,9 @@
     :root{--gold:#B8960C;--goldD:#8A7412;--ink:#050503;--paper:#EAE5DC}
     html{scroll-behavior:smooth}
     body{background:var(--ink);color:var(--paper);font-family:'Noto Serif JP',serif;overflow-x:hidden}
+    h1,h2,h3,p,.ri-text,.pw{line-break:strict;text-wrap:pretty}
+    h1,h2,h3,.ph-title{text-wrap:balance}
+    @supports (word-break:auto-phrase){h1,h2,h3,p,.ri-text,.pw{word-break:auto-phrase}}
 
     /* ── Nav ── */
     nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:28px 52px}
