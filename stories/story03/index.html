@@ -166,7 +166,7 @@
       .nav-links { gap: 8px 14px; flex-wrap: wrap; justify-content: flex-end; max-width: 246px; }
       .nav-links a { font-size: 11px; letter-spacing: .08em; }
       .logo { font-size: 13px; letter-spacing: .18em; }
-      #story-num { top: 16px; left: 18px; }
+      #story-num { top: 56px; left: 18px; }
       #indicator { bottom: 20px; right: 18px; }
       .nav-btn { padding: 16px 10px; }
       #btn-prev { left: 2px; }
@@ -180,6 +180,12 @@
       .narration-text { font-size: clamp(18px, 4.5vw, 32px); }
       .telop-text { font-size: clamp(20px, 5vw, 34px); }
       .narration-inner { padding: 0 8%; }
+      .photo-img { object-fit: contain; }
+    }
+    @media (max-width: 430px) {
+      .nav-links a:not(.cur) { display: none; }
+      .nav-links { gap: 0; }
+      #story-num { top: 48px; left: 16px; }
     }
   </style>
 </head>
