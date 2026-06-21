@@ -2,194 +2,177 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>まだ会いたい人がいる — Story 03 | WELK 人が歩く研究所</title>
-  <meta name="description" content="WELK 人が歩く研究所のStory 03。まだ会いたい人がいる。歩くことの先にある、信頼を築く時間の物語。">
-  <meta name="theme-color" content="#050503">
-  <meta property="og:type" content="article">
-  <meta property="og:site_name" content="WELK 人が歩く研究所">
-  <meta property="og:title" content="まだ会いたい人がいる — Story 03">
-  <meta property="og:description" content="歩くことの先にある、信頼を築く時間の物語。">
-  <meta name="twitter:card" content="summary">
-  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
+  <title>Story 03 — WELK 人が歩く研究所</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;family=Klee+One:wght@400;600&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&family=IM+Fell+English:ital@0;1&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --gold: #B8960C; --goldL: #C9A84C; --goldD: #8A7412;
+      --gold: #B8960C; --goldL: #C9A84C; --goldD: #6B5A0A;
       --ink: #050503; --paper: #EAE5DC;
     }
-    html { scroll-behavior: smooth; }
-    body {
-      width: 100%;
+    html, body {
+      width: 100%; height: 100%;
       background: var(--ink);
       color: var(--paper);
       font-family: 'Noto Serif JP', serif;
-      overflow-x: hidden;
-    }
-    h1, h2, h3, p, li, .story-lead, .narration {
-      line-break: strict;
-      text-wrap: pretty;
-    }
-    h1, h2, h3, .story-title {
-      text-wrap: balance;
-    }
-    @supports (word-break: auto-phrase) {
-      h1, h2, h3, p, li, .story-lead, .narration {
-        word-break: auto-phrase;
-      }
+      overflow: hidden;
+      user-select: none;
     }
 
-    #bg-canvas {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
+    /* Nav */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; justify-content: space-between; align-items: center;
       padding: 28px 52px; pointer-events: none;
-      background: linear-gradient(rgba(5,5,3,.95), rgba(5,5,3,0));
     }
     .logo {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 15px; letter-spacing: .24em;
-      color: rgba(234,229,220,.52); text-decoration: none;
+      font-size: 14px; letter-spacing: .28em;
+      color: rgba(234,229,220,.38); text-decoration: none;
       pointer-events: all; transition: color .6s;
     }
     .logo:hover { color: rgba(234,229,220,.72); }
     .nav-links { display: flex; gap: 40px; list-style: none; pointer-events: all; }
     .nav-links a {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 12px; letter-spacing: .14em;
-      color: rgba(234,229,220,.46); text-decoration: none; transition: color .5s;
+      font-size: 11px; letter-spacing: .18em;
+      color: rgba(234,229,220,.28); text-decoration: none; transition: color .5s;
     }
     .nav-links a:hover, .nav-links a.cur { color: rgba(234,229,220,.72); }
 
-    main {
-      position: relative;
-      z-index: 1;
+    /* Stage */
+    #stage { position: fixed; inset: 0; }
+
+    /* Slides */
+    .slide {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+      pointer-events: none;
     }
-    .story-hero {
-      min-height: 58vh;
-      display: flex;
-      align-items: flex-end;
-      padding: 120px 52px 72px;
+    .slide.active { opacity: 1; pointer-events: all; }
+
+    /* 写真スライド */
+    .slide-photo { background: var(--ink); }
+    .photo-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
     }
-    .story-head {
-      width: min(720px, 100%);
-      margin: 0 auto;
+    .photo-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 20% 5% 6%;
+      background: linear-gradient(to top, rgba(5,5,3,.85) 0%, rgba(5,5,3,.4) 50%, transparent 100%);
+      text-align: center;
+      z-index: 10;
+      opacity: 0;
     }
-    .story-num {
-      display: block;
-      margin-bottom: 20px;
-      font-family: 'IM Fell English', serif;
-      font-style: italic;
-      font-size: 12px;
-      letter-spacing: .28em;
-      color: var(--goldD);
+    .slide.active .photo-caption {
+      animation: fadeIn 2s ease 1s both;
     }
-    .story-title {
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .caption-scene {
       font-family: 'Klee One', 'Noto Serif JP', serif;
       font-weight: 400;
-      font-size: clamp(28px, 4vw, 48px);
-      line-height: 1.55;
-      letter-spacing: .12em;
-      color: rgba(234,229,220,.86);
-    }
-    .story-lead {
-      margin-top: 28px;
-      font-weight: 200;
-      font-size: clamp(14px, 1.45vw, 16px);
-      line-height: 2.2;
-      letter-spacing: .08em;
-      color: rgba(234,229,220,.54);
+      font-size: clamp(26px, 3.9vw, 57px);
+      line-height: 1.8;
+      color: rgba(234,229,220,.9);
+      letter-spacing: .18em;
     }
 
-    .story-body {
-      width: min(920px, 100%);
-      margin: 0 auto;
-      padding: 0 52px 132px;
+    /* ナレーション */
+    .slide-narration, .slide-telop {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--ink);
     }
-    .story-board {
-      width: 100%;
-      margin: 0 0 72px;
+    .narration-inner { width: 100%; padding: 0 10%; text-align: center; }
+    .narration-text, .telop-text {
+      display: block; width: 100%;
+      word-break: auto-phrase; overflow-wrap: anywhere;
+      font-family: 'Klee One', 'Noto Serif JP', serif;
+      font-weight: 400;
+      font-size: clamp(22px, 3.2vw, 42px);
+      line-height: 2.2; letter-spacing: .08em;
+      color: rgba(234,229,220,.82);
+      opacity: 0;
     }
-    .story-board img {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      border: .5px solid rgba(234,229,220,.16);
-    }
-    .narration {
-      width: min(620px, 100%);
-      margin: 0 auto;
-      font-weight: 200;
-      font-size: clamp(15px, 1.6vw, 18px);
-      line-height: 2.5;
-      letter-spacing: .08em;
-      color: rgba(234,229,220,.72);
-    }
-    .narration p + p { margin-top: 1.4em; }
-    .story-back {
-      display: inline-block;
-      margin-top: 64px;
-      font-family: 'IM Fell English', serif;
-      font-style: italic;
-      font-size: 13px;
-      letter-spacing: .12em;
-      color: rgba(184,150,12,.78);
-      text-decoration: none;
-      border-bottom: .5px solid rgba(184,150,12,.38);
-      padding-bottom: 2px;
+    .telop-text { font-size: clamp(24px, 3.5vw, 46px); letter-spacing: .12em; }
+    .slide.active .narration-text,
+    .slide.active .telop-text {
+      animation: fadeIn 2s ease .4s both;
     }
 
-    footer {
-      position: relative; z-index: 1;
-      padding: 44px 52px; text-align: center;
-      border-top: .5px solid rgba(184,150,12,.06);
+    /* ロゴスライド */
+    .slide-logo {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--ink); gap: 20px;
     }
-    .f-logo {
+    .logo-welk {
       font-family: 'IM Fell English', serif; font-style: italic;
-      font-size: 13px; letter-spacing: .28em;
-      color: var(--goldD); margin-bottom: 10px;
+      font-size: clamp(28px, 5vw, 60px); letter-spacing: .38em;
+      color: var(--goldD); opacity: 0;
     }
-    .f-copy { font-size: 11px; letter-spacing: .06em; color: rgba(234,229,220,.42); }
+    .logo-tagline {
+      font-weight: 200; font-size: 11px; letter-spacing: .22em;
+      color: rgba(234,229,220,.28); opacity: 0;
+    }
+    .slide.active .logo-welk { animation: fadeIn 1.6s ease .6s both; }
+    .slide.active .logo-tagline { animation: fadeIn 1.6s ease 1.2s both; }
 
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-      }
-      #bg-canvas { display: none !important; }
+    /* UI */
+    #story-num {
+      position: fixed; top: 28px; left: 52px; z-index: 200;
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 9px; letter-spacing: .38em; color: var(--goldD);
+      transition: opacity .6s;
+    }
+    #indicator {
+      position: fixed; bottom: 36px; right: 52px; z-index: 200;
+      font-family: 'IM Fell English', serif; font-style: italic;
+      font-size: 9px; letter-spacing: .22em; color: rgba(234,229,220,.25);
+    }
+    .nav-btn {
+      position: fixed; top: 50%; z-index: 200;
+      transform: translateY(-50%);
+      background: none; border: none; cursor: pointer;
+      padding: 20px 24px; color: rgba(184,150,12,.28);
+      transition: color .4s; outline: none;
+    }
+    .nav-btn:hover { color: rgba(184,150,12,.72); }
+    #btn-prev { left: 8px; }
+    #btn-next { right: 8px; }
+    .nav-btn svg { display: block; width: 22px; height: 22px; }
+    #progress-bar {
+      position: fixed; bottom: 0; left: 0;
+      height: 1px; background: var(--goldD);
+      width: 0%; z-index: 200; opacity: .4;
+      transition: width linear;
+    }
+    #bg-canvas {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
     }
 
     @media (max-width: 640px) {
-      nav { padding: 16px 18px; gap: 14px; align-items: flex-start; }
-      .nav-links { gap: 8px 14px; flex-wrap: wrap; justify-content: flex-end; max-width: 246px; }
-      .nav-links a { font-size: 11px; letter-spacing: .08em; }
-      .logo { font-size: 14px; letter-spacing: .18em; }
-      #bg-canvas { filter: brightness(1.28) contrast(1.08); }
-      .story-hero { min-height: 48vh; padding: 104px 26px 56px; }
-      .story-body { padding: 0 20px 100px; }
-      .story-board { margin-bottom: 52px; }
-      .narration { line-height: 2.25; }
+      nav { padding: 18px 22px; }
+      .nav-links { gap: 20px; }
+      #story-num { top: 18px; left: 22px; }
+      #indicator { bottom: 24px; right: 22px; }
     }
   </style>
 </head>
 <body>
 
-<canvas id="bg-canvas" aria-hidden="true"></canvas>
+<canvas id="bg-canvas"></canvas>
 
-<nav aria-label="Primary">
+<nav>
   <a class="logo" href="../../index.html">WELK</a>
   <ul class="nav-links">
     <li><a href="../../about.html">About</a></li>
@@ -200,95 +183,408 @@
   </ul>
 </nav>
 
-<main>
-  <section class="story-hero">
-    <div class="story-head">
-      <span class="story-num">STORY 03</span>
-      <h1 class="story-title">まだ会いたい人がいる</h1>
-      <p class="story-lead">歩くことの先に、信頼を築く時間がある。</p>
-    </div>
-  </section>
+<div id="story-num">STORY 03</div>
+<div id="indicator">1 / 30</div>
 
-  <section class="story-body">
-    <div class="story-board">
-      <img src="01.png" alt="まだ会いたい人がいる 1">
-      <img src="02.png" alt="まだ会いたい人がいる 2">
-      <img src="03.png" alt="まだ会いたい人がいる 3">
-      <img src="04.png" alt="まだ会いたい人がいる 4">
-      <img src="05.png" alt="まだ会いたい人がいる 5">
-      <img src="06.png" alt="まだ会いたい人がいる 6">
-      <img src="07.png" alt="まだ会いたい人がいる 7">
-      <img src="08.png" alt="まだ会いたい人がいる 8">
-      <img src="09.png" alt="まだ会いたい人がいる 9">
-      <img src="10.png" alt="まだ会いたい人がいる 10">
-      <img src="11.png" alt="まだ会いたい人がいる 11">
-      <img src="12.png" alt="まだ会いたい人がいる 12">
-      <img src="13.png" alt="まだ会いたい人がいる 13">
-      <img src="14.png" alt="まだ会いたい人がいる 14">
-      <img src="15.png" alt="まだ会いたい人がいる 15">
-      <img src="16.png" alt="まだ会いたい人がいる 16">
-      <img src="17.png" alt="まだ会いたい人がいる 17">
-      <img src="18.png" alt="まだ会いたい人がいる 18">
-      <img src="19.png" alt="まだ会いたい人がいる 19">
-      <img src="20.png" alt="まだ会いたい人がいる 20">
-      <img src="21.png" alt="まだ会いたい人がいる 21">
-      <img src="25.png" alt="まだ会いたい人がいる 25">
-      <img src="26.png" alt="まだ会いたい人がいる 26">
-      <img src="27.png" alt="まだ会いたい人がいる 27">
-      <img src="28.png" alt="まだ会いたい人がいる 28">
-    </div>
+<button id="btn-prev" class="nav-btn" aria-label="前へ">
+  <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.2">
+    <polyline points="14,4 8,11 14,18"/>
+  </svg>
+</button>
+<button id="btn-next" class="nav-btn" aria-label="次へ">
+  <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.2">
+    <polyline points="8,4 14,11 8,18"/>
+  </svg>
+</button>
 
-    <div class="narration">
-      <p>困っているわけじゃない。<br>まだ働ける。</p>
-      <p>それでも、<br>身体は少しずつ変わり始める。</p>
-      <p>本当に失いたくないのは、<br>歩くことじゃない。</p>
-      <p>信頼を築くこと。<br>会いに行くこと。<br>相談されること。<br>関係をつなぐこと。</p>
-      <p>まだ会いたい人がいる。</p>
-      <a class="story-back" href="../../story.html">Back to Story</a>
-    </div>
-  </section>
-</main>
+<div id="progress-bar"></div>
 
-<footer>
-  <div class="f-logo">WELK</div>
-  <p class="f-copy">© 2026 一般社団法人WELK 人が歩く研究所 · Osaka, Japan</p>
-</footer>
+<div id="stage">
+
+  <!-- 01 写真：まだ会いたい人がいる（タイトル） -->
+  <div class="slide slide-photo active" data-index="0">
+    <img class="photo-img" src="01.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">まだ会いたい人がいる</p>
+    </div>
+  </div>
+
+  <!-- 02 写真：朝。 -->
+  <div class="slide slide-photo" data-index="1">
+    <img class="photo-img" src="02.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">朝。</p>
+    </div>
+  </div>
+
+  <!-- 03 写真：顧客リストを見る。 -->
+  <div class="slide slide-photo" data-index="2">
+    <img class="photo-img" src="03.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">顧客リストを見る。</p>
+    </div>
+  </div>
+
+  <!-- 04 写真：以前なら何件でも回った。 -->
+  <div class="slide slide-photo" data-index="3">
+    <img class="photo-img" src="04.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">以前なら何件でも回った。</p>
+    </div>
+  </div>
+
+  <!-- 05 写真：しかし今日は少し膝を気にする。 -->
+  <div class="slide slide-photo" data-index="4">
+    <img class="photo-img" src="05.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">しかし今日は<br>少し膝を気にする。</p>
+    </div>
+  </div>
+
+  <!-- 06 写真：階段のあるビルを見る。 -->
+  <div class="slide slide-photo" data-index="5">
+    <img class="photo-img" src="06.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">階段のあるビルを見る。</p>
+    </div>
+  </div>
+
+  <!-- 07 写真：深呼吸する。 -->
+  <div class="slide slide-photo" data-index="6">
+    <img class="photo-img" src="07.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">深呼吸する。</p>
+    </div>
+  </div>
+
+  <!-- 08 写真：男性は歩き出す。 -->
+  <div class="slide slide-photo" data-index="7">
+    <img class="photo-img" src="08.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">男性は歩き出す。</p>
+    </div>
+  </div>
+
+  <!-- 09 写真：場面が変わる。 -->
+  <div class="slide slide-photo" data-index="8">
+    <img class="photo-img" src="09.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">場面が変わる。</p>
+    </div>
+  </div>
+
+  <!-- 10 写真：商談室。 -->
+  <div class="slide slide-photo" data-index="9">
+    <img class="photo-img" src="10.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">商談室。</p>
+    </div>
+  </div>
+
+  <!-- 11 写真：若い担当者が待っている。 -->
+  <div class="slide slide-photo" data-index="10">
+    <img class="photo-img" src="11.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">若い担当者が待っている。</p>
+    </div>
+  </div>
+
+  <!-- 12 写真：男性は近づく。 -->
+  <div class="slide slide-photo" data-index="11">
+    <img class="photo-img" src="12.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">男性は近づく。</p>
+    </div>
+  </div>
+
+  <!-- 13 写真：一歩目を出す。 -->
+  <div class="slide slide-photo" data-index="12">
+    <img class="photo-img" src="13.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">一歩目を出す。</p>
+    </div>
+  </div>
+
+  <!-- 14 写真：少したためらう。 -->
+  <div class="slide slide-photo" data-index="13">
+    <img class="photo-img" src="14.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">少したためらう。</p>
+    </div>
+  </div>
+
+  <!-- 15 写真：それでも笑顔を作る。 -->
+  <div class="slide slide-photo" data-index="14">
+    <img class="photo-img" src="15.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">それでも笑顔を作る。</p>
+    </div>
+  </div>
+
+  <!-- 16 写真：場面が変わる。 -->
+  <div class="slide slide-photo" data-index="15">
+    <img class="photo-img" src="16.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">場面が変わる。</p>
+    </div>
+  </div>
+
+  <!-- 17 写真：商談後。 -->
+  <div class="slide slide-photo" data-index="16">
+    <img class="photo-img" src="17.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">商談後。</p>
+    </div>
+  </div>
+
+  <!-- 18 写真：担当者が頭を下げる。 -->
+  <div class="slide slide-photo" data-index="17">
+    <img class="photo-img" src="18.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">担当者が頭を下げる。</p>
+    </div>
+  </div>
+
+  <!-- 19 写真：男性も頭を下げる。 -->
+  <div class="slide slide-photo" data-index="18">
+    <img class="photo-img" src="19.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">男性も頭を下げる。</p>
+    </div>
+  </div>
+
+  <!-- 20 写真：息を整える。 -->
+  <div class="slide slide-photo" data-index="19">
+    <img class="photo-img" src="20.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">息を整える。</p>
+    </div>
+  </div>
+
+  <!-- 21 写真：そして握手する。 -->
+  <div class="slide slide-photo" data-index="20">
+    <img class="photo-img" src="21.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">そして握手する。</p>
+    </div>
+  </div>
+
+  <!-- 22 ナレーション -->
+  <div class="slide slide-narration" data-index="21">
+    <div class="narration-inner">
+      <p class="narration-text">困っているわけじゃない。<br>まだ働ける。<br>それでも、<br>身体は少しずつ変わり始める。</p>
+    </div>
+  </div>
+
+  <!-- 23 暗転 -->
+  <div class="slide slide-narration" data-index="22">
+    <div class="narration-inner">
+    </div>
+  </div>
+
+  <!-- 24 ナレーション -->
+  <div class="slide slide-narration" data-index="23">
+    <div class="narration-inner">
+      <p class="narration-text">本当に失いたくないのは、<br>歩くことじゃない。</p>
+    </div>
+  </div>
+
+  <!-- 25 ナレーション -->
+  <div class="slide slide-narration" data-index="24">
+    <div class="narration-inner">
+      <p class="narration-text">信頼を築くこと。</p>
+    </div>
+  </div>
+
+  <!-- 26 ナレーション -->
+  <div class="slide slide-narration" data-index="25">
+    <div class="narration-inner">
+      <p class="narration-text">会いに行くこと。</p>
+    </div>
+  </div>
+
+  <!-- 27 写真：相談されること。 -->
+  <div class="slide slide-photo" data-index="26">
+    <img class="photo-img" src="27.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">相談されること。</p>
+    </div>
+  </div>
+
+  <!-- 28 写真：関係をつなぐこと。 -->
+  <div class="slide slide-photo" data-index="27">
+    <img class="photo-img" src="28.png" alt="">
+    <div class="photo-caption">
+      <p class="caption-scene">関係をつなぐこと。</p>
+    </div>
+  </div>
+
+  <!-- 29 テロップ -->
+  <div class="slide slide-telop" data-index="28">
+    <p class="telop-text">まだ会いたい<br>人がいる。</p>
+  </div>
+
+  <!-- 30 WELKロゴ -->
+  <div class="slide slide-logo" data-index="29">
+    <div class="logo-welk">WELK</div>
+    <div class="logo-tagline">歩くことから始まるイノチの跳躍</div>
+  </div>
+
+</div><!-- /stage -->
 
 <script>
+
 (() => {
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const cv = document.getElementById('bg-canvas');
-  const ctx = cv.getContext('2d');
+  /* ── 背景Canvas（静かな粒子、写真スライド以外で薄く浮かぶ） ── */
+  const cv  = document.getElementById('bg-canvas');
+  const bgCtx = cv.getContext('2d');
   let W, H;
   const resize = () => { W = cv.width = innerWidth; H = cv.height = innerHeight; };
   resize(); addEventListener('resize', resize);
-  if (reduceMotion) return;
 
-  const ptcls = Array.from({ length: 38 }, () => ({
+  const ptcls = Array.from({ length: 40 }, () => ({
     x: Math.random(), y: Math.random(),
-    vx: (Math.random() - .5) * .00005,
-    vy: -(Math.random() * .000025),
-    r: .3 + Math.random() * .8,
-    phase: Math.random() * Math.PI * 2,
-    alpha: .03 + Math.random() * .10,
+    vx: (Math.random()-.5)*.00005, vy: -(Math.random()*.000025),
+    r: .3 + Math.random()*.8,
+    phase: Math.random()*Math.PI*2,
+    alpha: .03 + Math.random()*.10,
   }));
 
-  const loop = (t) => {
-    requestAnimationFrame(loop);
-    ctx.clearRect(0, 0, W, H);
+  let bgOpacity = 0;
+  const bgLoop = (t) => {
+    requestAnimationFrame(bgLoop);
+    bgCtx.clearRect(0, 0, W, H);
     for (const p of ptcls) {
       p.x = (p.x + p.vx + 1) % 1;
       p.y = (p.y + p.vy + 1) % 1;
-      const a = p.alpha * 0.5 * (.3 + Math.sin(t * .00045 + p.phase) * .7);
+      const a = p.alpha * bgOpacity * (.3 + Math.sin(t*.00045+p.phase)*.7);
       if (a < 0.002) continue;
-      ctx.beginPath();
-      ctx.arc(p.x * W, p.y * H, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(184,150,12,${a})`;
-      ctx.fill();
+      bgCtx.beginPath();
+      bgCtx.arc(p.x*W, p.y*H, p.r, 0, Math.PI*2);
+      bgCtx.fillStyle = `rgba(184,150,12,${a})`;
+      bgCtx.fill();
     }
   };
-  requestAnimationFrame(loop);
+  requestAnimationFrame(bgLoop);
+
+  /* ── スライドデータ ── */
+  const slides      = Array.from(document.querySelectorAll('.slide'));
+  const TOTAL       = slides.length;
+  const storyNumEl  = document.getElementById('story-num');
+  const indicatorEl = document.getElementById('indicator');
+  const progressBar = document.getElementById('progress-bar');
+  const btnPrev     = document.getElementById('btn-prev');
+  const btnNext     = document.getElementById('btn-next');
+
+  const DURATIONS = slides.map(s => {
+    if (s.classList.contains('slide-narration')) return 4000;
+    if (s.classList.contains('slide-telop'))     return 4000;
+    if (s.classList.contains('slide-logo'))      return 4000;
+    return 4000; // photo
+  });
+
+  let current     = 0;
+  let autoTimer   = null;
+  let isAnimating = false;
+  let userPaused  = false;
+
+  /* UI更新 */
+  const updateUI = (idx) => {
+    const slide = slides[idx];
+    const isPhoto = slide.classList.contains('slide-photo');
+    bgOpacity = isPhoto ? 0 : 0.7;
+    storyNumEl.textContent = 'STORY 03';
+    storyNumEl.style.opacity = '1';
+    indicatorEl.textContent = `${idx + 1} / ${TOTAL}`;
+  };
+
+  /* 進行バー */
+  const startProgress = (dur) => {
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      progressBar.style.transition = `width ${dur}ms linear`;
+      progressBar.style.width = '100%';
+    }));
+  };
+  const stopProgress = () => {
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+  };
+
+  /* 自動再生 */
+  const startAuto = () => {
+    clearTimeout(autoTimer);
+    const dur = DURATIONS[current];
+    startProgress(dur);
+    autoTimer = setTimeout(() => {
+      goTo((current + 1) % TOTAL);
+    }, dur);
+  };
+  const stopAuto = () => {
+    clearTimeout(autoTimer);
+    stopProgress();
+    userPaused = true;
+  };
+
+  /* スライド遷移 */
+  const goTo = (idx, userAction = false) => {
+    if (isAnimating || idx === current) return;
+    isAnimating = true;
+
+    if (userAction) stopAuto();
+
+    slides[current].classList.remove('active');
+    const nextIdx = idx;
+    setTimeout(() => {
+      slides[nextIdx].classList.add('active');
+      current = nextIdx;
+      updateUI(nextIdx);
+    }, 1000);
+
+    setTimeout(() => {
+      isAnimating = false;
+      if (userAction) {
+        clearTimeout(autoTimer);
+        autoTimer = setTimeout(startAuto, 3000);
+      } else {
+        startAuto();
+      }
+    }, 1000);
+  };
+
+  /* 初期化 */
+  updateUI(0);
+  startAuto();
+
+  /* ボタン */
+  btnPrev.addEventListener('click', () => goTo((current - 1 + TOTAL) % TOTAL, true));
+  btnNext.addEventListener('click', () => goTo((current + 1) % TOTAL, true));
+
+  /* キーボード */
+  addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')
+      goTo((current + 1) % TOTAL, true);
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp')
+      goTo((current - 1 + TOTAL) % TOTAL, true);
+  });
+
+  /* スワイプ */
+  let tx = 0, ty = 0;
+  addEventListener('touchstart', e => {
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+  }, { passive: true });
+  addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    const dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+      if (dx < 0) goTo((current + 1) % TOTAL, true);
+      else         goTo((current - 1 + TOTAL) % TOTAL, true);
+    }
+  }, { passive: true });
+
 })();
+
 </script>
 </body>
 </html>
