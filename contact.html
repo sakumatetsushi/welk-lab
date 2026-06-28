@@ -141,8 +141,7 @@
     <p class="invite-body reveal">
       あなたの歩き方のデータが、研究を前に進めます。計測はすべて非侵襲で、<br>
       装置は膝下に小型センサーを巻くだけです。得られたデータは研究目的にのみ使用し、<br>
-      個人を特定できる形では公開しません。ご希望の方には歩行データのフィードバックをお伝えします。<br>
-      歩くことの先にある生活や仕事、外出を続けるために、身体の変化を一緒に見つめていきます。
+      個人を特定できる形では公開しません。ご希望の方には歩行データのフィードバックをお伝えします。
     </p>
 
     <h3 class="sec-label reveal">参加をご検討いただきたい方</h3>
@@ -163,35 +162,16 @@
     </div>
 
     <h2 class="sec-label reveal">ご連絡フォーム</h2>
-    <!-- 公開前チェック: mailtoフォームは環境依存のため、スマホ・PC・Chrome・Safariで送信テストする。現時点では外部フォームへ切り替えない。 -->
-    <form class="reveal" action="mailto:info@welk-lab.jp" method="post" enctype="text/plain">
-      <div class="form-row">
-        <label class="form-label" for="contact-type">お問い合わせの種類</label>
-        <select class="form-input" id="contact-type" name="お問い合わせの種類">
-          <option value="研究への参加">研究への参加</option>
-          <option value="連携・共同研究・実証の相談">連携・共同研究・実証の相談</option>
-          <option value="その他">その他</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="contact-name">お名前</label>
-        <input class="form-input" id="contact-name" name="お名前" type="text" placeholder="山田 太郎" autocomplete="name" required>
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="contact-email">メールアドレス</label>
-        <input class="form-input" id="contact-email" name="メールアドレス" type="email" placeholder="example@email.com" autocomplete="email" required>
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="contact-work">ご職業・ご所属・これまでのお仕事（任意）</label>
-        <input class="form-input" id="contact-work" name="ご職業・ご所属・これまでのお仕事" type="text" placeholder="例：建設業、介護職、製造業など">
-      </div>
-      <div class="form-row">
-        <label class="form-label" for="contact-message">一言メッセージ（任意）</label>
-        <textarea class="form-textarea" id="contact-message" name="メッセージ" placeholder="参加のきっかけ、連携のご相談、気になっていることなど、自由にどうぞ。"></textarea>
-      </div>
-      <button class="form-submit" type="submit">内容を送る</button>
-      <p class="form-note">いただいた情報は、研究活動や連携相談へのご返信にのみ使用します。</p>
-    </form>
+    <div class="reveal">
+      <p class="invite-body" style="color:rgba(234,229,220,.56);font-size:clamp(13px,1.4vw,15px);line-height:2.2;margin-bottom:36px">
+        研究への参加、連携のご相談、その他のお問い合わせは、<br>
+        以下のフォームからお送りください。<br>
+        いただいた内容には info@welk-lab.jp よりご返信いたします。
+      </p>
+      <!-- TODO: GoogleフォームURL確定後に差し替え -->
+      <a class="form-submit" href="TODO_GOOGLE_FORM_URL" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;text-decoration:none">お問い合わせフォームを開く</a>
+      <p class="form-note" style="margin-top:16px">フォームが開けない場合は <a href="mailto:info@welk-lab.jp" style="color:rgba(184,150,12,.6);text-decoration:none;border-bottom:.5px solid rgba(184,150,12,.25)">info@welk-lab.jp</a> へ直接ご連絡ください。</p>
+    </div>
   </div>
 </section>
 
@@ -201,7 +181,6 @@
     <h2 class="sec-label reveal">専門家・企業・地域との連携</h2>
     <p class="invite-body reveal" style="color:rgba(234,229,220,.62);font-size:clamp(14px,1.5vw,16px);line-height:2.4;margin-bottom:44px">
       歩行、身体、働くこと、地域での外出、ウェアラブル計測、実証研究。<br>
-      その先にある生活や仕事、人との関わりをどう支えるか。<br>
       まだ形になる前の問いからでも構いません。<br>
       WELKは、その問いをともに見つめるところから始めたいと考えています。
     </p>
