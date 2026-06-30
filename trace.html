@@ -4,14 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trace — WELK 人が歩く研究所</title>
-  <meta name="description" content="WELKが歩行に残る左右差、着地の衝撃、推進力の変化を静かに見つめる観察ページです。">
-  <meta name="theme-color" content="#050503">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="WELK 人が歩く研究所">
+  <meta name="description" content="身体が残した小さな差異を見つめる観察記録。左右差、着地、推進の変化を静かに読み取る。">
+  <link rel="canonical" href="https://sakumatetsushi.github.io/welk-lab/trace.html">
   <meta property="og:title" content="Trace — WELK 人が歩く研究所">
-  <meta property="og:description" content="WELKが歩行に残る左右差、着地の衝撃、推進力の変化を静かに見つめる観察ページです。">
-  <meta name="twitter:card" content="summary">
-  <!-- 公開前チェック: canonical / og:url / og:image / favicon / apple-touch-icon は公開URL・画像確定後に追加する -->
+  <meta property="og:description" content="身体が残した小さな差異を見つめる観察記録。左右差、着地、推進の変化を静かに読み取る。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sakumatetsushi.github.io/welk-lab/trace.html">
+  <meta property="og:image" content="https://sakumatetsushi.github.io/welk-lab/assets/ogp.png">
+  <meta property="og:site_name" content="WELK 人が歩く研究所">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Trace — WELK 人が歩く研究所">
+  <meta name="twitter:description" content="身体が残した小さな差異を見つめる観察記録。左右差、着地、推進の変化を静かに読み取る。">
+  <meta name="twitter:image" content="https://sakumatetsushi.github.io/welk-lab/assets/ogp.png">
+  <meta name="theme-color" content="#050503">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300&amp;family=IM+Fell+English:ital@0;1&amp;display=swap" rel="stylesheet">
@@ -453,13 +458,13 @@ class ObsSection {
         noiseAmp:    0.04,
         noiseScale:  0.001,
         baseSpeed:   1.0, speedJitter: 0.12,
-        maxLen: 9999, lineAlpha: 0.72, lineWidth: 5.0,
+        maxLen: 9999, lineAlpha: 0.72, lineWidth: 2.5,
         color: [220, 80, 140],  // ピンク
       });
       lineB._phraseDurBase = 700;
       lineB._phraseTurnAmp = 1.0;
-      lineB._widthBase     = 5.0;
-      lineB._widthAmp      = 2.8;
+      lineB._widthBase     = 2.5;
+      lineB._widthAmp      = 1.8;
       lineB._widthFreq     = 0.67;
       lineB._widthPhase    = Math.PI;
       lineB._follower      = lineA;
