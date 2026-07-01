@@ -91,7 +91,7 @@
     .nav-links {
       display: flex; gap: 40px; list-style: none;
       opacity: 0; transform: translateY(-5px);
-      transition: opacity 1.4s ease, transform 1.4s ease;
+      transition: opacity 0.5s ease, transform 0.5s ease;
       pointer-events: none;
     }
     .nav-links.show { opacity: 1; transform: none; pointer-events: auto; }
@@ -114,7 +114,7 @@
     .hero-text {
       text-align: center;
       opacity: 0;
-      animation: riseIn 3s cubic-bezier(.16,1,.3,1) 1s forwards;
+      animation: riseIn 0.7s cubic-bezier(.16,1,.3,1) 0s forwards;
       /* drift applied via JS */
       will-change: transform;
     }
@@ -132,22 +132,22 @@
     .line {
       display: block; opacity: 0;
       filter: blur(10px) brightness(.6);
-      animation: emerge 2.4s cubic-bezier(.16,1,.3,1) forwards;
+      animation: emerge 0.5s cubic-bezier(.16,1,.3,1) forwards;
     }
-    .line:nth-child(1) { animation-delay: 1.5s; }
-    .line:nth-child(2) { animation-delay: 2.3s; }
+    .line:nth-child(1) { animation-delay: 0s; }
+    .line:nth-child(2) { animation-delay: 0.15s; }
     .hero-en {
       display: block; margin-top: 30px;
       font-family: 'IM Fell English', serif; font-style: italic;
       font-size: 12px; letter-spacing: .1em;
       color: rgba(234,229,220,.34);
-      opacity: 0; animation: fadeOnly 2s ease 3.4s forwards;
+      opacity: 0; animation: fadeOnly 0.5s ease 0.3s forwards;
     }
     .scroll-ind {
       position: absolute; bottom: 36px; left: 50%;
       transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: 10px;
-      opacity: 0; animation: fadeOnly 1.5s ease 4s forwards;
+      opacity: 0; animation: fadeOnly 0.5s ease 1.2s forwards;
     }
     .scroll-ind span {
       font-family: 'IM Fell English', serif; font-style: italic;
@@ -205,7 +205,7 @@
       width: .5px; height: 68px;
       background: linear-gradient(to bottom, transparent, var(--goldD), transparent);
       margin: 52px auto;
-      opacity: 0; transition: opacity 2.2s ease;
+      opacity: 0; transition: opacity 0.5s ease;
     }
     .divider.up { opacity: .55; }
 
@@ -279,7 +279,7 @@
       color: var(--goldD); display: block;
       text-align: center;
       margin-bottom: 58px;
-      opacity: 0; transition: opacity 2.2s ease;
+      opacity: 0; transition: opacity 0.5s ease;
     }
     .section-eye.up { opacity: 1; }
 
@@ -319,7 +319,7 @@
       color: rgba(184,150,12,.72);
       background: rgba(184,150,12,.03);
     }
-    .thought { opacity: 0; transform: translateY(10px); transition: opacity 1.8s ease, transform 1.8s ease; }
+    .thought { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
     .thought.up { opacity: 1; transform: none; }
 
     @media (max-width: 640px) {
@@ -405,6 +405,7 @@
       <span class="line">世界に触れることだった。</span>
     </h1>
     <span class="hero-en">— Institute for Human Gait</span>
+    <span class="hero-en" style="margin-top:12px;font-family:'Noto Serif JP',serif;font-style:normal;font-weight:200;font-size:clamp(11px,1.2vw,13px);letter-spacing:.08em;color:rgba(234,229,220,.3);animation-delay:0.5s">歩行動態解析 · ウェアラブル計測 · 実証研究</span>
   </div>
   <div class="scroll-ind">
     <span>scroll</span>
@@ -420,7 +421,7 @@
       <!-- 間:0ms  duration:3.2s  drift:ゆっくり -->
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="7.5s" data-dy0="0px"    data-dy1="0.28px"  data-dy2="-0.18px">人は、</span>
       <!-- 間:1100ms  duration:3.8s  より深く -->
-      <span class="word-line" data-delay="1100" data-dur="3800" data-drift="9.2s" data-dy0="-0.1px" data-dy1="0.22px"  data-dy2="0.12px">歩きながら考えてきた。</span>
+      <span class="word-line" data-delay="350" data-dur="3800" data-drift="9.2s" data-dy0="-0.1px" data-dy1="0.22px"  data-dy2="0.12px">歩きながら考えてきた。</span>
     </div>
 
     <div class="divider"></div>
@@ -429,11 +430,11 @@
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.0s" data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.15px">歩くことは、</span>
       <!-- 労働：短い間 -->
-      <span class="word-line" data-delay="900"  data-dur="3400" data-drift="7.2s" data-dy0="0.1px"  data-dy1="-0.18px" data-dy2="0.08px">労働であり、</span>
+      <span class="word-line" data-delay="300"  data-dur="3400" data-drift="7.2s" data-dy0="0.1px"  data-dy1="-0.18px" data-dy2="0.08px">労働であり、</span>
       <!-- 祈り：少し長い間 -->
-      <span class="word-line" data-delay="2100" data-dur="3600" data-drift="10s"  data-dy0="-0.1px" data-dy1="0.3px"   data-dy2="-0.1px">祈りであり、</span>
+      <span class="word-line" data-delay="650" data-dur="3600" data-drift="10s"  data-dy0="-0.1px" data-dy1="0.3px"   data-dy2="-0.1px">祈りであり、</span>
       <!-- 自由：最も重い。長い間、深く、遅く -->
-      <span class="word-line heavy" data-delay="3800" data-dur="4800" data-drift="12s"  data-dy0="0px"    data-dy1="0.18px"  data-dy2="-0.25px">自由だった。</span>
+      <span class="word-line heavy" data-delay="1100" data-dur="4800" data-drift="12s"  data-dy0="0px"    data-dy1="0.18px"  data-dy2="-0.25px">自由だった。</span>
     </div>
 
     <div class="divider"></div>
@@ -441,9 +442,9 @@
     <!-- ブロック3：身体は、ただ移動するための、装置ではない。 -->
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8.5s" data-dy0="0.05px" data-dy1="-0.2px"  data-dy2="0.15px">身体は、</span>
-      <span class="word-line" data-delay="1200" data-dur="3500" data-drift="9.8s" data-dy0="-0.1px" data-dy1="0.25px"  data-dy2="-0.08px">ただ移動するための</span>
+      <span class="word-line" data-delay="400" data-dur="3500" data-drift="9.8s" data-dy0="-0.1px" data-dy1="0.25px"  data-dy2="-0.08px">ただ移動するための</span>
       <!-- 装置ではない：重い否定。沈み込むように -->
-      <span class="word-line heavy" data-delay="3000" data-dur="4500" data-drift="11s"  data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.3px">装置ではない。</span>
+      <span class="word-line heavy" data-delay="900" data-dur="4500" data-drift="11s"  data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.3px">装置ではない。</span>
     </div>
 
   </div>
@@ -460,30 +461,30 @@
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8s"  data-dy0="0px"    data-dy1="0.22px"  data-dy2="-0.15px">WELKは、</span>
-      <span class="word-line" data-delay="1200" data-dur="3800" data-drift="10s" data-dy0="-0.08px" data-dy1="0.2px"  data-dy2="0.1px">歩行を測ることから始める。</span>
+      <span class="word-line" data-delay="400" data-dur="3800" data-drift="10s" data-dy0="-0.08px" data-dy1="0.2px"  data-dy2="0.1px">歩行を測ることから始める。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.5s" data-dy0="0.06px"  data-dy1="-0.15px" data-dy2="0.1px">けれど、</span>
-      <span class="word-line heavy" data-delay="1400" data-dur="4400" data-drift="12s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.22px">測ることで終わる研究所ではない。</span>
+      <span class="word-line heavy" data-delay="450" data-dur="4400" data-drift="12s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.22px">測ることで終わる研究所ではない。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.2s" data-dy0="0.05px"  data-dy1="-0.18px" data-dy2="0.12px">歩いた人が、</span>
-      <span class="word-line" data-delay="1100" data-dur="3500" data-drift="9.5s" data-dy0="-0.1px"  data-dy1="0.2px"   data-dy2="-0.08px">自分の身体に起きていることを受け取り、</span>
-      <span class="word-line" data-delay="2400" data-dur="3800" data-drift="10s"  data-dy0="0px"     data-dy1="0.18px"  data-dy2="-0.15px">その先の生活や挑戦へ</span>
-      <span class="word-line heavy" data-delay="3800" data-dur="4600" data-drift="13s" data-dy0="0px"    data-dy1="0.12px" data-dy2="-0.2px">戻していくための研究所である。</span>
+      <span class="word-line" data-delay="350" data-dur="3500" data-drift="9.5s" data-dy0="-0.1px"  data-dy1="0.2px"   data-dy2="-0.08px">自分の身体に起きていることを受け取り、</span>
+      <span class="word-line" data-delay="750" data-dur="3800" data-drift="10s"  data-dy0="0px"     data-dy1="0.18px"  data-dy2="-0.15px">その先の生活や挑戦へ</span>
+      <span class="word-line heavy" data-delay="1100" data-dur="4600" data-drift="13s" data-dy0="0px"    data-dy1="0.12px" data-dy2="-0.2px">戻していくための研究所である。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="2800" data-drift="7.5s" data-dy0="0.08px"  data-dy1="-0.15px" data-dy2="0.1px">歩行動態解析。</span>
-      <span class="word-line" data-delay="1000" data-dur="2800" data-drift="7.8s" data-dy0="-0.06px" data-dy1="0.18px"  data-dy2="-0.1px">ウェアラブル計測。</span>
+      <span class="word-line" data-delay="300" data-dur="2800" data-drift="7.8s" data-dy0="-0.06px" data-dy1="0.18px"  data-dy2="-0.1px">ウェアラブル計測。</span>
       <span class="word-line" data-delay="2000" data-dur="2800" data-drift="8.2s" data-dy0="0.04px"  data-dy1="-0.12px" data-dy2="0.15px">実証研究。</span>
     </div>
 
@@ -491,8 +492,8 @@
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="9s"  data-dy0="0px"    data-dy1="0.2px"   data-dy2="-0.12px">それらを通じて、</span>
-      <span class="word-line" data-delay="1200" data-dur="3500" data-drift="10s" data-dy0="-0.08px" data-dy1="0.22px"  data-dy2="0.08px">人の歩みの質と、</span>
-      <span class="word-line heavy" data-delay="2800" data-dur="4800" data-drift="13s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.25px">その先にある景色を支える方法を探っている。</span>
+      <span class="word-line" data-delay="400" data-dur="3500" data-drift="10s" data-dy0="-0.08px" data-dy1="0.22px"  data-dy2="0.08px">人の歩みの質と、</span>
+      <span class="word-line heavy" data-delay="850" data-dur="4800" data-drift="13s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.25px">その先にある景色を支える方法を探っている。</span>
     </div>
 
   </div>
@@ -509,31 +510,31 @@
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8s"  data-dy0="0px"    data-dy1="0.22px" data-dy2="-0.15px">一歩のなかにある力を、</span>
-      <span class="word-line heavy" data-delay="1400" data-dur="4200" data-drift="11s" data-dy0="0px"    data-dy1="0.18px" data-dy2="-0.2px">読み取る。</span>
+      <span class="word-line heavy" data-delay="450" data-dur="4200" data-drift="11s" data-dy0="0px"    data-dy1="0.18px" data-dy2="-0.2px">読み取る。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.2s" data-dy0="0.05px"  data-dy1="-0.18px" data-dy2="0.12px">下腿に装着した小さなセンサーが、</span>
-      <span class="word-line" data-delay="1100" data-dur="3400" data-drift="9s"   data-dy0="-0.08px" data-dy1="0.2px"   data-dy2="0.1px">着地の衝撃、推進の力、左右の差を</span>
-      <span class="word-line" data-delay="2200" data-dur="3600" data-drift="9.5s" data-dy0="0px"     data-dy1="0.15px"  data-dy2="-0.18px">記録する。</span>
+      <span class="word-line" data-delay="350" data-dur="3400" data-drift="9s"   data-dy0="-0.08px" data-dy1="0.2px"   data-dy2="0.1px">着地の衝撃、推進の力、左右の差を</span>
+      <span class="word-line" data-delay="700" data-dur="3600" data-drift="9.5s" data-dy0="0px"     data-dy1="0.15px"  data-dy2="-0.18px">記録する。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8.8s" data-dy0="0.1px"   data-dy1="-0.15px" data-dy2="0.08px">歩行を「数値」ではなく、</span>
-      <span class="word-line" data-delay="1200" data-dur="3500" data-drift="10s"  data-dy0="-0.1px"  data-dy1="0.22px"  data-dy2="-0.08px">「動きの質」として可視化し、</span>
-      <span class="word-line heavy" data-delay="2800" data-dur="4400" data-drift="12s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.22px">歩いた本人に返す。</span>
+      <span class="word-line" data-delay="400" data-dur="3500" data-drift="10s"  data-dy0="-0.1px"  data-dy1="0.22px"  data-dy2="-0.08px">「動きの質」として可視化し、</span>
+      <span class="word-line heavy" data-delay="850" data-dur="4400" data-drift="12s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.22px">歩いた本人に返す。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.5s" data-dy0="0px"     data-dy1="0.2px"   data-dy2="-0.12px">気づきは、</span>
-      <span class="word-line" data-delay="1000" data-dur="3400" data-drift="9.2s" data-dy0="-0.06px" data-dy1="0.18px"  data-dy2="0.1px">測定者のものではない。</span>
-      <span class="word-line heavy" data-delay="2600" data-dur="5000" data-drift="14s" data-dy0="0px" data-dy1="0.12px" data-dy2="-0.2px">歩いた人自身のものである。</span>
+      <span class="word-line" data-delay="300" data-dur="3400" data-drift="9.2s" data-dy0="-0.06px" data-dy1="0.18px"  data-dy2="0.1px">測定者のものではない。</span>
+      <span class="word-line heavy" data-delay="800" data-dur="5000" data-drift="14s" data-dy0="0px" data-dy1="0.12px" data-dy2="-0.2px">歩いた人自身のものである。</span>
     </div>
 
   </div>
@@ -550,36 +551,36 @@
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8s"  data-dy0="0px"    data-dy1="0.22px"  data-dy2="-0.15px">現場で、</span>
-      <span class="word-line" data-delay="1100" data-dur="3800" data-drift="10s" data-dy0="-0.1px" data-dy1="0.25px"  data-dy2="0.08px">身体の変化に向き合う人へ。</span>
+      <span class="word-line" data-delay="350" data-dur="3800" data-drift="10s" data-dy0="-0.1px" data-dy1="0.25px"  data-dy2="0.08px">身体の変化に向き合う人へ。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8.5s" data-dy0="0.08px"  data-dy1="-0.18px" data-dy2="0.12px">数値の奥にある行為を</span>
-      <span class="word-line" data-delay="1200" data-dur="3500" data-drift="9.8s" data-dy0="-0.1px"  data-dy1="0.2px"   data-dy2="-0.1px">見つめたい研究者へ。</span>
+      <span class="word-line" data-delay="400" data-dur="3500" data-drift="9.8s" data-dy0="-0.1px"  data-dy1="0.2px"   data-dy2="-0.1px">見つめたい研究者へ。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3000" data-drift="8.2s" data-dy0="0.05px"  data-dy1="-0.15px" data-dy2="0.1px">人の働き方を、</span>
-      <span class="word-line" data-delay="1100" data-dur="3500" data-drift="9.5s" data-dy0="-0.08px" data-dy1="0.2px"   data-dy2="-0.08px">身体から考え直したい企業へ。</span>
+      <span class="word-line" data-delay="350" data-dur="3500" data-drift="9.5s" data-dy0="-0.08px" data-dy1="0.2px"   data-dy2="-0.08px">身体から考え直したい企業へ。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="8.8s" data-dy0="0.1px"   data-dy1="-0.12px" data-dy2="0.15px">もう一度、</span>
-      <span class="word-line" data-delay="1200" data-dur="3600" data-drift="10s"  data-dy0="-0.06px" data-dy1="0.22px"  data-dy2="-0.12px">外へ出る一歩を支えたい地域へ。</span>
+      <span class="word-line" data-delay="400" data-dur="3600" data-drift="10s"  data-dy0="-0.06px" data-dy1="0.22px"  data-dy2="-0.12px">外へ出る一歩を支えたい地域へ。</span>
     </div>
 
     <div class="divider"></div>
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="2800" data-drift="8s"   data-dy0="0.08px"  data-dy1="-0.12px" data-dy2="0.1px">医療、福祉、産業、研究、地域。</span>
-      <span class="word-line" data-delay="1200" data-dur="3400" data-drift="9.5s" data-dy0="0px"     data-dy1="0.18px"  data-dy2="-0.15px">それぞれの現場にある問いと結びながら、</span>
-      <span class="word-line heavy" data-delay="2800" data-dur="5000" data-drift="14s" data-dy0="0px"     data-dy1="0.12px"  data-dy2="-0.2px">ともに広げていきたい。</span>
+      <span class="word-line" data-delay="400" data-dur="3400" data-drift="9.5s" data-dy0="0px"     data-dy1="0.18px"  data-dy2="-0.15px">それぞれの現場にある問いと結びながら、</span>
+      <span class="word-line heavy" data-delay="850" data-dur="5000" data-drift="14s" data-dy0="0px"     data-dy1="0.12px"  data-dy2="-0.2px">ともに広げていきたい。</span>
     </div>
 
   </div>
@@ -620,8 +621,8 @@
 
     <div class="thought-group">
       <span class="word-line" data-delay="0"    data-dur="3200" data-drift="9s"   data-dy0="0px"    data-dy1="0.18px"  data-dy2="-0.12px">WELKは、</span>
-      <span class="word-line" data-delay="1200" data-dur="3600" data-drift="10.5s" data-dy0="-0.06px" data-dy1="0.2px"  data-dy2="0.1px">その問いをともに見つめるところから</span>
-      <span class="word-line heavy" data-delay="2800" data-dur="4800" data-drift="13s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.2px">始めたい。</span>
+      <span class="word-line" data-delay="400" data-dur="3600" data-drift="10.5s" data-dy0="-0.06px" data-dy1="0.2px"  data-dy2="0.1px">その問いをともに見つめるところから</span>
+      <span class="word-line heavy" data-delay="850" data-dur="4800" data-drift="13s" data-dy0="0px"    data-dy1="0.15px" data-dy2="-0.2px">始めたい。</span>
     </div>
 
   </div>
