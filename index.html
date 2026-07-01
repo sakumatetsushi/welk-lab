@@ -113,8 +113,8 @@
     }
     .hero-text {
       text-align: center;
-      opacity: 0;
-      animation: riseIn 0.7s cubic-bezier(.16,1,.3,1) 0s forwards;
+      opacity: 1;
+      
       /* drift applied via JS */
       will-change: transform;
     }
@@ -132,16 +132,16 @@
     .line {
       display: block; opacity: 0;
       filter: blur(10px) brightness(.6);
-      animation: emerge 0.5s cubic-bezier(.16,1,.3,1) forwards;
+      animation: emerge 2.4s cubic-bezier(.16,1,.3,1) forwards;
     }
-    .line:nth-child(1) { animation-delay: 0.3s; }
-    .line:nth-child(2) { animation-delay: 0.5s; }
+    .line:nth-child(1) { animation-delay: 0s; animation-duration: 4.8s; }
+    .line:nth-child(2) { animation-delay: 2.0s; }
     .hero-en {
       display: block; margin-top: 30px;
       font-family: 'IM Fell English', serif; font-style: italic;
       font-size: 12px; letter-spacing: .1em;
       color: rgba(234,229,220,.34);
-      opacity: 0; animation: fadeOnly 0.5s ease 0.3s forwards;
+      opacity: 1;
     }
     .scroll-ind {
       position: absolute; bottom: 36px; left: 50%;
@@ -405,7 +405,7 @@
       <span class="line">世界に触れることだった。</span>
     </h1>
     <span class="hero-en">— Institute for Human Gait</span>
-    <span class="hero-en" style="margin-top:12px;font-family:'Noto Serif JP',serif;font-style:normal;font-weight:200;font-size:clamp(11px,1.2vw,13px);letter-spacing:.08em;color:rgba(234,229,220,.3);animation-delay:0.5s">歩行動態解析 · ウェアラブル計測 · 実証研究</span>
+    <span class="hero-en" style="margin-top:12px;font-family:'Noto Serif JP',serif;font-style:normal;font-weight:200;font-size:clamp(11px,1.2vw,13px);letter-spacing:.08em;color:rgba(234,229,220,.3)">歩行動態解析 · ウェアラブル計測 · 実証研究</span>
   </div>
   <div class="scroll-ind">
     <span>scroll</span>
