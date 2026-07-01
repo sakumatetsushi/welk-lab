@@ -63,7 +63,7 @@
     .slide {
       position: absolute; inset: 0;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 0.6s ease;
       pointer-events: none;
     }
     .slide.active { opacity: 1; pointer-events: all; }
@@ -85,7 +85,7 @@
       opacity: 0;
     }
     .slide.active .photo-caption {
-      animation: fadeIn 2s ease 1s both;
+      animation: fadeIn 0.8s ease 0.3s both;
     }
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -119,7 +119,7 @@
     .telop-text { font-size: clamp(24px, 3.5vw, 46px); letter-spacing: .12em; text-align: center; }
     .slide.active .narration-text,
     .slide.active .telop-text {
-      animation: fadeIn 2s ease .4s both;
+      animation: fadeIn 0.8s ease 0.2s both;
     }
 
     /* ロゴスライド */
@@ -137,8 +137,8 @@
       font-weight: 200; font-size: 11px; letter-spacing: .22em;
       color: rgba(234,229,220,.28); opacity: 0;
     }
-    .slide.active .logo-welk { animation: fadeIn 1.6s ease .6s both; }
-    .slide.active .logo-tagline { animation: fadeIn 1.6s ease 1.2s both; }
+    .slide.active .logo-welk { animation: fadeIn 0.8s ease 0.3s both; }
+    .slide.active .logo-tagline { animation: fadeIn 0.8s ease 0.6s both; }
 
     /* UI */
     #story-num {
@@ -250,16 +250,9 @@
     </div>
   </div>
 
-  <!-- 03 写真：大量の花を見る -->
-  <div class="slide slide-photo" data-index="2">
-    <img class="photo-img" src="03.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">大量の花を見る</p>
-    </div>
-  </div>
 
   <!-- 04 写真：以前なら気にも留めなかった -->
-  <div class="slide slide-photo" data-index="3">
+  <div class="slide slide-photo" data-index="2">
     <img class="photo-img" src="04.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">以前なら気にも留めなかった</p>
@@ -267,23 +260,16 @@
   </div>
 
   <!-- 05 写真：しかし今日は少し膝を気にする -->
-  <div class="slide slide-photo" data-index="4">
+  <div class="slide slide-photo" data-index="3">
     <img class="photo-img" src="05.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">しかし今日は<br>少し膝を気にする</p>
     </div>
   </div>
 
-  <!-- 06 写真：女性は歩き出す -->
-  <div class="slide slide-photo" data-index="5">
-    <img class="photo-img" src="06.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">女性は歩き出す</p>
-    </div>
-  </div>
 
   <!-- 07 写真：店舗に戻る -->
-  <div class="slide slide-photo" data-index="6">
+  <div class="slide slide-photo" data-index="4">
     <img class="photo-img" src="07.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">店舗に戻る</p>
@@ -291,23 +277,16 @@
   </div>
 
   <!-- 08 写真：花を整える -->
-  <div class="slide slide-photo" data-index="7">
+  <div class="slide slide-photo" data-index="5">
     <img class="photo-img" src="08.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">花を整える</p>
     </div>
   </div>
 
-  <!-- 09 写真：立ち仕事が続く -->
-  <div class="slide slide-photo" data-index="8">
-    <img class="photo-img" src="09.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">立ち仕事が続く</p>
-    </div>
-  </div>
 
   <!-- 10 写真：一歩目を出す -->
-  <div class="slide slide-photo" data-index="9">
+  <div class="slide slide-photo" data-index="6">
     <img class="photo-img" src="10.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">一歩目を出す</p>
@@ -315,7 +294,7 @@
   </div>
 
   <!-- 11 写真：少したためらう -->
-  <div class="slide slide-photo" data-index="10">
+  <div class="slide slide-photo" data-index="7">
     <img class="photo-img" src="11.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">少したためらう</p>
@@ -323,7 +302,7 @@
   </div>
 
   <!-- 12 写真：それでも動く -->
-  <div class="slide slide-photo" data-index="11">
+  <div class="slide slide-photo" data-index="8">
     <img class="photo-img" src="12.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">それでも動く</p>
@@ -331,7 +310,7 @@
   </div>
 
   <!-- 13 写真：結婚式の装飾会場へ -->
-  <div class="slide slide-photo" data-index="12">
+  <div class="slide slide-photo" data-index="9">
     <img class="photo-img" src="13.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">結婚式の装飾会場へ</p>
@@ -339,7 +318,7 @@
   </div>
 
   <!-- 14 写真：脚立に上る -->
-  <div class="slide slide-photo" data-index="13">
+  <div class="slide slide-photo" data-index="10">
     <img class="photo-img" src="14.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">脚立に上る</p>
@@ -347,7 +326,7 @@
   </div>
 
   <!-- 15 写真：高い位置を飾る -->
-  <div class="slide slide-photo" data-index="14">
+  <div class="slide slide-photo" data-index="11">
     <img class="photo-img" src="15.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">高い位置を飾る</p>
@@ -355,23 +334,16 @@
   </div>
 
   <!-- 16 写真：低い位置を整える -->
-  <div class="slide slide-photo" data-index="15">
+  <div class="slide slide-photo" data-index="12">
     <img class="photo-img" src="16.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">低い位置を整える</p>
     </div>
   </div>
 
-  <!-- 17 写真：息を整える -->
-  <div class="slide slide-photo" data-index="16">
-    <img class="photo-img" src="17.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">息を整える</p>
-    </div>
-  </div>
 
   <!-- 18 写真：最後の花を飾る -->
-  <div class="slide slide-photo" data-index="17">
+  <div class="slide slide-photo" data-index="13">
     <img class="photo-img" src="18.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">最後の花を飾る</p>
@@ -379,23 +351,16 @@
   </div>
 
   <!-- 19 写真：会場全体を見る -->
-  <div class="slide slide-photo" data-index="18">
+  <div class="slide slide-photo" data-index="14">
     <img class="photo-img" src="19.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">会場全体を見る</p>
     </div>
   </div>
 
-  <!-- 20 写真：新郎新婦が入場する -->
-  <div class="slide slide-photo" data-index="19">
-    <img class="photo-img" src="20.png" alt="">
-    <div class="photo-caption">
-      <p class="caption-scene">新郎新婦が入場する</p>
-    </div>
-  </div>
 
   <!-- 21 写真：ゲストの笑顔が広がる -->
-  <div class="slide slide-photo" data-index="20">
+  <div class="slide slide-photo" data-index="15">
     <img class="photo-img" src="21.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">ゲストの笑顔が広がる</p>
@@ -403,42 +368,42 @@
   </div>
 
   <!-- 22 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="21">
+  <div class="slide slide-narration" data-index="16">
     <div class="narration-inner">
       <p class="narration-text">できなくなったわけじゃない<br>辞めたいわけでもない<br>それでも、<br>身体は少しずつ変わり始める</p>
     </div>
   </div>
 
   <!-- 23 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="22">
+  <div class="slide slide-narration" data-index="17">
     <div class="narration-inner">
       <p class="narration-text">本当に失いたくないのは、<br>歩くことじゃない</p>
     </div>
   </div>
 
   <!-- 24 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="23">
+  <div class="slide slide-narration" data-index="18">
     <div class="narration-inner">
       <p class="narration-text">空間を彩ること<br>特別な日を作ること</p>
     </div>
   </div>
 
   <!-- 25 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="24">
+  <div class="slide slide-narration" data-index="19">
     <div class="narration-inner">
       <p class="narration-text">花で想いを届けること</p>
     </div>
   </div>
 
   <!-- 26 ナレーション（黒） -->
-  <div class="slide slide-narration" data-index="25">
+  <div class="slide slide-narration" data-index="20">
     <div class="narration-inner">
       <p class="narration-text">笑顔を咲かせること</p>
     </div>
   </div>
 
   <!-- 27 写真：女性は静かに微笑む -->
-  <div class="slide slide-photo" data-index="26">
+  <div class="slide slide-photo" data-index="21">
     <img class="photo-img" src="27.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">女性は静かに微笑む</p>
@@ -446,7 +411,7 @@
   </div>
 
   <!-- 28 テロップ（写真＋テキスト） -->
-  <div class="slide slide-photo" data-index="27">
+  <div class="slide slide-photo" data-index="22">
     <img class="photo-img" src="28.png" alt="">
     <div class="photo-caption">
       <p class="caption-scene">まだ彩りたい空間がある</p>
@@ -454,12 +419,12 @@
   </div>
 
   <!-- 29 テロップ（黒） -->
-  <div class="slide slide-telop" data-index="28">
+  <div class="slide slide-telop" data-index="23">
     <p class="telop-text">花を飾るその手が、<br>誰かの一日を彩る</p>
   </div>
 
   <!-- 30 WELKロゴ（黒） -->
-  <div class="slide slide-logo" data-index="29">
+  <div class="slide slide-logo" data-index="24">
     <div class="logo-welk">WELK</div>
     <div class="logo-tagline">歩くことから始まるイノチの跳躍</div>
   </div>
@@ -511,10 +476,10 @@
   const btnNext     = document.getElementById('btn-next');
 
   const DURATIONS = slides.map(s => {
-    if (s.classList.contains('slide-narration')) return 4000;
-    if (s.classList.contains('slide-telop'))     return 4000;
-    if (s.classList.contains('slide-logo'))      return 4000;
-    return 4000; // photo
+    if (s.classList.contains('slide-narration')) return 3500;
+    if (s.classList.contains('slide-telop'))     return 3000;
+    if (s.classList.contains('slide-logo'))      return 3000;
+    return 3000; // photo
   });
 
   let current     = 0;
