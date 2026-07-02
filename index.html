@@ -319,7 +319,7 @@
       color: rgba(184,150,12,.72);
       background: rgba(184,150,12,.03);
     }
-    .thought { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .thought { opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.35s ease; }
     .thought.up { opacity: 1; transform: none; }
 
     @media (max-width: 640px) {
@@ -987,13 +987,16 @@
     if (el.dataset.settledOnce === '1') return;
     el.dataset.settledOnce = '1';
 
-    const delay   = toMs(el.dataset.delay, 0);
-    const dur     = toMs(el.dataset.dur, 3200);
-    const drift   = el.dataset.drift  ?? '9s';
-    const dy0     = el.dataset.dy0    ?? '0px';
-    const dy1     = el.dataset.dy1    ?? '0.2px';
-    const dy2     = el.dataset.dy2    ?? '-0.15px';
-    const isHeavy = el.classList.contains('heavy');
+    const rawDelay = toMs(el.dataset.delay, 0);
+    const rawDur   = toMs(el.dataset.dur, 3200);
+    const drift    = el.dataset.drift  ?? '9s';
+    const dy0      = el.dataset.dy0    ?? '0px';
+    const dy1      = el.dataset.dy1    ?? '0.2px';
+    const dy2      = el.dataset.dy2    ?? '-0.15px';
+    const isHeavy  = el.classList.contains('heavy');
+
+    const delay = Math.min(rawDelay * 0.32, 280);
+    const dur   = Math.min(rawDur * 0.32, isHeavy ? 1250 : 950);
 
     setTimeout(() => {
       // transition を動的に設定（重さによって速度を変える）
@@ -1042,7 +1045,7 @@
   const dividerObserver = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (!en.isIntersecting) return;
-      setTimeout(() => en.target.classList.add('up'), 400);
+      setTimeout(() => en.target.classList.add('up'), 160);
       dividerObserver.unobserve(en.target);
     });
   }, { threshold: 0.3 });
